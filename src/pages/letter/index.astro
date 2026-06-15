@@ -1,0 +1,76 @@
+---
+// src/pages/letter/index.astro
+// Newsletter signup + archive
+import Base from '../../layouts/Base.astro';
+
+// Later: pull from /content/letter/*.md using Astro.glob()
+const issues = await Astro.glob('../../content/letter/*.md');
+const sorted = issues.sort((a, b) =>
+  new Date(b.frontmatter.date) - new Date(a.frontmatter.date)
+);
+---
+<Base
+  title="The Letter"
+  description="A slow, honest newsletter on building a life with intention. No noise. One clear move at a time."
+  currentPath="/letter"
+>
+
+<main style="flex:1;position:relative;z-index:1;">
+
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="page-eyebrow">The Velani Letter</div>
+    <h1 class="page-title">Words worth<br><em>sitting with.</em></h1>
+    <p class="page-subtitle">
+      A slow newsletter on building a life with intention — systems, clarity,
+      and the quiet work that actually moves things forward.
+      No noise. Sent when there's something worth saying.
+    </p>
+  </div>
+
+  <!-- Signup card -->
+  <div style="max-width:720px;margin:0 auto 4rem;padding:0 2.5rem;">
+    <div class="card rise" style="max-width:480px;">
+      <div style="font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--terra);font-weight:500;margin-bottom:1rem;">
+        Join the waitlist
+      </div>
+      <p style="font-size:.9rem;color:var(--ink2);margin-bottom:1.5rem;line-height:1.7;">
+        Early access. Founding price locked in. You'll be the first to know
+        when Velani opens.
+      </p>
+      <!-- Replace 9244672 with your Kit form ID -->
+      <script async data-uid="9244672" src="https://velani.kit.com/9244672/index.js"></script>
+    </div>
+  </div>
+
+  <!-- Archive — only shows when you have .md files in /content/letter/ -->
+  {sorted.length > 0 && (
+    <div style="max-width:720px;margin:0 auto 6rem;padding:0 2.5rem;">
+      <div class="divider"></div>
+      <div style="font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink3);font-weight:500;margin-bottom:2rem;">
+        Archive
+      </div>
+      <div style="display:flex;flex-direction:column;gap:1rem;">
+        {sorted.map(issue => (
+          <a href={issue.url} style="text-decoration:none;">
+            <div class="card" style="display:flex;align-items:baseline;justify-content:space-between;gap:1.5rem;">
+              <div>
+                <div style="font-family:var(--display);font-weight:400;font-size:1rem;color:var(--ink);margin-bottom:.25rem;">
+                  {issue.frontmatter.title}
+                </div>
+                <div style="font-size:.82rem;color:var(--ink3);">
+                  {issue.frontmatter.description}
+                </div>
+              </div>
+              <div style="font-size:.72rem;color:var(--ink3);white-space:nowrap;font-style:italic;font-family:var(--display);">
+                {new Date(issue.frontmatter.date).toLocaleDateString('en-CA', { year:'numeric', month:'short', day:'numeric' })}
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  )}
+
+</main>
+</Base>
