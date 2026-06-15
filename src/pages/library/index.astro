@@ -1,0 +1,85 @@
+---
+// src/pages/library/index.astro
+// Short reads, essays, resources
+import Base from '../../layouts/Base.astro';
+
+const reads = await Astro.glob('../../content/library/*.md');
+const sorted = reads.sort((a, b) =>
+  new Date(b.frontmatter.date) - new Date(a.frontmatter.date)
+);
+
+// Group by tag/category if frontmatter.tag exists
+const tags = [...new Set(sorted.map(r => r.frontmatter.tag).filter(Boolean))];
+---
+<Base
+  title="Library"
+  description="Short reads on clarity, systems, and the architecture of a well-lived life."
+  currentPath="/library"
+>
+
+<main style="flex:1;position:relative;z-index:1;">
+
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="page-eyebrow">Library</div>
+    <h1 class="page-title">Ideas worth<br><em>returning to.</em></h1>
+    <p class="page-subtitle">
+      Short reads on clarity, systems, and the architecture of a well-lived life.
+      Written slowly. Meant to be reread.
+    </p>
+  </div>
+
+  <div style="max-width:720px;margin:0 auto 6rem;padding:0 2.5rem;">
+
+    {sorted.length === 0 ? (
+      <!-- Placeholder state until you add content -->
+      <div style="text-align:center;padding:4rem 0;">
+        <div style="font-family:var(--display);font-size:1.1rem;font-style:italic;color:var(--ink3);margin-bottom:.75rem;">
+          Coming soon.
+        </div>
+        <p style="font-size:.88rem;color:var(--ink3);">
+          The first reads are being written. Check back shortly.
+        </p>
+      </div>
+    ) : (
+      <div>
+        {tags.length > 0 && (
+          <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:2.5rem;">
+            {tags.map(tag => (
+              <span style="font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sage);border:1px solid var(--sage-gl2);border-radius:100px;padding:.3rem .9rem;">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+
+        <div style="display:grid;gap:1rem;">
+          {sorted.map(read => (
+            <a href={read.url} style="text-decoration:none;">
+              <div class="card" style="display:grid;grid-template-columns:1fr auto;gap:1.5rem;align-items:start;">
+                <div>
+                  {read.frontmatter.tag && (
+                    <div style="font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--terra);margin-bottom:.5rem;">
+                      {read.frontmatter.tag}
+                    </div>
+                  )}
+                  <div style="font-family:var(--display);font-size:1.05rem;font-weight:400;color:var(--ink);margin-bottom:.4rem;line-height:1.3;">
+                    {read.frontmatter.title}
+                  </div>
+                  <div style="font-size:.85rem;color:var(--ink3);line-height:1.6;">
+                    {read.frontmatter.description}
+                  </div>
+                </div>
+                <div style="font-size:.7rem;color:var(--ink3);white-space:nowrap;font-style:italic;font-family:var(--display);padding-top:.25rem;">
+                  {read.frontmatter.readTime || '3 min'}
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+  </div>
+</main>
+</Base>

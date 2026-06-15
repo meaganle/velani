@@ -1,0 +1,111 @@
+---
+// src/pages/philosophy/index.astro
+// Manifesto + four wealth domains + principles
+import Base from '../../layouts/Base.astro';
+
+const domains = [
+  {
+    name: 'Material',
+    glyph: '◆',
+    description: 'The resources, stability, and financial ground that make everything else possible. Not the goal — the foundation.',
+  },
+  {
+    name: 'Inner',
+    glyph: '○',
+    description: 'Mental clarity, emotional regulation, self-knowledge. The quality of your inner life determines the quality of everything else.',
+  },
+  {
+    name: 'Liveliness',
+    glyph: '△',
+    description: 'Energy, movement, health, creativity. The aliveness you bring to each day — not as performance, but as practice.',
+  },
+  {
+    name: 'Connection',
+    glyph: '◇',
+    description: 'The people, relationships, and sense of belonging that make a life feel whole. Tended with care, not taken for granted.',
+  },
+];
+
+const principles = [
+  { label: 'Clarity over volume', body: 'One clear move beats ten scattered intentions. We build systems that surface what actually matters.' },
+  { label: 'Architecture over noise', body: 'A well-designed life doesn\'t happen by accident. It\'s built deliberately, layer by layer, with the right structures in place.' },
+  { label: 'Slow is sustainable', body: 'The goal is not optimization. It\'s a life that works across decades, not a sprint that burns out by Tuesday.' },
+  { label: 'Simplicity is hard work', body: 'It\'s easy to add. The discipline is in removing — until what remains is exactly what\'s needed and nothing more.' },
+  { label: 'Daily is the unit', body: 'Grand visions are built from ordinary days. The question is never "what do I want?" — it\'s "what\'s the one clear move today?"' },
+];
+---
+<Base
+  title="Philosophy"
+  description="The thinking behind Velani — on clarity, architecture, and what it means to live deliberately."
+  currentPath="/philosophy"
+>
+
+<main style="flex:1;position:relative;z-index:1;">
+
+  <!-- Hero -->
+  <div class="page-hero" style="padding-bottom:2rem;">
+    <div class="page-eyebrow">Philosophy</div>
+    <h1 class="page-title">A life designed,<br><em>not drifted into.</em></h1>
+    <p class="page-subtitle">
+      Most systems optimize for productivity. Velani is built around something
+      different — the belief that a well-lived life has structure beneath it,
+      and that structure can be designed.
+    </p>
+  </div>
+
+  <div style="max-width:720px;margin:0 auto;padding:0 2.5rem 6rem;">
+
+    <!-- Manifesto -->
+    <div class="card rise prose" style="margin-bottom:2.5rem;padding:3rem;">
+      <p style="font-family:var(--display);font-size:1.15rem;font-weight:300;font-style:italic;line-height:1.9;color:var(--ink2);border-left:2px solid var(--sage);padding-left:1.5rem;">
+        We are not short on information. We are short on clarity. The problem
+        is not that we don't know what matters — it's that we haven't built
+        the structures that make it visible each day.
+      </p>
+    </div>
+
+    <!-- Four domains -->
+    <div style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);font-weight:500;margin-bottom:1.5rem;">
+      Four domains of wealth
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:3rem;">
+      {domains.map(d => (
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem;">
+            <span style="font-size:1.1rem;color:var(--sage);">{d.glyph}</span>
+            <span style="font-family:var(--display);font-size:.95rem;font-weight:400;color:var(--ink);">{d.name}</span>
+          </div>
+          <p style="font-size:.85rem;color:var(--ink3);line-height:1.7;margin:0;">{d.description}</p>
+        </div>
+      ))}
+    </div>
+
+    <!-- Principles -->
+    <div style="font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);font-weight:500;margin-bottom:1.5rem;">
+      Principles
+    </div>
+    <div style="display:flex;flex-direction:column;gap:0;">
+      {principles.map((p, i) => (
+        <div style={`padding:1.5rem 0;${i < principles.length - 1 ? 'border-bottom:1px solid var(--border);' : ''}`}>
+          <div style="font-family:var(--display);font-size:1rem;font-weight:400;color:var(--ink);margin-bottom:.4rem;">
+            {p.label}
+          </div>
+          <p style="font-size:.88rem;color:var(--ink3);line-height:1.75;margin:0;">
+            {p.body}
+          </p>
+        </div>
+      ))}
+    </div>
+
+    <!-- Closing -->
+    <div class="divider"></div>
+    <p style="font-family:var(--display);font-size:1rem;font-style:italic;font-weight:300;color:var(--ink3);line-height:1.9;text-align:center;">
+      One clear move at a time.<br>A different life over time.
+    </p>
+    <div style="text-align:center;margin-top:2rem;">
+      <a href="/letter" class="btn-ghost">Read the letter →</a>
+    </div>
+
+  </div>
+</main>
+</Base>
