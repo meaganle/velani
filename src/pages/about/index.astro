@@ -1,0 +1,228 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const domains = [
+  { glyph: '◆', name: 'Material',   desc: 'The resources, stability, and financial ground beneath you. Not the goal — the foundation.' },
+  { glyph: '○', name: 'Inner',      desc: 'Your inner life. How you feel, think, and talk to yourself. Everything else builds on this.' },
+  { glyph: '△', name: 'Liveliness', desc: 'Energy, movement, creativity. The aliveness you bring to each day — as a practice, not a performance.' },
+  { glyph: '◇', name: 'Connection', desc: 'The people and relationships that make life feel full. Tended with care, not taken for granted.' },
+];
+const principles = [
+  { label: 'One clear move beats ten scattered intentions', body: 'You don\'t need a longer list. You need a clearer question. What\'s the one thing today that actually matters?' },
+  { label: 'Clarity follows structure, not the other way around', body: 'Most people wait to feel ready. The calm you\'re waiting for comes after you put a simple structure in place — not before.' },
+  { label: 'Slow is sustainable', body: 'The goal isn\'t more productivity. It\'s a life that feels like yours — across decades, not just this week.' },
+  { label: 'Simple is harder than it looks', body: 'Adding is easy. Removing takes discipline. We keep removing until what\'s left is exactly what\'s needed.' },
+];
+const faqs = [
+  { q: 'Is Velani a planner?',           a: 'No. Velani helps you decide what matters today, notice what moved forward, and gently reset for tomorrow. No scheduling. No perfect routine required.' },
+  { q: 'Is this a productivity system?', a: 'No — at least not in the usual way. Most productivity systems ask you to do more. Velani helps you focus on what matters and carry less.' },
+  { q: 'Who is Velani for?',             a: 'People carrying a lot. Parents. Professionals. Creators. Operators. People who want life to feel calmer, clearer, and more intentional.' },
+  { q: 'Is Velani free?',                a: 'Yes. Velani Lite is free and available in multiple formats. If you\'d like weekly letters and updates, you can join the email list too.' },
+  { q: 'How long does it take daily?',   a: '2–10 minutes. One question in the morning, one reflection at night. The weekly reset takes about 20 minutes on Sunday.' },
+  { q: 'What if I miss a day?',          a: 'Nothing breaks. Velani isn\'t a streak system. You pick it back up when you\'re ready. That\'s intentional.' },
+  { q: 'Do I need Notion?',              a: 'No. Velani Lite is available as a PDF and Google Doc too. Notion gives the best experience, but any format works.' },
+  { q: 'Is this therapy or coaching?',   a: 'Neither. Velani is a calm daily structure — not a substitute for professional support. A tool for clearer days, not a treatment.' },
+];
+---
+<Base
+  title="About Velani"
+  description="Why Velani exists — and the person behind it."
+  currentPath="/about"
+>
+<style>
+  main { flex: 1; }
+
+  .v-label { font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: var(--terra); font-weight: 500; margin-bottom: 1rem; }
+
+  /* Two-col intro */
+  .intro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+
+  .prose p { font-size: .93rem; color: var(--ink2); line-height: 1.9; margin-bottom: 1rem; }
+  .prose p:last-child { margin-bottom: 0; }
+  .prose em { font-style: italic; color: var(--sage); }
+
+  .pull { font-family: var(--display); font-size: .95rem; font-weight: 300; font-style: italic; color: var(--ink2); border-left: 2px solid var(--sage); padding: .75rem 0 .75rem 1.3rem; margin: 1.5rem 0; line-height: 1.7; }
+
+  /* Founder */
+  .founder-strip { display: flex; align-items: center; gap: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 11px; padding: 1.1rem 1.3rem; margin-bottom: 1.3rem; }
+  .founder-photo { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; object-position: center top; border: 1.5px solid var(--border2); flex-shrink: 0; }
+  .founder-fallback { width: 52px; height: 52px; border-radius: 50%; background: var(--sage-gl); border: 1.5px solid rgba(91,140,122,.25); display: none; align-items: center; justify-content: center; font-family: var(--display); font-size: 1rem; color: var(--sage); font-style: italic; flex-shrink: 0; }
+  .founder-name { font-family: var(--display); font-size: .9rem; font-weight: 400; color: var(--ink); margin-bottom: .1rem; }
+  .founder-role { font-size: .74rem; color: var(--ink3); line-height: 1.5; }
+
+  /* Is/Isn't */
+  .what-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .what-row { display: flex; gap: 1rem; padding: .82rem 1.3rem; border-bottom: 1px solid var(--border); align-items: flex-start; }
+  .what-row:last-child { border-bottom: none; }
+  .what-badge { font-size: .58rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; min-width: 38px; flex-shrink: 0; padding-top: .2em; }
+  .what-badge.yes { color: var(--sage); }
+  .what-badge.no  { color: var(--ink3); }
+  .what-value { font-size: .84rem; color: var(--ink2); line-height: 1.65; }
+
+  /* Domains + Principles */
+  .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+  .domains { display: grid; grid-template-columns: 1fr 1fr; gap: .65rem; }
+  .domain-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.2rem; }
+  .domain-head { display: flex; align-items: center; gap: .5rem; margin-bottom: .45rem; }
+  .domain-glyph { font-size: .9rem; color: var(--sage); }
+  .domain-name { font-family: var(--display); font-size: .86rem; font-weight: 400; color: var(--ink); }
+  .domain-desc { font-size: .76rem; color: var(--ink3); line-height: 1.65; }
+
+  .principles { display: flex; flex-direction: column; }
+  .principle { padding: 1rem 0; border-bottom: 1px solid var(--border); }
+  .principle:last-child { border-bottom: none; }
+  .principle-label { font-family: var(--display); font-size: .88rem; font-weight: 400; color: var(--ink); margin-bottom: .3rem; line-height: 1.3; }
+  .principle-body  { font-size: .8rem; color: var(--ink3); line-height: 1.75; }
+
+  /* FAQ */
+  .faq-list { max-width: 680px; }
+  .faq-item { border-bottom: 1px solid var(--border); }
+  .faq-item:first-child { border-top: 1px solid var(--border); }
+  .faq-btn { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .9rem 0; background: none; border: none; cursor: pointer; text-align: left; font-family: var(--display); font-size: .88rem; font-weight: 400; color: var(--ink); line-height: 1.35; transition: color .15s; }
+  .faq-btn:hover { color: var(--sage); }
+  .faq-chevron { flex-shrink: 0; color: var(--ink3); transition: transform .2s; font-size: .62rem; }
+  .faq-item.open .faq-chevron { transform: rotate(180deg); }
+  .faq-body { font-size: .82rem; color: var(--ink2); line-height: 1.75; max-height: 0; overflow: hidden; transition: max-height .25s ease, padding .25s ease; }
+  .faq-item.open .faq-body { max-height: 220px; padding-bottom: 1rem; }
+
+  /* CTA — white box, navy button below text */
+  .cta-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 2.5rem 2.8rem;
+    max-width: 560px;
+    margin-top: 3rem;
+  }
+  .cta-box-text {
+    font-family: var(--display);
+    font-size: 1rem; font-style: italic;
+    font-weight: 300; color: var(--ink2);
+    line-height: 1.75; margin-bottom: 1.5rem;
+  }
+  .cta-box-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+
+  @media (max-width: 900px) {
+    .intro-grid { grid-template-columns: 1fr; gap: 0; }
+    .content-grid { grid-template-columns: 1fr; gap: 0; }
+    .domains { grid-template-columns: 1fr; }
+    .cta-box { padding: 2rem; }
+  }
+</style>
+
+<main>
+<div class="page-wrap">
+
+  <div class="page-hero">
+    <div class="eyebrow">About Velani</div>
+    <h1 class="page-title">Why Velani exists.<br><em>And the person behind it.</em></h1>
+  </div>
+
+  <!-- 1 + 2: Why + Who -->
+  <div class="intro-grid">
+    <div>
+      <div class="v-label">Why Velani exists</div>
+      <div class="prose">
+        <p>Life feels heavier than it should sometimes.</p>
+        <p>Not because we aren't trying. But because modern life asks us to carry too much at once.</p>
+        <p>Too many decisions. Too many tabs open — in the browser and in the mind. A constant sense that something important is being missed, even when we're working hard.</p>
+        <div class="pull">"I tried every productivity system. Some helped for a week or two. None of them made life actually feel calmer."</div>
+        <p><em>Velani exists to make life feel a little clearer.</em> One meaningful move. One quieter day. One gentle rhythm at a time.</p>
+      </div>
+    </div>
+    <div>
+      <div class="v-label">Who built it</div>
+      <div class="founder-strip">
+        <img src="/images/meagan.jpg" alt="Meagan Le, founder of Velani" class="founder-photo"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div class="founder-fallback">M</div>
+        <div>
+          <div class="founder-name">Meagan Le</div>
+          <div class="founder-role">Founder of Velani · Mom · Systems thinker</div>
+        </div>
+      </div>
+      <div class="prose">
+        <p>I spent over twenty years building digital systems for large retailers. I understood how to make complex things work at scale. My own life felt like a different problem.</p>
+        <p>Velani started as a personal framework — one question in the morning, a quiet win at night, a slow Sunday reset. When I shared it, people kept saying: <em>"I didn't know I needed this until I had it."</em></p>
+        <p>That's when I understood it wasn't just mine.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="v-divider"></div>
+
+  <!-- 3: What it is -->
+  <div class="v-label">What Velani is</div>
+  <div class="what-card" style="max-width:680px;">
+    <div class="what-row"><span class="what-badge yes">Is</span><span class="what-value">A daily clarity layer — one clear question, one meaningful move, one gentle rhythm</span></div>
+    <div class="what-row"><span class="what-badge yes">Is</span><span class="what-value">Built around four wealth domains: Material, Inner, Liveliness, and Connection</span></div>
+    <div class="what-row"><span class="what-badge yes">Is</span><span class="what-value">Free to start — no setup, no account required</span></div>
+    <div class="what-row"><span class="what-badge no">Not</span><span class="what-value">A productivity system, habit tracker, or wellness platform</span></div>
+    <div class="what-row"><span class="what-badge no">Not</span><span class="what-value">Built to make you do more — built to help you carry less</span></div>
+  </div>
+
+  <div class="v-divider"></div>
+
+  <!-- 4 + 5: Domains + Principles -->
+  <div class="content-grid">
+    <div>
+      <div class="v-label">Four domains of a full life</div>
+      <div class="domains">
+        {domains.map(d => (
+          <div class="domain-card">
+            <div class="domain-head"><span class="domain-glyph">{d.glyph}</span><span class="domain-name">{d.name}</span></div>
+            <p class="domain-desc">{d.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div>
+      <div class="v-label">How we think about life</div>
+      <div class="principles">
+        {principles.map(p => (
+          <div class="principle">
+            <div class="principle-label">{p.label}</div>
+            <p class="principle-body">{p.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <div class="v-divider"></div>
+
+  <!-- 6: FAQ -->
+  <div class="v-label">Common questions</div>
+  <div class="faq-list" id="faq-list">
+    {faqs.map((faq, i) => (
+      <div class="faq-item" id={`faq-${i}`}>
+        <button class="faq-btn" onclick={`window.toggleFaq(${i})`}>
+          <span>{faq.q}</span><span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-body">{faq.a}</div>
+      </div>
+    ))}
+  </div>
+
+  <!-- CTA — white box, buttons below text -->
+  <div class="cta-box">
+    <p class="cta-box-text">The easiest next step is trying Velani for two minutes.</p>
+    <div class="cta-box-actions">
+      <a href="/start" class="btn-dark">Start with one move →</a>
+      <a href="/letters" class="btn-link">Read the letters</a>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<script>
+  window.toggleFaq = function(i) {
+    const item = document.getElementById(`faq-${i}`);
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  };
+</script>
+
+</Base>

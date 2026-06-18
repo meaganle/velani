@@ -234,7 +234,7 @@ main {
   </div>
 </main>
 
-<script>
+<script is:inline>
 function trackEvent(eventName, eventData) {
   if (window.plausible) {
     window.plausible(eventName, { props: eventData || {} });

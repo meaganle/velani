@@ -1,85 +1,395 @@
 ---
-// src/pages/library/index.astro
-// Short reads, essays, resources
 import Base from '../../layouts/Base.astro';
 
-const reads = await Astro.glob('../../content/library/*.md');
-const sorted = reads.sort((a, b) =>
-  new Date(b.frontmatter.date) - new Date(a.frontmatter.date)
-);
+const allReads = await Astro.glob('../../content/library/*.md');
+const sorted = allReads
+  .filter(r => !r.frontmatter.draft)
+  .sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date));
 
-// Group by tag/category if frontmatter.tag exists
-const tags = [...new Set(sorted.map(r => r.frontmatter.tag).filter(Boolean))];
+function live(slug) {
+  return sorted.filter(r => r.frontmatter.category === slug);
+}
+
+// Category order: Calmer Days ⭐ right after Start Here ⭐
+const categories = [
+  { slug: 'start-here',    label: 'Start Here',    star: true  },
+  { slug: 'calmer-days',   label: 'Calmer Days',   star: true  },
+  { slug: 'clarity',       label: 'Clarity',       star: false },
+  { slug: 'rhythm',        label: 'Rhythm',        star: false },
+  { slug: 'quiet-wins',    label: 'Quiet Wins',    star: false },
+  { slug: 'simplifiers',   label: 'Simplifiers',   star: false },
+  { slug: 'wisdom-cards',  label: 'Wisdom Cards',  star: false },
+  { slug: 'velani-letter', label: 'Velani Letter', star: false },
+];
+
+const placeholders = {
+  'start-here':    [
+    { title: 'What matters today?',   desc: 'The one question that cuts through everything else.',  time: '2 min' },
+    { title: 'One meaningful move',   desc: 'Why one clear thing beats a full list every time.',   time: '3 min' },
+    { title: 'Weekly reset',          desc: 'A slow Sunday ritual that actually works.',            time: '5 min' },
+    { title: 'The invisible load',    desc: 'What\'s making you tired — it\'s not on your list.', time: '4 min' },
+  ],
+  'calmer-days':   [
+    { title: 'When life feels heavy',     desc: 'You don\'t need a system right now.',                 time: '3 min' },
+    { title: 'Make tomorrow easier',      desc: 'Small things tonight that change the morning.',       time: '2 min' },
+  ],
+  'clarity':       [
+    { title: 'Why productivity stopped working', desc: 'The framework was never the problem.',         time: '4 min' },
+    { title: 'Decision fatigue is real',         desc: 'Why you\'re exhausted before noon.',           time: '4 min' },
+  ],
+  'rhythm':        [
+    { title: 'A morning that actually works', desc: 'A gentle rhythm that fits real life.',            time: '4 min' },
+    { title: 'The evening reset',             desc: 'Close the day without carrying it forward.',      time: '3 min' },
+  ],
+  'quiet-wins':    [
+    { title: 'The things nobody clapped for', desc: 'Notice what you did well this week.',            time: '2 min' },
+    { title: 'Small progress counts',         desc: 'Why micro-momentum matters more.',               time: '3 min' },
+  ],
+  'simplifiers':   [
+    { title: 'Meal rhythm, not meal planning', desc: 'A lighter approach to food decisions.',         time: '4 min' },
+    { title: 'Digital boundaries that stick',  desc: 'Practical, not preachy.',                      time: '3 min' },
+  ],
+  'wisdom-cards':  [
+    { title: 'On doing less, better',          desc: 'Greg McKeown on essentialism.',                 time: '2 min' },
+    { title: 'On building identity slowly',    desc: 'James Clear on small habits.',                  time: '2 min' },
+  ],
+  'velani-letter': [
+    { title: 'The system nobody builds',       desc: 'The most important architecture goes undesigned.', time: '4 min' },
+    { title: 'One clear move at a time',       desc: 'A different philosophy on a good day.',         time: '3 min' },
+  ],
+};
 ---
 <Base
   title="Library"
-  description="Short reads on clarity, systems, and the architecture of a well-lived life."
+  description="Short reads on clarity, daily rhythm, and simpler living."
   currentPath="/library"
 >
 
-<main style="flex:1;position:relative;z-index:1;">
+<style>
+  main { flex: 1; }
+
+  /* ── Search bar — full readable width ── */
+  .lib-search-wrap {
+    padding: 0 3rem 2rem;
+    position: relative; z-index: 1;
+  }
+  .search-inner {
+    max-width: 760px; margin: 0 auto;
+    display: flex; align-items: center; gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .search-box { position: relative; flex: 1; min-width: 260px; }
+  .search-icon {
+    position: absolute; left: .9rem; top: 50%;
+    transform: translateY(-50%); color: var(--ink3); pointer-events: none;
+  }
+  .search-input {
+    width: 100%; background: var(--surface);
+    border: 1.5px solid var(--border2); border-radius: 8px;
+    padding: .7rem 2.4rem .7rem 2.3rem;
+    font-family: var(--body); font-size: .85rem; color: var(--ink);
+    outline: none; transition: border-color .2s, box-shadow .2s;
+  }
+  .search-input:focus { border-color: var(--sage); box-shadow: 0 0 0 3px var(--sage-gl); }
+  .search-input::placeholder { color: var(--ink3); }
+  .search-clear {
+    position: absolute; right: .7rem; top: 50%; transform: translateY(-50%);
+    background: none; border: none; color: var(--ink3);
+    cursor: pointer; font-size: .7rem; display: none; line-height: 1;
+  }
+  .search-clear.visible { display: block; }
+
+  /* Category pills */
+  .cat-pills { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .cat-pill {
+    font-size: .7rem; color: var(--ink3);
+    background: var(--surface); border: 1.5px solid var(--border2);
+    border-radius: 6px; padding: .3rem .85rem;
+    cursor: pointer; transition: all .15s;
+    white-space: nowrap; font-family: var(--body);
+    display: inline-flex; align-items: center; gap: .2rem;
+  }
+  .cat-pill:hover { border-color: var(--sage); color: var(--ink); }
+  .cat-pill.active { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+  .cat-pill.coming { opacity: .45; cursor: default; }
+  .pill-soon {
+    font-size: .55rem; border: 1px solid currentColor;
+    border-radius: 3px; padding: .05rem .3rem; opacity: .7;
+  }
+
+  /* Mobile pills toggle */
+  .cat-mobile { display: none; }
+  .cat-toggle-btn {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; background: var(--surface);
+    border: 1.5px solid var(--border2); border-radius: 8px;
+    padding: .6rem 1rem; font-family: var(--body);
+    font-size: .8rem; color: var(--ink2); cursor: pointer;
+    margin-bottom: .5rem;
+  }
+  .cat-caret { font-size: .6rem; color: var(--ink3); transition: transform .2s; }
+  .cat-mobile.open .cat-caret { transform: rotate(180deg); }
+  .cat-mobile-pills { display: none; flex-wrap: wrap; gap: .4rem; }
+  .cat-mobile.open .cat-mobile-pills { display: flex; }
+
+  /* Results */
+  .results-note { font-size: .72rem; color: var(--ink3); margin-bottom: 1rem; min-height: 1rem; padding: 0 3rem; }
+  .results-note .content-inner { max-width: 760px; margin: 0 auto; }
+  .no-results { display: none; padding: 3rem 3rem; }
+  .no-results.visible { display: block; }
+  .no-results p { font-family: var(--display); font-size: .9rem; font-style: italic; color: var(--ink3); line-height: 1.8; max-width: 760px; margin: 0 auto; }
+
+  /* ── Content — single column, generous spacing ── */
+  .lib-content {
+    padding: 0 3rem 6rem;
+    position: relative; z-index: 1;
+  }
+  .lib-inner { max-width: 760px; margin: 0 auto; }
+
+  .cat-section { margin-bottom: 3.5rem; }
+  .cat-head {
+    display: flex; align-items: baseline;
+    justify-content: space-between; gap: 1rem;
+    padding-bottom: .65rem; margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .cat-name { font-family: var(--display); font-size: .95rem; font-weight: 400; color: var(--ink); }
+  .cat-meta { font-size: .65rem; color: var(--ink3); font-style: italic; font-family: var(--display); white-space: nowrap; }
+  .cat-meta.soon { font-style: normal; font-family: var(--body); font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; color: var(--terra); }
+
+  .reads { display: flex; flex-direction: column; gap: .5rem; }
+  .read-row {
+    display: flex; align-items: baseline;
+    justify-content: space-between; gap: 1.5rem;
+    padding: 1rem 1.3rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; text-decoration: none;
+    transition: box-shadow .15s, transform .12s, border-color .15s;
+    cursor: pointer;
+  }
+  .read-row:not(.placeholder):hover {
+    box-shadow: 0 2px 16px rgba(26,29,46,.06);
+    transform: translateY(-1px); border-color: var(--border2);
+  }
+  .read-row.placeholder { opacity: .5; pointer-events: none; }
+  .read-body { flex: 1; min-width: 0; }
+  .read-title { font-family: var(--display); font-size: .92rem; font-weight: 400; color: var(--ink); line-height: 1.3; margin-bottom: .2rem; }
+  .read-desc  { font-size: .78rem; color: var(--ink3); line-height: 1.55; }
+  .read-time  { font-size: .68rem; color: var(--ink3); font-family: var(--display); font-style: italic; white-space: nowrap; flex-shrink: 0; }
+
+  /* ── Signup nudge ── */
+  .lib-nudge {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.8rem 2rem;
+    margin-top: .5rem;
+  }
+  .lib-nudge-title { font-family: var(--display); font-size: .98rem; font-weight: 300; color: var(--ink); margin-bottom: .25rem; }
+  .lib-nudge-title em { font-style: italic; color: var(--sage); }
+  .lib-nudge p { font-size: .8rem; color: var(--ink3); margin-bottom: .9rem; line-height: 1.6; }
+
+  @media (max-width: 900px) {
+    .lib-search-wrap { padding: 0 1.5rem 2rem; }
+    .lib-content { padding: 0 1.5rem 4rem; }
+    .results-note { padding: 0 1.5rem; }
+    .no-results { padding: 2rem 1.5rem; }
+    .cat-pills { display: none; }
+    .cat-mobile { display: block; width: 100%; }
+    .search-inner { flex-direction: column; align-items: stretch; }
+    .search-box { min-width: 0; }
+  }
+</style>
+
+<main>
 
   <!-- Hero -->
-  <div class="page-hero">
-    <div class="page-eyebrow">Library</div>
-    <h1 class="page-title">Ideas worth<br><em>returning to.</em></h1>
-    <p class="page-subtitle">
-      Short reads on clarity, systems, and the architecture of a well-lived life.
-      Written slowly. Meant to be reread.
-    </p>
+  <div class="section-wrap tight" style="position:relative;z-index:1;">
+    <div class="content-wide">
+      <div class="page-hero" style="padding-top:3rem;">
+        <div class="eyebrow">Library</div>
+        <h1 class="page-title">A calm companion,<br><em>for clearer days.</em></h1>
+        <p class="page-subtitle">Short reads on clarity, daily rhythm, and simpler living.</p>
+      </div>
+    </div>
   </div>
 
-  <div style="max-width:720px;margin:0 auto 6rem;padding:0 2.5rem;">
-
-    {sorted.length === 0 ? (
-      <!-- Placeholder state until you add content -->
-      <div style="text-align:center;padding:4rem 0;">
-        <div style="font-family:var(--display);font-size:1.1rem;font-style:italic;color:var(--ink3);margin-bottom:.75rem;">
-          Coming soon.
-        </div>
-        <p style="font-size:.88rem;color:var(--ink3);">
-          The first reads are being written. Check back shortly.
-        </p>
+  <!-- Search + pills -->
+  <div class="lib-search-wrap">
+    <div class="search-inner">
+      <div class="search-box">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none">
+          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <input type="text" id="lib-search" class="search-input" placeholder="What do you need today?" autocomplete="off">
+        <button class="search-clear" id="search-clear" aria-label="Clear">✕</button>
       </div>
-    ) : (
-      <div>
-        {tags.length > 0 && (
-          <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:2.5rem;">
-            {tags.map(tag => (
-              <span style="font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--sage);border:1px solid var(--sage-gl2);border-radius:100px;padding:.3rem .9rem;">
-                {tag}
+
+      <!-- Desktop pills -->
+      <div class="cat-pills" id="cat-pills-desktop">
+        <button class="cat-pill active" data-cat="all">All</button>
+        {categories.map(cat => {
+          const has = live(cat.slug).length > 0;
+          return (
+            <button class={`cat-pill${!has ? ' coming' : ''}`} data-cat={cat.slug}>
+              {cat.star ? '⭐ ' : ''}{cat.label}
+              {!has && <span class="pill-soon">soon</span>}
+            </button>
+          );
+        })}
+      </div>
+
+      <!-- Mobile collapse -->
+      <div class="cat-mobile" id="cat-mobile">
+        <button class="cat-toggle-btn" onclick="window.toggleMobileCat()">
+          <span>Browse by topic</span>
+          <span class="cat-caret">▾</span>
+        </button>
+        <div class="cat-mobile-pills">
+          <button class="cat-pill active" data-cat="all">All</button>
+          {categories.map(cat => {
+            const has = live(cat.slug).length > 0;
+            return (
+              <button class={`cat-pill${!has ? ' coming' : ''}`} data-cat={cat.slug}>
+                {cat.star ? '⭐ ' : ''}{cat.label}
+                {!has && <span class="pill-soon">soon</span>}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="results-note" id="results-note"><div class="content-inner"></div></div>
+  <div class="no-results" id="no-results"><p>Nothing found. Try "mornings", "overwhelm", or "reset".</p></div>
+
+  <!-- Content -->
+  <div class="lib-content">
+    <div class="lib-inner">
+
+      {categories.map(cat => {
+        const liveItems = live(cat.slug);
+        const phItems   = placeholders[cat.slug] || [];
+        const items     = liveItems.length > 0 ? liveItems : phItems;
+        return (
+          <div class="cat-section" data-section={cat.slug}>
+            <div class="cat-head">
+              <span class="cat-name">{cat.star ? '⭐ ' : ''}{cat.label}</span>
+              <span class={`cat-meta${!liveItems.length ? ' soon' : ''}`}>
+                {liveItems.length ? `${liveItems.length} read${liveItems.length !== 1 ? 's' : ''}` : 'Start here soon'}
               </span>
-            ))}
-          </div>
-        )}
-
-        <div style="display:grid;gap:1rem;">
-          {sorted.map(read => (
-            <a href={read.url} style="text-decoration:none;">
-              <div class="card" style="display:grid;grid-template-columns:1fr auto;gap:1.5rem;align-items:start;">
-                <div>
-                  {read.frontmatter.tag && (
-                    <div style="font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--terra);margin-bottom:.5rem;">
-                      {read.frontmatter.tag}
+            </div>
+            <div class="reads">
+              {items.map(item => {
+                const isLive = liveItems.length > 0;
+                const title = isLive ? item.frontmatter.title : item.title;
+                const desc  = isLive ? item.frontmatter.description : item.desc;
+                const time  = isLive ? (item.frontmatter.readTime || '3 min') : item.time;
+                const Tag   = isLive ? 'a' : 'div';
+                return (
+                  <Tag
+                    {...(isLive ? { href: item.url } : {})}
+                    class={`read-row${!isLive ? ' placeholder' : ''}`}
+                    data-title={title.toLowerCase()}
+                    data-desc={(desc||'').toLowerCase()}
+                    data-cat={cat.slug}
+                  >
+                    <div class="read-body">
+                      <div class="read-title">{title}</div>
+                      {desc && <div class="read-desc">{desc}</div>}
                     </div>
-                  )}
-                  <div style="font-family:var(--display);font-size:1.05rem;font-weight:400;color:var(--ink);margin-bottom:.4rem;line-height:1.3;">
-                    {read.frontmatter.title}
-                  </div>
-                  <div style="font-size:.85rem;color:var(--ink3);line-height:1.6;">
-                    {read.frontmatter.description}
-                  </div>
-                </div>
-                <div style="font-size:.7rem;color:var(--ink3);white-space:nowrap;font-style:italic;font-family:var(--display);padding-top:.25rem;">
-                  {read.frontmatter.readTime || '3 min'}
-                </div>
-              </div>
-            </a>
-          ))}
-        </div>
-      </div>
-    )}
+                    <div class="read-time">{time}</div>
+                  </Tag>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
 
+      <!-- Signup nudge -->
+      <div class="lib-nudge">
+        <div class="lib-nudge-title">A quieter <em>inbox.</em></div>
+        <p>Weekly letters with practical tools for calmer, clearer days.</p>
+        <div id="nudge-form">
+          <div class="inline-form">
+            <input type="email" id="nudge-email" class="inline-email" placeholder="your@email.com" autocomplete="email">
+            <button class="inline-btn" onclick="window.nudgeSignup()">Stay in touch</button>
+          </div>
+          <p class="inline-consent">By joining, you agree to occasional Velani emails. <a href="/privacy" target="_blank">Privacy policy</a>.</p>
+        </div>
+        <div class="inline-success" id="nudge-success">✓ Check your inbox to confirm.</div>
+      </div>
+
+    </div>
   </div>
 </main>
+
+<script>
+  window.toggleMobileCat = function() {
+    document.getElementById('cat-mobile').classList.toggle('open');
+  };
+
+  const searchEl    = document.getElementById('lib-search');
+  const clearBtn    = document.getElementById('search-clear');
+  const allPills    = document.querySelectorAll('.cat-pill');
+  const sections    = document.querySelectorAll('[data-section]');
+  const noResults   = document.getElementById('no-results');
+  const resultsNote = document.getElementById('results-note');
+  let activeCat = 'all', query = '';
+
+  function update() {
+    let count = 0;
+    sections.forEach(sec => {
+      const cat = sec.dataset.section;
+      const show = activeCat === 'all' || activeCat === cat;
+      let vis = false;
+      sec.querySelectorAll('[data-title]').forEach(card => {
+        const match = !query || (card.dataset.title||'').includes(query) || (card.dataset.desc||'').includes(query);
+        const ok = show && match;
+        card.style.display = ok ? '' : 'none';
+        if (ok) { vis = true; count++; }
+      });
+      sec.style.display = vis ? '' : 'none';
+    });
+    noResults.classList.toggle('visible', count === 0);
+    resultsNote.querySelector('.content-inner').textContent =
+      query ? `${count} result${count !== 1 ? 's' : ''} for "${query}"` : '';
+  }
+
+  searchEl.addEventListener('input', () => {
+    query = searchEl.value.trim().toLowerCase();
+    clearBtn.classList.toggle('visible', !!query);
+    update();
+  });
+  clearBtn.addEventListener('click', () => {
+    searchEl.value = ''; query = '';
+    clearBtn.classList.remove('visible');
+    searchEl.focus(); update();
+  });
+  allPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      if (pill.classList.contains('coming')) return;
+      allPills.forEach(p => p.classList.remove('active'));
+      document.querySelectorAll(`[data-cat="${pill.dataset.cat}"]`).forEach(p => {
+        if (p.classList.contains('cat-pill')) p.classList.add('active');
+      });
+      activeCat = pill.dataset.cat; update();
+    });
+  });
+
+  window.nudgeSignup = function() {
+    const email = document.getElementById('nudge-email').value.trim();
+    if (!email || !email.includes('@')) { document.getElementById('nudge-email').style.borderColor='#B86A43'; return; }
+    document.getElementById('nudge-email').style.borderColor='rgba(26,29,46,.14)';
+    fetch('https://velani-subscribe.velani-app.workers.dev/', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email })
+    }).then(() => done()).catch(() => done());
+    function done() {
+      document.getElementById('nudge-form').style.display = 'none';
+      document.getElementById('nudge-success').classList.add('visible');
+    }
+  };
+</script>
+
 </Base>

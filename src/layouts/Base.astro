@@ -1,82 +1,313 @@
 ---
-// src/layouts/Base.astro
-import '../styles/global.css';
-
 const {
   title = 'Velani',
-  description = 'A life well lived, daily.',
-  ogImage = '/og-default.png',
+  description = 'A daily clarity layer. One clear move at a time.',
   currentPath = ''
 } = Astro.props;
 
-const navLinks = [
-  { href: '/letter',     label: 'Letter' },
-  { href: '/library',    label: 'Library' },
-  { href: '/philosophy', label: 'Philosophy' },
+const nav = [
+  { href: '/start',   label: 'Start'   },
+  { href: '/library', label: 'Library' },
+  { href: '/letters', label: 'Letters' },
+  { href: '/about',   label: 'About'   },
 ];
 ---
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{title} — Velani</title>
-  <meta name="description" content={description}>
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="icon" type="image/png" href="/favicon.png">
-  <link rel="shortcut icon" href="/favicon.ico">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content={`${title} — Velani`}>
-  <meta property="og:description" content={description}>
-  <meta property="og:image" content={ogImage}>
-  <meta property="og:url" content={`https://velani.app${currentPath}`}>
-  <meta property="og:type" content="website">
-
-  <!-- Canonical -->
-  <link rel="canonical" href={`https://velani.app${currentPath}`}>
-
-  <!-- Sitemap -->
-  <link rel="sitemap" href="/sitemap-index.xml">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title} — Velani</title>
+<meta name="description" content={description}>
+<link rel="canonical" href={`https://velani.app${currentPath}`}>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:title" content={`${title} — Velani`}>
+<meta property="og:description" content={description}>
+<meta property="og:url" content={`https://velani.app${currentPath}`}>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<nav class="main-nav">
+<nav>
   <a class="nav-brand" href="/">
-    <svg width="18" height="18" viewBox="0 0 80 80" fill="none">
-      <circle cx="40" cy="40" r="33" stroke="#1A1D2E" stroke-width="2.2" fill="none" opacity=".16"/>
-      <circle cx="40" cy="40" r="21" stroke="#1A1D2E" stroke-width="2.2" fill="none" opacity=".4"/>
+    <svg width="20" height="20" viewBox="0 0 80 80" fill="none">
+      <circle cx="40" cy="40" r="33" stroke="#1A1D2E" stroke-width="2.2" fill="none" opacity=".18"/>
+      <circle cx="40" cy="40" r="21" stroke="#1A1D2E" stroke-width="2.2" fill="none" opacity=".45"/>
       <circle cx="40" cy="40" r="6" fill="#5B8C7A"/>
     </svg>
     VELANI
   </a>
-  {Astro.slots.has('nav-right') ? (
-    <slot name="nav-right" />
-  ) : (
-    <div class="nav-links">
-      {navLinks.map(link => (
-        <a
-          class={`nav-link${currentPath.startsWith(link.href) ? ' active' : ''}`}
-          href={link.href}
-        >{link.label}</a>
-      ))}
-    </div>
-  )}
+  <div class="nav-links">
+    {nav.map(n => (
+      <a class={`nav-link${currentPath === n.href || currentPath.startsWith(n.href + '/') ? ' active' : ''}`} href={n.href}>
+        {n.label}
+      </a>
+    ))}
+  </div>
 </nav>
 
 <slot />
 
+<!-- Footer: single line like V3 -->
 <footer>
   <div class="foot-brand">VELANI</div>
-  <div class="foot-links">
-    <a class="foot-link" href="mailto:hello@velani.app">hello@velani.app</a>
-    <a class="foot-link" href="/privacy">Privacy</a>
+  <nav class="foot-nav">
+    <a href="/start">Start</a>
+    <a href="/library">Library</a>
+    <a href="/letters">Letters</a>
+    <a href="/about">About</a>
+  </nav>
+  <div class="foot-right">
+    <a href="/privacy">Privacy</a>
+    <a href="mailto:hello@velani.app">Contact</a>
+    <!-- Pinterest: simple P lettermark, clean -->
+    <a href="https://ca.pinterest.com/velaniapp/" target="_blank" rel="noopener" aria-label="Pinterest" class="foot-pinterest">
+      <span>P</span>
+    </a>
   </div>
-  <div class="foot-copy">© 2026 · A life well lived, daily.</div>
 </footer>
 
 </body>
 </html>
+
+<style is:global>
+/* ─────────────────────────────
+   TOKENS
+───────────────────────────── */
+:root {
+  --bg:       #F7F6F3;
+  --bg2:      #EDECEA;
+  --surface:  #FFFFFF;
+  --border:   rgba(26,29,46,.08);
+  --border2:  rgba(26,29,46,.14);
+  --ink:      #1A1D2E;
+  --ink2:     #4A4E6B;
+  --ink3:     #6E7191;
+  --sage:     #5B8C7A;
+  --sage2:    #3D6B59;
+  --sage-gl:  rgba(91,140,122,.10);
+  --sage-gl2: rgba(91,140,122,.18);
+  --terra:    #B86A43;
+  --display:  'Lora', Georgia, serif;
+  --body:     'DM Sans', system-ui, sans-serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 18px; scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-weight: 400;
+  line-height: 1.75;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+/* ─────────────────────────────
+   NAV
+───────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 50;
+  padding: 1.2rem 3rem;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  background: rgba(247,246,243,.96);
+  backdrop-filter: blur(10px);
+}
+.nav-brand {
+  font-family: var(--display);
+  font-size: 1rem; font-weight: 400;
+  letter-spacing: .22em; color: var(--ink);
+  text-decoration: none;
+  display: flex; align-items: center; gap: .55rem;
+}
+.nav-links { display: flex; align-items: center; gap: 2.2rem; }
+.nav-link {
+  font-size: .75rem; color: var(--ink3);
+  text-decoration: none; letter-spacing: .04em; transition: color .2s;
+}
+.nav-link:hover, .nav-link.active { color: var(--ink); }
+
+/* ─────────────────────────────
+   FOOTER — single line V3 style
+───────────────────────────── */
+footer {
+  position: relative; z-index: 1;
+  padding: 1.2rem 3rem;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap; gap: .5rem;
+  margin-top: auto;
+}
+.foot-brand {
+  font-family: var(--display);
+  font-size: .8rem; letter-spacing: .22em; color: var(--ink);
+}
+.foot-nav { display: flex; gap: 1.6rem; }
+.foot-nav a {
+  font-size: .72rem; color: var(--ink3);
+  text-decoration: none; transition: color .2s;
+}
+.foot-nav a:hover { color: var(--ink); }
+.foot-right { display: flex; align-items: center; gap: 1.2rem; }
+.foot-right a {
+  font-size: .72rem; color: var(--ink3);
+  text-decoration: none; transition: color .2s;
+}
+.foot-right a:hover { color: var(--ink); }
+.foot-pinterest {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--ink); color: var(--bg) !important;
+  font-family: Georgia, serif; font-size: .7rem; font-style: italic;
+  font-weight: 700; line-height: 1; text-decoration: none;
+  transition: background .2s !important;
+}
+.foot-pinterest:hover { background: #E60023 !important; }
+
+/* ─────────────────────────────
+   PAGE LAYOUT HELPERS
+───────────────────────────── */
+/* Full-bleed section wrapper */
+.section-wrap {
+  width: 100%;
+  padding: 5rem 3rem;
+  position: relative; z-index: 1;
+}
+.section-wrap.surface { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.section-wrap.tight { padding: 3.5rem 3rem; }
+
+/* Content constrained to readable width */
+.content-mid  { max-width: 760px;  margin: 0 auto; }
+.content-wide { max-width: 1080px; margin: 0 auto; }
+.content-narrow { max-width: 580px; margin: 0 auto; }
+
+/* Page hero — left aligned inside page-wrap */
+.page-wrap {
+  max-width: 1080px; margin: 0 auto;
+  padding: 0 3rem; width: 100%;
+  position: relative; z-index: 1;
+}
+.page-hero { padding: 4.5rem 0 3rem; max-width: 600px; }
+
+/* Typography helpers */
+.eyebrow {
+  font-size: .6rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--terra);
+  font-weight: 500; margin-bottom: .85rem;
+}
+.page-title {
+  font-family: var(--display);
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 300; line-height: 1.1;
+  color: var(--ink); margin-bottom: 1rem; letter-spacing: -.02em;
+}
+.page-title em { font-style: italic; color: var(--sage); }
+.page-subtitle { font-size: .95rem; color: var(--ink2); line-height: 1.8; }
+
+/* Section label */
+.v-label {
+  font-size: .6rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--terra);
+  font-weight: 500; margin-bottom: 1rem;
+}
+/* Divider */
+.v-divider { height: 1px; background: var(--border); margin: 3rem 0; }
+
+/* ─────────────────────────────
+   BUTTONS
+───────────────────────────── */
+.btn-dark {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: var(--ink); color: var(--bg);
+  font-family: var(--body); font-size: .78rem; font-weight: 500;
+  letter-spacing: .07em; text-transform: uppercase;
+  padding: .85rem 1.8rem; border-radius: 100px;
+  text-decoration: none; border: none; cursor: pointer;
+  transition: background .2s, transform .15s; white-space: nowrap;
+}
+.btn-dark:hover { background: var(--sage2); transform: translateY(-1px); }
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: transparent; color: var(--ink2);
+  font-family: var(--body); font-size: .78rem; font-weight: 400;
+  padding: .75rem 1.5rem; border-radius: 100px;
+  border: 1.5px solid var(--border2); text-decoration: none;
+  transition: border-color .2s, color .2s; white-space: nowrap;
+}
+.btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+.btn-link { font-size: .8rem; color: var(--sage); text-decoration: none; }
+.btn-link:hover { text-decoration: underline; }
+
+/* ─────────────────────────────
+   INLINE EMAIL FORM
+───────────────────────────── */
+.inline-form { display: flex; gap: .55rem; }
+.inline-email {
+  flex: 1; min-width: 0; background: var(--bg);
+  border: 1.5px solid var(--border2); border-radius: 8px;
+  padding: .72rem 1rem; font-family: var(--body);
+  font-size: .85rem; color: var(--ink); outline: none;
+  transition: border-color .2s;
+}
+.inline-email:focus { border-color: var(--sage); }
+.inline-email::placeholder { color: var(--ink3); }
+.inline-btn {
+  background: var(--ink); color: var(--bg);
+  font-family: var(--body); font-size: .73rem; font-weight: 500;
+  letter-spacing: .06em; text-transform: uppercase;
+  padding: .72rem 1.3rem; border-radius: 8px; border: none;
+  cursor: pointer; white-space: nowrap; flex-shrink: 0;
+  transition: background .2s;
+}
+.inline-btn:hover { background: var(--sage2); }
+.inline-consent {
+  font-size: .64rem; color: var(--ink3); margin-top: .4rem; line-height: 1.5;
+}
+.inline-consent a { color: var(--sage); text-decoration: none; }
+.inline-success {
+  display: none; font-size: .82rem; color: var(--sage);
+  font-family: var(--display); font-style: italic;
+}
+.inline-success.visible { display: block; }
+
+/* ─────────────────────────────
+   ANIMATIONS
+───────────────────────────── */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.rise { animation: rise .7s cubic-bezier(.22,1,.36,1) forwards; }
+
+/* ─────────────────────────────
+   RESPONSIVE
+───────────────────────────── */
+@media (max-width: 900px) {
+  nav { padding: 1.1rem 1.5rem; }
+  footer { padding: 1.1rem 1.5rem; flex-direction: column; align-items: flex-start; gap: .5rem; }
+  .section-wrap { padding: 4rem 1.5rem; }
+  .section-wrap.tight { padding: 3rem 1.5rem; }
+  .page-wrap { padding: 0 1.5rem; }
+  .page-hero { padding: 3rem 0 2rem; }
+}
+@media (max-width: 640px) {
+  .nav-links { gap: 1.4rem; }
+  .inline-form { flex-direction: column; }
+  .inline-btn { width: 100%; padding: .85rem; text-align: center; justify-content: center; }
+}
+</style>

@@ -1,0 +1,175 @@
+---
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const pages = await Astro.glob('../../content/library/*.md');
+  return pages
+    .filter(p => !p.frontmatter.draft)
+    .map(page => {
+      const slug = page.file.split('/').pop().replace('.md', '');
+      return {
+        params: { slug },
+        props: { frontmatter: page.frontmatter, compiledContent: page.compiledContent() }
+      };
+    });
+}
+
+const { frontmatter, compiledContent } = Astro.props;
+---
+<Base
+  title={frontmatter.title}
+  description={frontmatter.description || ''}
+  currentPath={`/library/${frontmatter.slug || ''}`}
+>
+<style>
+  main { flex: 1; }
+
+  .article-wrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 5rem 3rem 7rem;
+    position: relative; z-index: 1;
+  }
+
+  .article-back {
+    display: inline-flex; align-items: center; gap: .4rem;
+    font-size: .75rem; color: var(--ink3); text-decoration: none;
+    letter-spacing: .04em; margin-bottom: 3rem;
+    transition: color .2s;
+  }
+  .article-back:hover { color: var(--ink); }
+
+  .article-meta {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1.2rem; flex-wrap: wrap;
+  }
+  .article-category {
+    font-size: .6rem; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--terra); font-weight: 500;
+  }
+  .article-time {
+    font-size: .72rem; color: var(--ink3);
+    font-family: var(--display); font-style: italic;
+  }
+
+  .article-title {
+    font-family: var(--display);
+    font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+    font-weight: 300; line-height: 1.15;
+    color: var(--ink); margin-bottom: 1rem;
+    letter-spacing: -.015em;
+  }
+
+  .article-desc {
+    font-size: 1rem; color: var(--ink2);
+    line-height: 1.75; margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    font-style: italic; font-family: var(--display);
+  }
+
+  /* Article body prose */
+  .article-body { font-size: .98rem; color: var(--ink2); line-height: 1.9; }
+  .article-body p { margin-bottom: 1.4rem; }
+  .article-body p:last-child { margin-bottom: 0; }
+  .article-body em { font-style: italic; color: var(--ink); }
+  .article-body strong { font-weight: 500; color: var(--ink); }
+  .article-body hr {
+    border: none; border-top: 1px solid var(--border);
+    margin: 2.5rem 0;
+  }
+  .article-body h2 {
+    font-family: var(--display); font-size: 1.1rem;
+    font-weight: 400; color: var(--ink);
+    margin: 2.5rem 0 .8rem; line-height: 1.3;
+  }
+  .article-body h3 {
+    font-family: var(--display); font-size: .95rem;
+    font-weight: 400; color: var(--ink);
+    margin: 2rem 0 .6rem;
+  }
+  .article-body ul, .article-body ol {
+    padding-left: 1.5rem; margin-bottom: 1.4rem;
+  }
+  .article-body li { margin-bottom: .4rem; color: var(--ink2); }
+  .article-body blockquote {
+    font-family: var(--display); font-style: italic;
+    font-size: 1rem; color: var(--ink2);
+    border-left: 2px solid var(--sage);
+    padding: .75rem 0 .75rem 1.4rem;
+    margin: 2rem 0; line-height: 1.7;
+  }
+
+  /* Footer: back link + nudge */
+  .article-footer {
+    margin-top: 4rem; padding-top: 2.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .article-footer-hed {
+    font-family: var(--display); font-size: .95rem;
+    font-weight: 300; color: var(--ink); margin-bottom: .3rem;
+  }
+  .article-footer-hed em { font-style: italic; color: var(--sage); }
+  .article-footer p { font-size: .8rem; color: var(--ink3); margin-bottom: .9rem; line-height: 1.6; }
+
+  @media (max-width: 700px) {
+    .article-wrap { padding: 3rem 1.5rem 5rem; }
+  }
+</style>
+
+<main>
+  <div class="article-wrap">
+
+    <a class="article-back" href="/library">← Library</a>
+
+    <div class="article-meta">
+      {frontmatter.category && (
+        <span class="article-category">{frontmatter.category.replace('-', ' ')}</span>
+      )}
+      {frontmatter.readTime && (
+        <span class="article-time">{frontmatter.readTime}</span>
+      )}
+    </div>
+
+    <h1 class="article-title">{frontmatter.title}</h1>
+    {frontmatter.description && (
+      <p class="article-desc">{frontmatter.description}</p>
+    )}
+
+    <div class="article-body">
+      <Fragment set:html={compiledContent} />
+    </div>
+
+    <!-- Signup nudge at article end -->
+    <div class="article-footer">
+      <div class="article-footer-hed">A quieter <em>inbox.</em></div>
+      <p>Weekly letters with practical tools for calmer, clearer days.</p>
+      <div id="art-form">
+        <div class="inline-form">
+          <input type="email" id="art-email" class="inline-email" placeholder="your@email.com" autocomplete="email">
+          <button class="inline-btn" onclick="window.artSignup()">Join Velani</button>
+        </div>
+        <p class="inline-consent">By joining, you agree to receive occasional Velani emails. <a href="/privacy" target="_blank">Privacy policy</a>.</p>
+      </div>
+      <div class="inline-success" id="art-success">✓ Check your inbox to confirm.</div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  window.artSignup = function() {
+    const email = document.getElementById('art-email').value.trim();
+    if (!email || !email.includes('@')) { document.getElementById('art-email').style.borderColor='#B86A43'; return; }
+    document.getElementById('art-email').style.borderColor='rgba(26,29,46,.14)';
+    fetch('https://velani-subscribe.velani-app.workers.dev/', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email })
+    }).then(() => ok()).catch(() => ok());
+    function ok() {
+      document.getElementById('art-form').style.display = 'none';
+      document.getElementById('art-success').classList.add('visible');
+    }
+  };
+</script>
+
+</Base>

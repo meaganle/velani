@@ -2,369 +2,439 @@
 import Base from '../layouts/Base.astro';
 ---
 <Base
-  title="Velani — One clear move. One clearer day."
-  description="Stop managing everything. Move one meaningful thing forward. No setup. Free forever."
+  title="Velani — Make room for yourself again."
+  description="You spent years making room for everyone else. Velani helps you make room for yourself again. A simple daily practice for women carrying too much."
   currentPath="/"
 >
-  <a slot="nav-right" class="nav-link" href="#how">How it works</a>
-
 <style>
-main { flex: 1; position: relative; z-index: 1; }
+  main { flex: 1; }
 
-.hero {
-  display: flex; flex-direction: column;
-  align-items: center; text-align: center;
-  padding: 6.5rem 2rem 5rem;
-  max-width: 680px; margin: 0 auto;
-  animation: rise .85s cubic-bezier(.22,1,.36,1) forwards;
-}
-@keyframes rise {
-  from { opacity: 0; transform: translateY(22px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.hero-headline {
-  font-family: var(--display);
-  font-size: clamp(2.6rem, 5.5vw, 3.6rem);
-  font-weight: 300;
-  line-height: 1.07;
-  letter-spacing: -.025em;
-  color: var(--ink);
-  margin-bottom: 1.3rem;
-}
-.hero-headline em { font-style: italic; color: var(--sage); }
-.hero-sub {
-  font-size: 1.05rem;
-  color: var(--ink2);
-  line-height: 1.72;
-  margin-bottom: 2.8rem;
-  max-width: 380px;
-}
-.cta-group {
-  display: flex; flex-direction: column;
-  align-items: center; gap: .85rem;
-  margin-bottom: 1rem;
-}
-.btn-dark {
-  display: inline-flex; align-items: center; gap: .55rem;
-  background: var(--ink); color: var(--bg);
-  font-family: var(--body);
-  font-size: .82rem; font-weight: 500;
-  letter-spacing: .07em; text-transform: uppercase;
-  padding: .95rem 2.4rem;
-  border-radius: 100px;
-  text-decoration: none; border: none; cursor: pointer;
-  transition: background .2s, transform .15s;
-}
-.btn-dark:hover { background: var(--sage2); transform: translateY(-1px); }
-.btn-dark svg { transition: transform .2s; }
-.btn-dark:hover svg { transform: translateX(3px); }
-.btn-outline {
-  display: inline-flex; align-items: center; gap: .4rem;
-  background: transparent; color: var(--ink2);
-  font-family: var(--body);
-  font-size: .8rem; font-weight: 400;
-  padding: .65rem 1.5rem;
-  border-radius: 100px;
-  border: 1.5px solid var(--border2);
-  text-decoration: none; cursor: pointer;
-  transition: border-color .2s, color .2s;
-}
-.btn-outline:hover { border-color: var(--ink2); color: var(--ink); }
-.hero-footnote {
-  font-size: .7rem; color: var(--ink3);
-  letter-spacing: .04em;
-}
-.hero-footnote span { margin: 0 .35rem; opacity: .5; }
+  /* ── Section base ── */
+  .section {
+    padding: 7rem 3rem;
+    position: relative; z-index: 1;
+  }
+  .section.surface {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .section.ink-bg {
+    background: var(--ink);
+    border-top: none; border-bottom: none;
+  }
+  .section.sage-tint {
+    background: rgba(91,140,122,.06);
+    border-top: 1px solid rgba(91,140,122,.12);
+    border-bottom: 1px solid rgba(91,140,122,.12);
+  }
 
-.preview-wrap {
-  max-width: 680px; margin: 0 auto;
-  padding: 0 2rem 5.5rem;
-  animation: rise .85s .1s cubic-bezier(.22,1,.36,1) both;
-}
-.section-eyebrow {
-  text-align: center;
-  font-size: .6rem;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: var(--ink3); font-weight: 500;
-  margin-bottom: 1.6rem;
-}
-.preview-card {
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 20px;
-  padding: 2rem 2.4rem;
-  max-width: 420px;
-  margin: 0 auto;
-  box-shadow: 0 2px 20px rgba(26,29,46,.04);
-}
-.preview-date {
-  font-size: .62rem; font-weight: 500;
-  letter-spacing: .16em; text-transform: uppercase;
-  color: var(--ink3); margin-bottom: 1.6rem;
-}
-.preview-row { margin-bottom: 1.3rem; }
-.preview-row:last-child { margin-bottom: 0; }
-.preview-row-label {
-  font-size: .6rem; letter-spacing: .18em;
-  text-transform: uppercase; color: var(--terra);
-  font-weight: 500; margin-bottom: .5rem;
-}
-.preview-item {
-  display: flex; align-items: center; gap: .7rem;
-  font-size: .88rem; color: var(--ink2); line-height: 1.5;
-}
-.preview-dot {
-  width: 18px; height: 18px; border-radius: 50%;
-  background: var(--sage-gl);
-  border: 1.5px solid rgba(91,140,122,.28);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.preview-divider { height: 1px; background: var(--border); margin: 1.2rem 0; }
+  /* ── Hero ── */
+  .hero {
+    padding: 8rem 3rem 7rem;
+    max-width: 820px;
+    margin: 0 auto;
+    animation: rise .9s cubic-bezier(.22,1,.36,1) forwards;
+    position: relative; z-index: 1;
+  }
+  .hero-eyebrow {
+    font-size: .62rem; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--sage);
+    font-weight: 500; margin-bottom: 2rem;
+  }
+  .hero-headline {
+    font-family: var(--display);
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 300; line-height: 1.1;
+    letter-spacing: -.02em; color: var(--ink);
+    margin-bottom: 2.5rem;
+  }
+  .hero-headline em { font-style: italic; color: var(--sage); }
 
-.pillars-wrap {
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  padding: 5rem 2rem;
-}
-.pillars-inner { max-width: 720px; margin: 0 auto; }
-.pillars {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-  margin-top: 2.8rem;
-}
-.pillar { padding: 0 .5rem; }
-.pillar-num {
-  font-family: var(--display);
-  font-size: 1.8rem; font-weight: 300;
-  font-style: italic; color: var(--sage);
-  margin-bottom: .5rem; line-height: 1;
-}
-.pillar-name { font-size: .88rem; font-weight: 500; color: var(--ink); margin-bottom: .4rem; }
-.pillar-desc { font-size: .78rem; color: var(--ink3); line-height: 1.7; }
+  /* The list — short breath, one per line */
+  .hero-list {
+    list-style: none;
+    margin-bottom: 2.5rem;
+    display: flex; flex-direction: column; gap: .2rem;
+  }
+  .hero-list li {
+    font-family: var(--display);
+    font-size: 1.05rem; font-weight: 300;
+    color: var(--ink2); line-height: 1.6;
+    font-style: italic;
+  }
 
-.quote-wrap {
-  padding: 5rem 2rem;
-  text-align: center;
-  max-width: 520px; margin: 0 auto;
-}
-.quote-text {
-  font-family: var(--display);
-  font-size: 1.08rem; font-style: italic; font-weight: 300;
-  color: var(--ink2); line-height: 1.85; margin-bottom: .9rem;
-}
-.quote-attr { font-size: .68rem; color: var(--ink3); letter-spacing: .1em; text-transform: uppercase; }
+  .hero-close {
+    font-size: 1.05rem; color: var(--ink2);
+    line-height: 1.8; margin-bottom: 3rem;
+    max-width: 540px;
+  }
+  .hero-close strong {
+    color: var(--ink); font-weight: 500;
+    font-family: var(--display); font-style: italic;
+  }
 
-.signup-wrap {
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  padding: 5.5rem 2rem;
-}
-.signup-inner { max-width: 420px; margin: 0 auto; text-align: center; }
-.signup-eyebrow {
-  font-size: .6rem; letter-spacing: .22em;
-  text-transform: uppercase; color: var(--terra);
-  font-weight: 500; margin-bottom: 1rem;
-}
-.signup-headline {
-  font-family: var(--display);
-  font-size: 1.65rem; font-weight: 300;
-  line-height: 1.18; color: var(--ink);
-  margin-bottom: .8rem; letter-spacing: -.01em;
-}
-.signup-headline em { font-style: italic; color: var(--sage); }
-.signup-subline { font-size: .88rem; color: var(--ink3); line-height: 1.72; margin-bottom: 1.8rem; }
-.field-email {
-  width: 100%; background: var(--bg);
-  border: 1.5px solid var(--border2); border-radius: 10px;
-  padding: .95rem 1.1rem; font-family: var(--body);
-  font-size: .9rem; color: var(--ink);
-  outline: none; transition: border-color .2s;
-  margin-bottom: .6rem;
-}
-.field-email:focus { border-color: var(--sage); background: var(--surface); }
-.field-email::placeholder { color: var(--ink3); }
-.field-error { display: block; font-size: .7rem; color: var(--terra); min-height: 1.1rem; margin-bottom: .4rem; text-align: left; }
-.consent-row { display: flex; align-items: flex-start; gap: .65rem; margin-bottom: .5rem; text-align: left; }
-.consent-row input[type="checkbox"] { width: 15px; height: 15px; cursor: pointer; accent-color: var(--sage); flex-shrink: 0; margin-top: .2em; }
-.consent-label { font-size: .7rem; color: var(--ink3); line-height: 1.6; cursor: pointer; }
-.consent-label a { color: var(--sage); text-decoration: none; }
-.field-footnote { font-size: .65rem; color: var(--ink3); letter-spacing: .02em; margin-bottom: 1.4rem; text-align: left; }
-.field-message { display: block; font-size: .72rem; color: var(--sage); min-height: 1rem; margin-top: .7rem; text-align: center; }
+  .hero-cta { display: flex; flex-direction: column; align-items: flex-start; gap: .6rem; }
+  .hero-sub-text {
+    font-size: .78rem; color: var(--ink3);
+    font-style: italic; font-family: var(--display);
+    margin-top: .2rem;
+  }
 
-@media (max-width: 640px) {
-  .hero { padding: 4.5rem 1.5rem 4rem; }
-  .preview-wrap { padding: 0 1.5rem 4rem; }
-  .pillars { grid-template-columns: 1fr; gap: 0; margin-top: 2rem; }
-  .pillar { padding: 1.4rem 0; border-bottom: 1px solid var(--border); }
-  .pillar:last-child { border-bottom: none; }
-  .quote-wrap { padding: 4rem 1.5rem; }
-  .signup-wrap { padding: 4rem 1.5rem; }
-}
+  /* ── Section 2: Life wasn't supposed to feel like maintenance ── */
+  .s2-inner { max-width: 720px; margin: 0 auto; }
+  .s2-headline {
+    font-family: var(--display);
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 300; line-height: 1.15;
+    color: var(--ink); margin-bottom: 2rem;
+    letter-spacing: -.015em;
+  }
+  .s2-headline em { font-style: italic; color: var(--ink2); }
+  .s2-body {
+    font-size: 1rem; color: var(--ink2);
+    line-height: 1.85; margin-bottom: 2rem;
+    max-width: 560px;
+  }
+  .s2-list {
+    list-style: none;
+    margin-bottom: 2.5rem;
+    display: flex; flex-direction: column; gap: .35rem;
+    max-width: 420px;
+  }
+  .s2-list li {
+    display: flex; align-items: baseline; gap: .75rem;
+    font-size: .95rem; color: var(--ink2); line-height: 1.6;
+  }
+  .s2-dash { color: var(--ink3); flex-shrink: 0; }
+  .s2-answer {
+    font-family: var(--display);
+    font-size: 1.05rem; font-weight: 300;
+    font-style: italic; color: var(--ink);
+    margin-top: 2rem; line-height: 1.7;
+  }
+  .s2-answer strong { font-style: normal; font-weight: 400; color: var(--sage); }
+
+  /* ── Section 3: Velani helps you carry less ── */
+  .s3-inner {
+    max-width: 900px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 6rem; align-items: center;
+  }
+  .s3-headline {
+    font-family: var(--display);
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 300; line-height: 1.15;
+    color: var(--ink); margin-bottom: 1.2rem;
+    letter-spacing: -.015em;
+  }
+  .s3-headline em { font-style: italic; color: var(--sage); }
+  .s3-body { font-size: .95rem; color: var(--ink2); line-height: 1.85; margin-bottom: 2rem; }
+  .s3-checks { display: flex; flex-direction: column; gap: .6rem; margin-bottom: 2.5rem; }
+  .s3-check {
+    display: flex; align-items: flex-start; gap: .75rem;
+    font-size: .9rem; color: var(--ink2); line-height: 1.6;
+  }
+  .check-mark {
+    color: var(--sage); font-size: .8rem;
+    flex-shrink: 0; margin-top: .2em; font-weight: 500;
+  }
+
+  /* Right side: the before/after feeling */
+  .feeling-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .feeling-half {
+    padding: 2rem 2.2rem;
+  }
+  .feeling-half.before { border-bottom: 1px solid var(--border); }
+  .feeling-label {
+    font-size: .6rem; letter-spacing: .18em;
+    text-transform: uppercase; font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  .feeling-label.before { color: var(--ink3); }
+  .feeling-label.after  { color: var(--sage); }
+  .feeling-items { display: flex; flex-direction: column; gap: .4rem; }
+  .feeling-item {
+    font-size: .85rem; line-height: 1.5;
+    display: flex; align-items: baseline; gap: .6rem;
+  }
+  .feeling-item.before { color: var(--ink3); }
+  .feeling-item.after  { color: var(--ink2); }
+  .fi-marker { flex-shrink: 0; font-size: .7rem; }
+  .fi-marker.before { color: var(--ink3); }
+  .fi-marker.after  { color: var(--sage); }
+
+  /* ── Section 4: Promise — dark ── */
+  .s4-inner { max-width: 680px; margin: 0 auto; text-align: center; }
+  .s4-headline {
+    font-family: var(--display);
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+    font-weight: 300; line-height: 1.2;
+    color: var(--bg); margin-bottom: 1.5rem;
+    letter-spacing: -.015em;
+  }
+  .s4-headline em { font-style: italic; color: rgba(91,140,122,.8); }
+  .s4-body {
+    font-size: 1rem; color: rgba(247,246,243,.6);
+    line-height: 1.85; margin-bottom: 3rem;
+    max-width: 480px; margin-left: auto; margin-right: auto;
+  }
+
+  /* ── Section 5: Signup ── */
+  .s5-inner { max-width: 520px; margin: 0 auto; }
+  .s5-eyebrow {
+    font-size: .6rem; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--terra);
+    font-weight: 500; margin-bottom: 1rem;
+  }
+  .s5-headline {
+    font-family: var(--display);
+    font-size: clamp(1.6rem, 3vw, 2rem);
+    font-weight: 300; line-height: 1.2;
+    color: var(--ink); margin-bottom: .75rem;
+    letter-spacing: -.01em;
+  }
+  .s5-headline em { font-style: italic; color: var(--sage); }
+  .s5-body { font-size: .9rem; color: var(--ink2); line-height: 1.8; margin-bottom: 2rem; }
+
+  .s5-form { max-width: 420px; }
+  .s5-row { display: flex; gap: .55rem; margin-bottom: .5rem; }
+  .s5-email {
+    flex: 1; min-width: 0; background: var(--bg);
+    border: 1.5px solid var(--border2); border-radius: 10px;
+    padding: .85rem 1rem; font-family: var(--body);
+    font-size: .88rem; color: var(--ink); outline: none;
+    transition: border-color .2s;
+  }
+  .s5-email:focus { border-color: var(--sage); }
+  .s5-email::placeholder { color: var(--ink3); }
+  .s5-btn {
+    background: var(--ink); color: var(--bg);
+    font-family: var(--body); font-size: .74rem; font-weight: 500;
+    letter-spacing: .07em; text-transform: uppercase;
+    padding: .85rem 1.4rem; border-radius: 10px; border: none;
+    cursor: pointer; white-space: nowrap; flex-shrink: 0;
+    transition: background .2s, transform .15s;
+  }
+  .s5-btn:hover { background: var(--sage2); transform: translateY(-1px); }
+  .s5-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+  .s5-error { display: block; font-size: .7rem; color: var(--terra); min-height: .85rem; margin-bottom: .3rem; }
+  .s5-consent { font-size: .64rem; color: var(--ink3); line-height: 1.55; }
+  .s5-consent a { color: var(--sage); text-decoration: none; }
+
+  /* Success */
+  .s5-success { display: none; }
+  .s5-success.visible { display: block; }
+  .success-mark {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--sage-gl); border: 1.5px solid rgba(91,140,122,.25);
+    display: flex; align-items: center; justify-content: center; margin-bottom: 1.2rem;
+  }
+  .success-title { font-family: var(--display); font-size: 1.2rem; font-weight: 300; color: var(--ink); margin-bottom: .4rem; }
+  .success-title em { font-style: italic; color: var(--sage); }
+  .success-sub { font-size: .83rem; color: var(--ink3); line-height: 1.75; }
+
+  @media (max-width: 900px) {
+    .hero { padding: 5rem 1.5rem 4.5rem; }
+    .section { padding: 5rem 1.5rem; }
+    .s3-inner { grid-template-columns: 1fr; gap: 3rem; }
+  }
+  @media (max-width: 640px) {
+    .s5-row { flex-direction: column; }
+    .s5-btn { width: 100%; padding: .9rem; }
+  }
 </style>
 
 <main>
 
+  <!-- ── HERO ── -->
   <section class="hero">
+    <p class="hero-eyebrow">A daily practice for women carrying too much</p>
     <h1 class="hero-headline">
-      One clear move.<br><em>One clearer day.</em>
+      Somewhere along the way,<br>
+      life became all <em>responsibility.</em>
     </h1>
-    <p class="hero-sub">Stop managing everything. Move one meaningful thing forward.</p>
-    <div class="cta-group">
-      <a class="btn-dark" href="/start">
-        Start your first move
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-          <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </a>
-      <a class="btn-outline" href="#how">See how it works</a>
+
+    <ul class="hero-list">
+      <li>Work.</li>
+      <li>Family.</li>
+      <li>Appointments.</li>
+      <li>Planning.</li>
+      <li>Remembering.</li>
+      <li>Supporting.</li>
+      <li>Managing.</li>
+    </ul>
+
+    <p class="hero-close">
+      Everything started filtering through responsibility.<br>
+      And there was less room left for <strong>you.</strong>
+    </p>
+
+    <div class="hero-cta">
+      <a class="btn-dark" href="/start">Start here</a>
+      <p class="hero-sub-text">A simple daily practice for women carrying too much.</p>
     </div>
-    <p class="hero-footnote">No setup <span>·</span> Free forever <span>·</span> Takes about a minute</p>
   </section>
 
-  <div class="preview-wrap" id="how">
-    <p class="section-eyebrow">What Velani looks like</p>
-    <div class="preview-card">
-      <div class="preview-date">Today · Monday</div>
-      <div class="preview-row">
-        <div class="preview-row-label">One Move</div>
-        <div class="preview-item">
-          <div class="preview-dot">
-            <svg width="9" height="9" viewBox="0 0 12 12" fill="none">
-              <path d="M2 6.5L5 9.5L10 4" stroke="#5B8C7A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+  <!-- ── SECTION 2: Life wasn't supposed to feel like maintenance ── -->
+  <section class="section surface">
+    <div class="s2-inner">
+      <h2 class="s2-headline">
+        Life wasn't supposed to<br>feel like <em>maintenance.</em>
+      </h2>
+      <p class="s2-body">
+        You weren't meant to spend every day managing logistics,
+        carrying everyone else's needs, remembering everything,
+        solving every problem, postponing yourself.
+      </p>
+      <ul class="s2-list">
+        <li><span class="s2-dash">—</span>managing logistics</li>
+        <li><span class="s2-dash">—</span>carrying everyone else's needs</li>
+        <li><span class="s2-dash">—</span>remembering everything</li>
+        <li><span class="s2-dash">—</span>solving every problem</li>
+        <li><span class="s2-dash">—</span>postponing yourself</li>
+      </ul>
+      <p class="s2-answer">
+        The answer isn't doing more.<br>
+        The answer is <strong>carrying less.</strong>
+      </p>
+    </div>
+  </section>
+
+  <!-- ── SECTION 3: Velani helps you carry less ── -->
+  <section class="section">
+    <div class="s3-inner">
+
+      <div>
+        <h2 class="s3-headline">
+          Velani helps you<br><em>carry less.</em>
+        </h2>
+        <p class="s3-body">
+          Not through complicated systems.<br>
+          Not through perfect routines.<br>
+          Just small practices that help you:
+        </p>
+        <div class="s3-checks">
+          <div class="s3-check"><span class="check-mark">✓</span><span>Focus on what matters today</span></div>
+          <div class="s3-check"><span class="check-mark">✓</span><span>Reduce the mental clutter</span></div>
+          <div class="s3-check"><span class="check-mark">✓</span><span>Stop carrying everything at once</span></div>
+          <div class="s3-check"><span class="check-mark">✓</span><span>Make room for yourself again</span></div>
+          <div class="s3-check"><span class="check-mark">✓</span><span>Reconnect with the parts of you that got buried</span></div>
+        </div>
+        <a class="btn-dark" href="/start">Start here</a>
+      </div>
+
+      <!-- Before / After feeling card -->
+      <div class="feeling-card">
+        <div class="feeling-half before">
+          <div class="feeling-label before">How it feels now</div>
+          <div class="feeling-items">
+            <div class="feeling-item before"><span class="fi-marker before">·</span><span>Exhausted</span></div>
+            <div class="feeling-item before"><span class="fi-marker before">·</span><span>Scattered</span></div>
+            <div class="feeling-item before"><span class="fi-marker before">·</span><span>Carrying everything</span></div>
+            <div class="feeling-item before"><span class="fi-marker before">·</span><span>Always responsible</span></div>
+            <div class="feeling-item before"><span class="fi-marker before">·</span><span>No room for themselves</span></div>
+            <div class="feeling-item before"><span class="fi-marker before">·</span><span>Life feels like maintenance</span></div>
           </div>
-          Send the proposal that's been hanging
+        </div>
+        <div class="feeling-half">
+          <div class="feeling-label after">How it can feel</div>
+          <div class="feeling-items">
+            <div class="feeling-item after"><span class="fi-marker after">✓</span><span>More space</span></div>
+            <div class="feeling-item after"><span class="fi-marker after">✓</span><span>More capacity</span></div>
+            <div class="feeling-item after"><span class="fi-marker after">✓</span><span>More presence</span></div>
+            <div class="feeling-item after"><span class="fi-marker after">✓</span><span>More possibility</span></div>
+            <div class="feeling-item after"><span class="fi-marker after">✓</span><span>Time for themselves again</span></div>
+            <div class="feeling-item after"><span class="fi-marker after">✓</span><span>Feel like themselves again</span></div>
+          </div>
         </div>
       </div>
-      <div class="preview-divider"></div>
-      <div class="preview-row">
-        <div class="preview-row-label">Quiet Win</div>
-        <div class="preview-item">
-          <div class="preview-dot">
-            <svg width="9" height="9" viewBox="0 0 12 12" fill="none">
-              <path d="M2 6.5L5 9.5L10 4" stroke="#5B8C7A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          Proposal sent — first draft out the door
+
+    </div>
+  </section>
+
+  <!-- ── SECTION 4: Brand promise — dark ── -->
+  <section class="section ink-bg">
+    <div class="s4-inner">
+      <h2 class="s4-headline">
+        You spent years making<br>room for everyone else.<br>
+        <em>Velani helps you make room<br>for yourself again.</em>
+      </h2>
+      <p class="s4-body">
+        Not a productivity app. Not a self-help system.<br>
+        A practical daily practice that helps you carry less,<br>
+        feel more like yourself, and find space again.
+      </p>
+      <a class="btn-dark" href="/start" style="background:var(--bg);color:var(--ink);margin:0 auto;display:inline-flex;">
+        Start here
+      </a>
+    </div>
+  </section>
+
+  <!-- ── SECTION 5: Signup ── -->
+  <section class="section surface">
+    <div class="s5-inner">
+      <p class="s5-eyebrow">The Velani Letter</p>
+      <h2 class="s5-headline">
+        A quieter way <em>forward.</em>
+      </h2>
+      <p class="s5-body">
+        Weekly letters for women who want to carry less and feel more like themselves.
+        Thoughtful, practical, and calm — arriving every Sunday.
+      </p>
+
+      <div id="s5-form" class="s5-form">
+        <div class="s5-row">
+          <input type="email" id="s5-email" class="s5-email" placeholder="your@email.com" autocomplete="email">
+          <button class="s5-btn" id="s5-btn" onclick="window.hpSignup()">Join Velani</button>
         </div>
+        <span class="s5-error" id="s5-error"></span>
+        <p class="s5-consent">
+          By joining, you agree to receive occasional Velani emails. <a href="/privacy" target="_blank">Privacy policy</a>.
+        </p>
       </div>
-      <div class="preview-divider"></div>
-      <div class="preview-row">
-        <div class="preview-row-label">Tomorrow's Move</div>
-        <div class="preview-item">
-          <div class="preview-dot" style="background:transparent; border-color: rgba(26,29,46,.14);">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
-              <path d="M5 12h14M12 5l7 7-7 7" stroke="#6E7191" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          Get sunlight within 30 minutes of waking
+
+      <div class="s5-success" id="s5-success">
+        <div class="success-mark">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M5 12.5L10 17.5L19 7" stroke="#5B8C7A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </div>
+        <div class="success-title">You're in.<br><em>Check your inbox.</em></div>
+        <p class="success-sub">Confirm your email to complete signup.<br>Your first letter arrives Sunday.</p>
       </div>
     </div>
-  </div>
-
-  <div class="pillars-wrap">
-    <div class="pillars-inner">
-      <p class="section-eyebrow" style="text-align:center; color: var(--terra);">How it works</p>
-      <div class="pillars">
-        <div class="pillar">
-          <div class="pillar-num">01</div>
-          <div class="pillar-name">Choose one move</div>
-          <p class="pillar-desc">Not a list. One clear thing that matters today.</p>
-        </div>
-        <div class="pillar">
-          <div class="pillar-num">02</div>
-          <div class="pillar-name">Move it forward</div>
-          <p class="pillar-desc">Two minutes or two hours. Small progress counts.</p>
-        </div>
-        <div class="pillar">
-          <div class="pillar-num">03</div>
-          <div class="pillar-name">Log a Quiet Win</div>
-          <p class="pillar-desc">Notice what moved. Set tomorrow's move. Done.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="quote-wrap">
-    <p class="quote-text">"I stopped managing my productivity system and started moving things forward."</p>
-    <div class="quote-attr">— Founding member</div>
-  </div>
-
-  <div class="signup-wrap">
-    <div class="signup-inner">
-      <p class="signup-eyebrow">Stay connected</p>
-      <h2 class="signup-headline">A quieter way <em>forward</em></h2>
-      <p class="signup-subline">Quiet, practical emails for clearer days.</p>
-      <input type="email" id="hp-email" class="field-email" placeholder="your@email.com" autocomplete="email">
-      <span class="field-error" id="hp-error"></span>
-      <div class="consent-row">
-        <input type="checkbox" id="hp-consent">
-        <label class="consent-label" for="hp-consent">
-          Send me Velani letters and updates. See our <a href="/privacy" target="_blank">privacy policy</a>.
-        </label>
-      </div>
-      <p class="field-footnote">Quiet inbox. Unsubscribe anytime.</p>
-      <button class="btn-dark" onclick="window.subscribeHomepage()">
-        I'm in
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-          <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-      <span class="field-message" id="hp-message"></span>
-    </div>
-  </div>
+  </section>
 
 </main>
 
 <script>
-window.submitToKit = function(email) {
-  return fetch('https://velani-subscribe.velani-app.workers.dev/', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: email })
-  });
-};
-
-window.subscribeHomepage = function() {
-  const email   = document.getElementById('hp-email').value.trim();
-  const consent = document.getElementById('hp-consent').checked;
-  const errorEl = document.getElementById('hp-error');
-  const msgEl   = document.getElementById('hp-message');
-  errorEl.textContent = '';
-  msgEl.textContent   = '';
-  if (!email || !email.includes('@')) {
-    errorEl.textContent = 'Please enter a valid email.';
-    document.getElementById('hp-email').style.borderColor = '#B86A43';
-    return;
-  }
-  if (!consent) {
-    errorEl.textContent = 'Please check the box to continue.';
-    return;
-  }
-  document.getElementById('hp-email').style.borderColor = 'rgba(26,29,46,.14)';
-  msgEl.textContent = 'Sending...';
-  msgEl.style.color = 'var(--ink3)';
-  window.submitToKit(email)
-    .then(res => res.json())
-    .then(() => {
-      msgEl.textContent = '✓ Check your inbox to confirm!';
-      msgEl.style.color = 'var(--sage)';
-      document.getElementById('hp-email').value = '';
-      document.getElementById('hp-consent').checked = false;
-    })
-    .catch(() => {
-      msgEl.textContent = '✓ Check your inbox to confirm!';
-      msgEl.style.color = 'var(--sage)';
-      document.getElementById('hp-email').value = '';
-      document.getElementById('hp-consent').checked = false;
-    });
-};
+  window.hpSignup = function() {
+    const email   = document.getElementById('s5-email').value.trim();
+    const errorEl = document.getElementById('s5-error');
+    const btn     = document.getElementById('s5-btn');
+    errorEl.textContent = '';
+    if (!email || !email.includes('@')) {
+      errorEl.textContent = 'Please enter a valid email address.';
+      document.getElementById('s5-email').style.borderColor = '#B86A43';
+      return;
+    }
+    document.getElementById('s5-email').style.borderColor = 'rgba(26,29,46,.14)';
+    btn.disabled = true; btn.textContent = 'Sending…';
+    fetch('https://velani-subscribe.velani-app.workers.dev/', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    }).then(() => ok()).catch(() => ok());
+    function ok() {
+      document.getElementById('s5-form').style.display = 'none';
+      document.getElementById('s5-success').classList.add('visible');
+    }
+  };
 </script>
 
 </Base>
