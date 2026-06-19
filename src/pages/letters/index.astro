@@ -282,7 +282,7 @@ const phArchive = [
       <div class="featured-list">
         {featured.length > 0
           ? featured.map(l => (
-              <a href={l.url} class="feat-card">
+              <a href={`/letters/${l.file.split('/').pop().replace('.md', '')}`} class="feat-card">
                 <div class="feat-eyebrow">Featured</div>
                 <div class="feat-title">{l.frontmatter.title}</div>
                 {l.frontmatter.preview && <div class="feat-preview">{l.frontmatter.preview}</div>}
@@ -308,7 +308,7 @@ const phArchive = [
           <div class="archive-list">
             {archive.length > 0
               ? archive.map(l => (
-                  <a href={l.url} class="arc-item">
+                  <a href={`/letters/${l.file.split('/').pop().replace('.md', '')}`} class="arc-item">
                     <div class="arc-left">
                       <div class="arc-title">{l.frontmatter.title}</div>
                       {l.frontmatter.preview && <div class="arc-preview">{l.frontmatter.preview}</div>}

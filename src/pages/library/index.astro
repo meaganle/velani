@@ -321,10 +321,12 @@ const placeholders = {
                 const title = isLive ? item.frontmatter.title : item.title;
                 const desc  = isLive ? item.frontmatter.description : item.desc;
                 const time  = isLive ? (item.frontmatter.readTime || '3 min') : item.time;
+                const slug  = isLive ? item.file.split('/').pop().replace('.md', '') : null;
+                const href  = isLive ? `/library/${slug}` : null;
                 const Tag   = isLive ? 'a' : 'div';
                 return (
                   <Tag
-                    {...(isLive ? { href: item.url } : {})}
+                    {...(isLive ? { href } : {})}
                     class={`read-row${!isLive ? ' placeholder' : ''}`}
                     data-title={title.toLowerCase()}
                     data-desc={(desc||'').toLowerCase()}

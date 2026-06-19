@@ -1,0 +1,189 @@
+---
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const pages = await Astro.glob('../../content/letters/*.md');
+  return pages
+    .filter(p => !p.frontmatter.draft)
+    .map(page => {
+      const slug = page.file.split('/').pop().replace('.md', '');
+      return {
+        params: { slug },
+        props: { frontmatter: page.frontmatter, compiledContent: page.compiledContent() }
+      };
+    });
+}
+
+const { frontmatter, compiledContent } = Astro.props;
+---
+<Base
+  title={frontmatter.title}
+  description={frontmatter.description || ''}
+  currentPath={`/letters`}
+>
+<style>
+  main { flex: 1; }
+
+  .article-wrap {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 5rem 3rem 7rem;
+    position: relative; z-index: 1;
+  }
+
+  .article-back {
+    display: inline-flex; align-items: center; gap: .4rem;
+    font-size: .75rem; color: var(--ink3); text-decoration: none;
+    letter-spacing: .04em; margin-bottom: 3rem;
+    transition: color .2s;
+  }
+  .article-back:hover { color: var(--ink); }
+
+  .article-meta {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1.2rem; flex-wrap: wrap;
+  }
+  .article-issue {
+    font-size: .6rem; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--terra); font-weight: 500;
+  }
+  .article-date {
+    font-size: .72rem; color: var(--ink3);
+    font-family: var(--display); font-style: italic;
+  }
+  .article-time {
+    font-size: .72rem; color: var(--ink3);
+    font-family: var(--display); font-style: italic;
+  }
+
+  .article-title {
+    font-family: var(--display);
+    font-size: clamp(1.9rem, 3.5vw, 2.6rem);
+    font-weight: 300; line-height: 1.12;
+    color: var(--ink); margin-bottom: 1rem;
+    letter-spacing: -.02em;
+  }
+
+  .article-desc {
+    font-size: 1rem; color: var(--ink2);
+    line-height: 1.8; margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+    font-style: italic; font-family: var(--display);
+  }
+
+  /* Prose */
+  .article-body { font-size: .98rem; color: var(--ink2); line-height: 1.92; }
+  .article-body p { margin-bottom: 1.5rem; }
+  .article-body p:last-child { margin-bottom: 0; }
+  .article-body em { font-style: italic; color: var(--ink); }
+  .article-body strong { font-weight: 500; color: var(--ink); }
+  .article-body hr {
+    border: none; border-top: 1px solid var(--border);
+    margin: 2.5rem 0;
+  }
+  .article-body h2 {
+    font-family: var(--display); font-size: 1.15rem;
+    font-weight: 400; color: var(--ink);
+    margin: 2.8rem 0 .9rem; line-height: 1.3;
+  }
+  .article-body h3 {
+    font-family: var(--display); font-size: .98rem;
+    font-weight: 400; color: var(--ink);
+    margin: 2.2rem 0 .6rem;
+  }
+  .article-body ul, .article-body ol {
+    padding-left: 1.5rem; margin-bottom: 1.5rem;
+  }
+  .article-body li { margin-bottom: .45rem; color: var(--ink2); }
+  .article-body blockquote {
+    font-family: var(--display); font-style: italic;
+    font-size: 1.05rem; color: var(--ink2);
+    border-left: 2.5px solid var(--sage);
+    padding: .75rem 0 .75rem 1.5rem;
+    margin: 2.2rem 0; line-height: 1.72;
+  }
+
+  /* Footer nudge */
+  .article-footer {
+    margin-top: 4rem; padding-top: 2.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .article-footer-eyebrow {
+    font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--terra); font-weight: 600; margin-bottom: .5rem;
+  }
+  .article-footer-hed {
+    font-family: var(--display); font-size: 1rem;
+    font-weight: 300; color: var(--ink); margin-bottom: .35rem;
+  }
+  .article-footer-hed em { font-style: italic; color: var(--sage); }
+  .article-footer p { font-size: .82rem; color: var(--ink3); margin-bottom: 1rem; line-height: 1.65; }
+
+  @media (max-width: 700px) {
+    .article-wrap { padding: 3rem 1.5rem 5rem; }
+  }
+</style>
+
+<main>
+  <div class="article-wrap">
+
+    <a class="article-back" href="/letters">← The Velani Letter</a>
+
+    <div class="article-meta">
+      <span class="article-issue">The Velani Letter</span>
+      {frontmatter.date && (
+        <span class="article-date">
+          {new Date(frontmatter.date).toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' })}
+        </span>
+      )}
+      {frontmatter.readTime && (
+        <span class="article-time">{frontmatter.readTime}</span>
+      )}
+    </div>
+
+    <h1 class="article-title">{frontmatter.title}</h1>
+    {frontmatter.description && (
+      <p class="article-desc">{frontmatter.description}</p>
+    )}
+
+    <div class="article-body">
+      <Fragment set:html={compiledContent} />
+    </div>
+
+    <div class="article-footer">
+      <div class="article-footer-eyebrow">The Velani Letter</div>
+      <div class="article-footer-hed">Enjoyed this? Get the next one <em>Sunday.</em></div>
+      <p>Weekly letters for women who want to carry less and feel more like themselves.</p>
+      <div id="let-art-form">
+        <div class="inline-form">
+          <input type="email" id="let-art-email" class="inline-email" placeholder="your@email.com" autocomplete="email">
+          <button class="inline-btn" onclick="window.letArtSignup()">Join Velani</button>
+        </div>
+        <p class="inline-consent">
+          By joining, you agree to receive occasional Velani emails.
+          <a href="/privacy" target="_blank">Privacy policy</a>.
+        </p>
+      </div>
+      <div class="inline-success" id="let-art-success">✓ Check your inbox to confirm.</div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  window.letArtSignup = function() {
+    const email = document.getElementById('let-art-email').value.trim();
+    if (!email || !email.includes('@')) { document.getElementById('let-art-email').style.borderColor = '#B86A43'; return; }
+    document.getElementById('let-art-email').style.borderColor = 'rgba(26,29,46,.14)';
+    fetch('https://velani-subscribe.velani-app.workers.dev/', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email })
+    }).then(() => ok()).catch(() => ok());
+    function ok() {
+      document.getElementById('let-art-form').style.display = 'none';
+      document.getElementById('let-art-success').classList.add('visible');
+    }
+  };
+</script>
+
+</Base>
