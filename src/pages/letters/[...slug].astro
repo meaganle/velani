@@ -15,6 +15,10 @@ export async function getStaticPaths() {
 }
 
 const { frontmatter, compiledContent } = Astro.props;
+
+const formattedDate = frontmatter.date
+  ? new Date(frontmatter.date).toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' })
+  : null;
 ---
 <Base
   title={frontmatter.title}
@@ -24,154 +28,241 @@ const { frontmatter, compiledContent } = Astro.props;
 <style>
   main { flex: 1; }
 
+  /* Reading progress bar */
+  .reading-bar {
+    position: fixed; top: 0; left: 0; z-index: 100;
+    height: 2px; width: 0%; background: var(--sage);
+    transition: width .1s linear;
+    pointer-events: none;
+  }
+
   .article-wrap {
-    max-width: 620px;
+    max-width: 660px;
     margin: 0 auto;
-    padding: 5rem 3rem 7rem;
+    padding: 4rem 3rem 8rem;
     position: relative; z-index: 1;
   }
 
+  /* Back */
   .article-back {
-    display: inline-flex; align-items: center; gap: .4rem;
-    font-size: .75rem; color: var(--ink3); text-decoration: none;
-    letter-spacing: .04em; margin-bottom: 3rem;
-    transition: color .2s;
+    display: inline-flex; align-items: center; gap: .45rem;
+    font-size: .72rem; color: var(--ink3); text-decoration: none;
+    letter-spacing: .05em; text-transform: uppercase; font-weight: 500;
+    margin-bottom: 3.5rem; transition: color .2s;
   }
-  .article-back:hover { color: var(--ink); }
+  .article-back:hover { color: var(--sage); }
+  .article-back svg { transition: transform .2s; }
+  .article-back:hover svg { transform: translateX(-2px); }
 
+  /* Header */
+  .article-header { margin-bottom: 2.5rem; }
   .article-meta {
-    display: flex; align-items: center; gap: 1rem;
-    margin-bottom: 1.2rem; flex-wrap: wrap;
+    display: flex; align-items: center; gap: .6rem;
+    margin-bottom: 1.4rem; flex-wrap: wrap;
   }
-  .article-issue {
-    font-size: .6rem; letter-spacing: .18em;
-    text-transform: uppercase; color: var(--terra); font-weight: 500;
+  .meta-label {
+    font-size: .58rem; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--terra);
+    font-weight: 600; background: rgba(184,106,67,.08);
+    padding: .25rem .65rem; border-radius: 100px;
   }
-  .article-date {
+  .meta-sep { color: var(--border2); font-size: .75rem; }
+  .meta-date {
     font-size: .72rem; color: var(--ink3);
     font-family: var(--display); font-style: italic;
   }
-  .article-time {
+  .meta-time {
     font-size: .72rem; color: var(--ink3);
     font-family: var(--display); font-style: italic;
   }
 
   .article-title {
     font-family: var(--display);
-    font-size: clamp(1.9rem, 3.5vw, 2.6rem);
-    font-weight: 300; line-height: 1.12;
-    color: var(--ink); margin-bottom: 1rem;
-    letter-spacing: -.02em;
+    font-size: clamp(2rem, 4vw, 2.9rem);
+    font-weight: 300; line-height: 1.08;
+    color: var(--ink); margin-bottom: 1.3rem;
+    letter-spacing: -.025em;
   }
 
-  .article-desc {
-    font-size: 1rem; color: var(--ink2);
-    line-height: 1.8; margin-bottom: 3rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid var(--border);
-    font-style: italic; font-family: var(--display);
+  .article-lede {
+    font-family: var(--display);
+    font-size: 1.1rem; font-weight: 300;
+    font-style: italic; color: var(--ink2);
+    line-height: 1.82;
+  }
+
+  .article-rule {
+    display: flex; align-items: center; gap: .75rem;
+    margin: 2.5rem 0;
+  }
+  .article-rule::before, .article-rule::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+  .article-rule-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--sage); flex-shrink: 0; opacity: .6;
   }
 
   /* Prose */
-  .article-body { font-size: .98rem; color: var(--ink2); line-height: 1.92; }
-  .article-body p { margin-bottom: 1.5rem; }
+  .article-body {
+    font-size: 1rem; color: var(--ink2);
+    line-height: 1.95;
+  }
+  .article-body p { margin-bottom: 1.6rem; }
   .article-body p:last-child { margin-bottom: 0; }
   .article-body em { font-style: italic; color: var(--ink); }
   .article-body strong { font-weight: 500; color: var(--ink); }
   .article-body hr {
-    border: none; border-top: 1px solid var(--border);
-    margin: 2.5rem 0;
+    border: none;
+    display: flex; align-items: center; gap: .75rem;
+    margin: 3rem 0;
+  }
+  .article-body hr::before, .article-body hr::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+    display: block;
   }
   .article-body h2 {
-    font-family: var(--display); font-size: 1.15rem;
+    font-family: var(--display); font-size: 1.25rem;
     font-weight: 400; color: var(--ink);
-    margin: 2.8rem 0 .9rem; line-height: 1.3;
+    margin: 3rem 0 1rem; line-height: 1.25;
+    letter-spacing: -.01em;
   }
   .article-body h3 {
-    font-family: var(--display); font-size: .98rem;
+    font-family: var(--display); font-size: 1rem;
     font-weight: 400; color: var(--ink);
-    margin: 2.2rem 0 .6rem;
+    margin: 2.5rem 0 .8rem;
   }
   .article-body ul, .article-body ol {
-    padding-left: 1.5rem; margin-bottom: 1.5rem;
+    padding-left: 1.4rem; margin-bottom: 1.6rem;
   }
-  .article-body li { margin-bottom: .45rem; color: var(--ink2); }
+  .article-body li {
+    margin-bottom: .5rem; color: var(--ink2);
+    line-height: 1.75;
+  }
   .article-body blockquote {
     font-family: var(--display); font-style: italic;
-    font-size: 1.05rem; color: var(--ink2);
+    font-size: 1.08rem; color: var(--ink);
     border-left: 2.5px solid var(--sage);
-    padding: .75rem 0 .75rem 1.5rem;
-    margin: 2.2rem 0; line-height: 1.72;
+    padding: .8rem 1.6rem .8rem 1.6rem;
+    margin: 2.5rem 0; line-height: 1.75;
+    background: var(--sage-gl);
+    border-radius: 0 8px 8px 0;
   }
 
-  /* Footer nudge */
-  .article-footer {
-    margin-top: 4rem; padding-top: 2.5rem;
+  /* Closing */
+  .article-closing {
+    margin-top: 3rem; padding-top: 2rem;
     border-top: 1px solid var(--border);
+    font-family: var(--display); font-size: .88rem;
+    font-style: italic; color: var(--ink3); line-height: 1.7;
   }
-  .article-footer-eyebrow {
+  .article-closing strong { font-style: normal; font-weight: 400; color: var(--ink2); }
+
+  /* Footer */
+  .article-footer {
+    margin-top: 4rem; padding-top: 3rem;
+    border-top: 1px solid var(--border);
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 3rem; align-items: start;
+  }
+  .footer-nav-label {
+    font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink3); font-weight: 600; margin-bottom: .6rem;
+  }
+  .footer-back {
+    display: inline-flex; align-items: center; gap: .4rem;
+    font-family: var(--display); font-size: .88rem; font-style: italic;
+    color: var(--sage); text-decoration: none; transition: gap .2s;
+  }
+  .footer-back:hover { gap: .6rem; }
+
+  .footer-signup-label {
     font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
     color: var(--terra); font-weight: 600; margin-bottom: .5rem;
   }
-  .article-footer-hed {
-    font-family: var(--display); font-size: 1rem;
-    font-weight: 300; color: var(--ink); margin-bottom: .35rem;
+  .footer-signup-hed {
+    font-family: var(--display); font-size: .95rem;
+    font-weight: 300; color: var(--ink); margin-bottom: .3rem;
   }
-  .article-footer-hed em { font-style: italic; color: var(--sage); }
-  .article-footer p { font-size: .82rem; color: var(--ink3); margin-bottom: 1rem; line-height: 1.65; }
+  .footer-signup-hed em { font-style: italic; color: var(--sage); }
+  .footer-signup p { font-size: .78rem; color: var(--ink3); margin-bottom: .8rem; line-height: 1.65; }
 
   @media (max-width: 700px) {
-    .article-wrap { padding: 3rem 1.5rem 5rem; }
+    .article-wrap { padding: 3rem 1.5rem 6rem; }
+    .article-footer { grid-template-columns: 1fr; gap: 2rem; }
   }
 </style>
+
+<div class="reading-bar" id="reading-bar"></div>
 
 <main>
   <div class="article-wrap">
 
-    <a class="article-back" href="/letters">← The Velani Letter</a>
+    <a class="article-back" href="/letters">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+        <path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      The Velani Letter
+    </a>
 
-    <div class="article-meta">
-      <span class="article-issue">The Velani Letter</span>
-      {frontmatter.date && (
-        <span class="article-date">
-          {new Date(frontmatter.date).toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' })}
-        </span>
-      )}
-      {frontmatter.readTime && (
-        <span class="article-time">{frontmatter.readTime}</span>
+    <div class="article-header">
+      <div class="article-meta">
+        <span class="meta-label">The Velani Letter</span>
+        {formattedDate && <><span class="meta-sep">·</span><span class="meta-date">{formattedDate}</span></>}
+        {frontmatter.readTime && <><span class="meta-sep">·</span><span class="meta-time">{frontmatter.readTime}</span></>}
+      </div>
+      <h1 class="article-title">{frontmatter.title}</h1>
+      {(frontmatter.description || frontmatter.preview) && (
+        <p class="article-lede">{frontmatter.description || frontmatter.preview}</p>
       )}
     </div>
 
-    <h1 class="article-title">{frontmatter.title}</h1>
-    {frontmatter.description && (
-      <p class="article-desc">{frontmatter.description}</p>
-    )}
+    <div class="article-rule"><span class="article-rule-dot"></span></div>
 
     <div class="article-body">
       <Fragment set:html={compiledContent} />
     </div>
 
+    <div class="article-closing">
+      Warmly,<br>
+      <strong>Meagan · Velani</strong>
+    </div>
+
     <div class="article-footer">
-      <div class="article-footer-eyebrow">The Velani Letter</div>
-      <div class="article-footer-hed">Enjoyed this? Get the next one <em>Sunday.</em></div>
-      <p>Weekly letters for women who want to carry less and feel more like themselves.</p>
-      <div id="let-art-form">
-        <div class="inline-form">
-          <input type="email" id="let-art-email" class="inline-email" placeholder="your@email.com" autocomplete="email">
-          <button class="inline-btn" onclick="window.letArtSignup()">Join Velani</button>
-        </div>
-        <p class="inline-consent">
-          By joining, you agree to receive occasional Velani emails.
-          <a href="/privacy" target="_blank">Privacy policy</a>.
-        </p>
+      <div class="footer-nav">
+        <div class="footer-nav-label">Read more</div>
+        <a class="footer-back" href="/letters">← All letters</a>
       </div>
-      <div class="inline-success" id="let-art-success">✓ Check your inbox to confirm.</div>
+      <div class="footer-signup">
+        <div class="footer-signup-label">The Velani Letter</div>
+        <div class="footer-signup-hed">Get the next one <em>Sunday.</em></div>
+        <p>Weekly letters for women who want to carry less and feel more like themselves.</p>
+        <div id="let-art-form">
+          <div class="inline-form">
+            <input type="email" id="let-art-email" class="inline-email" placeholder="your@email.com" autocomplete="email">
+            <button class="inline-btn" onclick="window.letArtSignup()">Join</button>
+          </div>
+          <p class="inline-consent">
+            By joining, you agree to occasional Velani emails.
+            <a href="/privacy" target="_blank">Privacy policy</a>.
+          </p>
+        </div>
+        <div class="inline-success" id="let-art-success">✓ Check your inbox to confirm.</div>
+      </div>
     </div>
 
   </div>
 </main>
 
 <script>
+  const bar = document.getElementById('reading-bar');
+  function updateBar() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = docHeight > 0 ? (scrollTop / docHeight * 100) + '%' : '0%';
+  }
+  window.addEventListener('scroll', updateBar, { passive: true });
+
   window.letArtSignup = function() {
     const email = document.getElementById('let-art-email').value.trim();
     if (!email || !email.includes('@')) { document.getElementById('let-art-email').style.borderColor = '#B86A43'; return; }
