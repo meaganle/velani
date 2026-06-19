@@ -10,53 +10,56 @@ const featured = letters.filter(l => l.frontmatter.featured || l.frontmatter.sta
 const archive  = letters.filter(l => !l.frontmatter.featured && !l.frontmatter.startHere);
 
 const phFeatured = [
-  { title: 'The system nobody builds',   preview: 'For years, I thought I needed better discipline. What I slowly realized is that most of us never stop to build the system underneath our lives.', time: '4 min read' },
-  { title: 'The invisible load',         preview: 'What\'s actually making you tired. It\'s not the tasks on your list. It\'s everything that lives between them — the quiet remembering, the mental carrying.', time: '4 min read' },
+  {
+    title: 'The system nobody builds',
+    preview: 'Most of us spend years building careers, families, and homes. Very few of us ever stop to build the structure underneath our daily lives — the thing that quietly shapes how everything feels.',
+    time: '4 min read'
+  },
+  {
+    title: 'The invisible load',
+    preview: 'You wake up tired. You move through the day feeling slightly behind. By evening you wonder why you\'re so exhausted when you didn\'t really do that much. The answer is usually invisible.',
+    time: '4 min read'
+  },
 ];
 const phArchive = [
-  { title: 'One clear move at a time',       preview: 'A different philosophy on what a good day actually requires.', time: '3 min read' },
-  { title: 'Why productivity stopped working', preview: 'The framework was never the problem. The foundation was.', time: '4 min read' },
+  { title: 'One clear move at a time',         preview: 'A different philosophy on what a good day actually requires of you.', time: '3 min read' },
+  { title: 'Why productivity stopped working', preview: 'The framework was never the problem. The weight was.',                 time: '4 min read' },
 ];
 ---
 <Base
   title="Letters"
-  description="Letters for clearer days. A thoughtful Sunday letter for people who want clarity without the noise."
+  description="A Sunday letter for women who want to feel more like themselves again."
   currentPath="/letters"
 >
 <style>
   main { flex: 1; }
 
-  /* Hero + signup visible on first screen */
   .letters-hero-section {
     padding: 5rem 3rem 4rem;
     position: relative; z-index: 1;
   }
   .letters-hero-inner {
     max-width: 960px; margin: 0 auto;
-    display: grid; grid-template-columns: 1fr 380px;
-    gap: 5rem; align-items: stretch;
+    display: grid; grid-template-columns: 1fr 360px;
+    gap: 5rem; align-items: start;
   }
 
-  /* Left */
   .find-block { margin-top: 1.8rem; }
   .find-label { font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink3); font-weight: 500; margin-bottom: .7rem; }
-  .find-items { display: flex; flex-direction: column; gap: .3rem; }
-  .find-item { display: flex; align-items: center; gap: .65rem; font-size: .86rem; color: var(--ink2); line-height: 1.5; }
+  .find-items { display: flex; flex-direction: column; gap: .35rem; }
+  .find-item { display: flex; align-items: center; gap: .65rem; font-size: .88rem; color: var(--ink2); line-height: 1.5; }
   .find-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--sage); flex-shrink: 0; }
 
-  /* Right: signup card */
   .signup-card {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 14px; padding: 2rem 2.2rem;
     box-shadow: 0 4px 24px rgba(26,29,46,.04);
-    display: flex; flex-direction: column; justify-content: center;
   }
   .signup-eyebrow { font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--terra); font-weight: 500; margin-bottom: .4rem; }
   .signup-hed { font-family: var(--display); font-size: 1.2rem; font-weight: 300; color: var(--ink); margin-bottom: .5rem; line-height: 1.2; }
   .signup-hed em { font-style: italic; color: var(--sage); }
-  .signup-desc { font-size: .82rem; color: var(--ink2); line-height: 1.65; margin-bottom: 1.2rem; }
+  .signup-desc { font-size: .82rem; color: var(--ink2); line-height: 1.7; margin-bottom: 1.2rem; }
 
-  /* Archive section */
   .archive-section {
     padding: 0 3rem 6rem;
     border-top: 1px solid var(--border);
@@ -67,10 +70,9 @@ const phArchive = [
   .section-label { font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ink3); font-weight: 500; margin-bottom: 1rem; }
   .archive-intro { font-size: .78rem; color: var(--ink3); font-style: italic; font-family: var(--display); margin-bottom: .9rem; }
 
-  /* Featured cards */
   .featured-list { display: flex; flex-direction: column; gap: .7rem; margin-bottom: 3rem; }
   .feat-card {
-    display: block; padding: 1.5rem 1.8rem;
+    display: block; padding: 1.6rem 1.8rem;
     background: var(--surface); border: 1px solid rgba(91,140,122,.22);
     border-radius: 12px; text-decoration: none;
     transition: box-shadow .15s, transform .12s;
@@ -78,10 +80,9 @@ const phArchive = [
   .feat-card:not(.placeholder):hover { box-shadow: 0 4px 20px rgba(26,29,46,.06); transform: translateY(-1px); }
   .feat-card.placeholder { opacity: .55; pointer-events: none; border-style: dashed; }
   .feat-title { font-family: var(--display); font-size: 1rem; font-weight: 400; color: var(--ink); line-height: 1.3; margin-bottom: .4rem; }
-  .feat-preview { font-size: .8rem; color: var(--ink3); line-height: 1.65; margin-bottom: .5rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .feat-preview { font-size: .82rem; color: var(--ink2); line-height: 1.7; margin-bottom: .5rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .feat-time { font-size: .68rem; color: var(--sage); font-family: var(--display); font-style: italic; }
 
-  /* Archive list */
   .archive-list { display: flex; flex-direction: column; gap: .5rem; }
   .arc-item {
     display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
@@ -97,7 +98,6 @@ const phArchive = [
   .arc-right { flex-shrink: 0; text-align: right; }
   .arc-date { font-size: .68rem; color: var(--ink3); font-family: var(--display); font-style: italic; white-space: nowrap; }
   .arc-time { font-size: .65rem; color: var(--ink3); }
-
   .empty-note { text-align: center; padding: 1.5rem 0; font-family: var(--display); font-size: .85rem; font-style: italic; color: var(--ink3); line-height: 1.8; }
 
   @media (max-width: 860px) {
@@ -105,38 +105,37 @@ const phArchive = [
     .letters-hero-inner { grid-template-columns: 1fr; gap: 2rem; }
     .archive-section { padding: 0 1.5rem 4rem; }
   }
-  @media (max-width: 600px) {
-    .arc-item { flex-direction: column; gap: .3rem; }
-  }
 </style>
 
 <main>
 
-  <!-- Hero + Signup — visible on first screen -->
   <div class="letters-hero-section">
     <div class="letters-hero-inner">
 
-      <!-- Left: headline + what you'll find -->
       <div>
         <div class="eyebrow">The Velani Letter</div>
-        <h1 class="page-title">Letters for<br><em>clearer days.</em></h1>
-        <p class="page-subtitle">A thoughtful Sunday letter for people who want clarity without the noise.</p>
+        <h1 class="page-title">A Sunday letter<br>for <em>women carrying too much.</em></h1>
+        <p class="page-subtitle">
+          Not a newsletter about productivity. A quiet weekly letter about making room for yourself again — in your days, your mind, and your life.
+        </p>
 
         <div class="find-block">
           <div class="find-label">What you'll find here</div>
           <div class="find-items">
-            <div class="find-item"><span class="find-dot"></span>Clearer days</div>
-            <div class="find-item"><span class="find-dot"></span>Gentler rhythms</div>
-            <div class="find-item"><span class="find-dot"></span>Thoughtful reflections</div>
+            <div class="find-item"><span class="find-dot"></span>Permission to carry less</div>
+            <div class="find-item"><span class="find-dot"></span>Small practices that actually help</div>
+            <div class="find-item"><span class="find-dot"></span>Warm, honest reflections on ordinary life</div>
           </div>
         </div>
       </div>
 
-      <!-- Right: signup card -->
       <div class="signup-card">
         <div class="signup-eyebrow">Receive the letter</div>
-        <h2 class="signup-hed">A quieter <em>inbox.</em></h2>
-        <p class="signup-desc">Weekly thoughtful letters, practical tools, and gentle systems for clearer days.</p>
+        <h2 class="signup-hed">A quieter <em>Sunday.</em></h2>
+        <p class="signup-desc">
+          Weekly letters for women who want to feel more like themselves again.
+          Warm, practical, and calm — arriving every Sunday morning.
+        </p>
         <div id="letters-form">
           <div class="inline-form">
             <input type="email" id="let-email" class="inline-email" placeholder="your@email.com" autocomplete="email">
@@ -153,7 +152,6 @@ const phArchive = [
     </div>
   </div>
 
-  <!-- Archive -->
   <div class="archive-section">
     <div class="archive-inner">
 
@@ -164,7 +162,7 @@ const phArchive = [
               <a href={l.url} class="feat-card">
                 <div class="feat-title">{l.frontmatter.title}</div>
                 {l.frontmatter.preview && <div class="feat-preview">{l.frontmatter.preview}</div>}
-                <div class="feat-time">{l.frontmatter.readTime||'3 min read'}</div>
+                <div class="feat-time">{l.frontmatter.readTime || '3 min read'}</div>
               </a>
             ))
           : phFeatured.map(p => (
@@ -192,7 +190,7 @@ const phArchive = [
                     </div>
                     <div class="arc-right">
                       <div class="arc-date">{new Date(l.frontmatter.date).toLocaleDateString('en-CA', { year:'numeric', month:'short', day:'numeric' })}</div>
-                      <div class="arc-time">{l.frontmatter.readTime||'3 min'}</div>
+                      <div class="arc-time">{l.frontmatter.readTime || '3 min'}</div>
                     </div>
                   </a>
                 ))
@@ -207,7 +205,7 @@ const phArchive = [
                 ))
             }
           </div>
-          {letters.length === 0 && <div class="empty-note">First letter coming soon.<br>Sign up and you'll get it Sunday.</div>}
+          {letters.length === 0 && <div class="empty-note">First letter coming soon.<br>Sign up and you'll receive it Sunday.</div>}
         </div>
       )}
 
@@ -219,8 +217,8 @@ const phArchive = [
 <script>
   window.lettersSignup = function() {
     const email = document.getElementById('let-email').value.trim();
-    if (!email || !email.includes('@')) { document.getElementById('let-email').style.borderColor='#B86A43'; return; }
-    document.getElementById('let-email').style.borderColor='rgba(26,29,46,.14)';
+    if (!email || !email.includes('@')) { document.getElementById('let-email').style.borderColor = '#B86A43'; return; }
+    document.getElementById('let-email').style.borderColor = 'rgba(26,29,46,.14)';
     fetch('https://velani-subscribe.velani-app.workers.dev/', {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email })
     }).then(() => ok()).catch(() => ok());

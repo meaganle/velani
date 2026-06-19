@@ -106,6 +106,10 @@ import Base from '../layouts/Base.astro';
     display: flex; align-items: baseline; gap: .75rem;
     font-size: .95rem; color: var(--ink2); line-height: 1.6;
   }
+  .s2-list li::before {
+    content: '·'; color: var(--ink3);
+    flex-shrink: 0; font-size: 1.1rem;
+  }
   .s2-answer {
     font-family: var(--display);
     font-size: 1.05rem; font-weight: 300;
@@ -145,11 +149,13 @@ import Base from '../layouts/Base.astro';
     border: 1px solid var(--border);
     border-radius: 16px;
     overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
   .feeling-half {
-    padding: 2rem 2.2rem;
+    padding: 2rem 1.8rem;
   }
-  .feeling-half.before { border-bottom: 1px solid var(--border); }
+  .feeling-half.before { border-right: 1px solid var(--border); }
   .feeling-label {
     font-size: .6rem; letter-spacing: .18em;
     text-transform: uppercase; font-weight: 500;
@@ -255,8 +261,7 @@ import Base from '../layouts/Base.astro';
   <section class="hero">
     <p class="hero-eyebrow">A daily practice for women carrying too much</p>
     <h1 class="hero-headline">
-      Somewhere along the way,<br>
-      life became all <em>responsibility.</em>
+      Somewhere along the way,<br>life became all <em>responsibility.</em>
     </h1>
 
     <ul class="hero-list">

@@ -10,222 +10,201 @@ function live(slug) {
   return sorted.filter(r => r.frontmatter.category === slug);
 }
 
-// Category order: Calmer Days ⭐ right after Start Here ⭐
+// Renamed away from productivity language
 const categories = [
-  { slug: 'start-here',    label: 'Start Here',    star: true  },
-  { slug: 'calmer-days',   label: 'Calmer Days',   star: true  },
-  { slug: 'clarity',       label: 'Clarity',       star: false },
-  { slug: 'rhythm',        label: 'Rhythm',        star: false },
-  { slug: 'quiet-wins',    label: 'Quiet Wins',    star: false },
-  { slug: 'simplifiers',   label: 'Simplifiers',   star: false },
-  { slug: 'wisdom-cards',  label: 'Wisdom Cards',  star: false },
-  { slug: 'velani-letter', label: 'Velani Letter', star: false },
+  { slug: 'start-here',     label: 'Start Here',          star: true,  desc: 'New? Begin here.' },
+  { slug: 'calmer-days',    label: 'Calmer Days',          star: true,  desc: 'When life feels heavy.' },
+  { slug: 'carrying-less',  label: 'Carrying Less',        star: false, desc: 'The invisible load.' },
+  { slug: 'rhythm',         label: 'Gentle Rhythms',       star: false, desc: 'Morning, evening, weekly.' },
+  { slug: 'quiet-wins',     label: 'Quiet Wins',           star: false, desc: 'Small progress matters.' },
+  { slug: 'making-room',    label: 'Making Room',          star: false, desc: 'Space for yourself.' },
+  { slug: 'wisdom-cards',   label: 'One Idea',             star: false, desc: 'Short and memorable.' },
+  { slug: 'velani-letter',  label: 'From the Letter',      star: false, desc: 'Longer reads.' },
 ];
 
 const placeholders = {
-  'start-here':    [
-    { title: 'What matters today?',   desc: 'The one question that cuts through everything else.',  time: '2 min' },
-    { title: 'One meaningful move',   desc: 'Why one clear thing beats a full list every time.',   time: '3 min' },
-    { title: 'Weekly reset',          desc: 'A slow Sunday ritual that actually works.',            time: '5 min' },
-    { title: 'The invisible load',    desc: 'What\'s making you tired — it\'s not on your list.', time: '4 min' },
+  'start-here': [
+    { title: 'What matters today?',          desc: 'The one question that cuts through everything else.',        time: '2 min' },
+    { title: 'One meaningful move',          desc: 'Why one clear thing beats a full list every time.',         time: '3 min' },
+    { title: 'Weekly reset',                 desc: 'A slow Sunday ritual that actually works.',                  time: '5 min' },
+    { title: 'The invisible load',           desc: 'What\'s making you tired — it\'s not on your list.',       time: '4 min' },
   ],
-  'calmer-days':   [
-    { title: 'When life feels heavy',     desc: 'You don\'t need a system right now.',                 time: '3 min' },
-    { title: 'Make tomorrow easier',      desc: 'Small things tonight that change the morning.',       time: '2 min' },
+  'calmer-days': [
+    { title: 'When life feels heavy',        desc: 'You don\'t need a system right now. You need this first.',  time: '3 min' },
+    { title: 'Make tomorrow easier',         desc: 'Small things tonight that change how the morning feels.',   time: '2 min' },
+    { title: 'What would 10% lighter feel like?', desc: 'A gentler question for hard days.',                   time: '2 min' },
   ],
-  'clarity':       [
-    { title: 'Why productivity stopped working', desc: 'The framework was never the problem.',         time: '4 min' },
-    { title: 'Decision fatigue is real',         desc: 'Why you\'re exhausted before noon.',           time: '4 min' },
+  'carrying-less': [
+    { title: 'Why you\'re exhausted before noon', desc: 'It\'s not laziness. It\'s the invisible decisions.',  time: '4 min' },
+    { title: 'The mental load nobody talks about', desc: 'Naming the weight is the first step to setting it down.', time: '4 min' },
+    { title: 'Simplifying what you carry',   desc: 'Not everything deserves equal space in your mind.',         time: '3 min' },
   ],
-  'rhythm':        [
-    { title: 'A morning that actually works', desc: 'A gentle rhythm that fits real life.',            time: '4 min' },
-    { title: 'The evening reset',             desc: 'Close the day without carrying it forward.',      time: '3 min' },
+  'rhythm': [
+    { title: 'A morning that actually works', desc: 'Not a 5am routine. A gentle rhythm that fits real life.', time: '4 min' },
+    { title: 'The evening reset',            desc: 'How to close the day without carrying it into tomorrow.',   time: '3 min' },
+    { title: 'Sustainable over optimal',     desc: 'Consistency built gently lasts longer than systems built fast.', time: '3 min' },
   ],
-  'quiet-wins':    [
-    { title: 'The things nobody clapped for', desc: 'Notice what you did well this week.',            time: '2 min' },
-    { title: 'Small progress counts',         desc: 'Why micro-momentum matters more.',               time: '3 min' },
+  'quiet-wins': [
+    { title: 'The things nobody clapped for', desc: 'A space to notice what you did well this week.',           time: '2 min' },
+    { title: 'Small progress counts',        desc: 'Why the quiet moves matter more than you\'re giving them credit for.', time: '3 min' },
   ],
-  'simplifiers':   [
-    { title: 'Meal rhythm, not meal planning', desc: 'A lighter approach to food decisions.',         time: '4 min' },
-    { title: 'Digital boundaries that stick',  desc: 'Practical, not preachy.',                      time: '3 min' },
+  'making-room': [
+    { title: 'When did you stop being on your own list?', desc: 'A gentle question worth sitting with.',        time: '3 min' },
+    { title: 'Rest is not a reward',         desc: 'On giving yourself permission before you\'ve earned it.',   time: '3 min' },
+    { title: 'Possibility and the daily reset', desc: 'How small space creates unexpected room.',               time: '4 min' },
   ],
-  'wisdom-cards':  [
-    { title: 'On doing less, better',          desc: 'Greg McKeown on essentialism.',                 time: '2 min' },
-    { title: 'On building identity slowly',    desc: 'James Clear on small habits.',                  time: '2 min' },
+  'wisdom-cards': [
+    { title: 'On doing less, better',        desc: 'Greg McKeown on essentialism.',                             time: '2 min' },
+    { title: 'On building identity slowly',  desc: 'James Clear on why small habits compound quietly.',         time: '2 min' },
   ],
   'velani-letter': [
-    { title: 'The system nobody builds',       desc: 'The most important architecture goes undesigned.', time: '4 min' },
-    { title: 'One clear move at a time',       desc: 'A different philosophy on a good day.',         time: '3 min' },
+    { title: 'The system nobody builds',     desc: 'On why the most important architecture in your life goes undesigned.', time: '4 min' },
+    { title: 'One clear move at a time',     desc: 'A different philosophy on what a good day actually requires.', time: '3 min' },
   ],
 };
 ---
 <Base
   title="Library"
-  description="Short reads on clarity, daily rhythm, and simpler living."
+  description="Short reads for women who want to carry less and feel more like themselves."
   currentPath="/library"
 >
-
 <style>
   main { flex: 1; }
 
-  /* ── Search bar — full readable width ── */
-  .lib-search-wrap {
-    padding: 0 3rem 2rem;
-    position: relative; z-index: 1;
+  .lib-controls {
+    display: flex; align-items: center;
+    gap: 1.2rem; margin-bottom: 2.5rem; flex-wrap: wrap;
   }
-  .search-inner {
-    max-width: 760px; margin: 0 auto;
-    display: flex; align-items: center; gap: 1rem;
-    flex-wrap: wrap;
-  }
-  .search-box { position: relative; flex: 1; min-width: 260px; }
-  .search-icon {
-    position: absolute; left: .9rem; top: 50%;
-    transform: translateY(-50%); color: var(--ink3); pointer-events: none;
-  }
+
+  .search-box { position: relative; flex-shrink: 0; }
+  .search-icon { position: absolute; left: .85rem; top: 50%; transform: translateY(-50%); color: var(--ink3); pointer-events: none; }
   .search-input {
-    width: 100%; background: var(--surface);
+    width: 260px; background: var(--surface);
     border: 1.5px solid var(--border2); border-radius: 8px;
-    padding: .7rem 2.4rem .7rem 2.3rem;
-    font-family: var(--body); font-size: .85rem; color: var(--ink);
+    padding: .62rem 2rem .62rem 2.3rem;
+    font-family: var(--body); font-size: .83rem; color: var(--ink);
     outline: none; transition: border-color .2s, box-shadow .2s;
   }
   .search-input:focus { border-color: var(--sage); box-shadow: 0 0 0 3px var(--sage-gl); }
   .search-input::placeholder { color: var(--ink3); }
-  .search-clear {
-    position: absolute; right: .7rem; top: 50%; transform: translateY(-50%);
-    background: none; border: none; color: var(--ink3);
-    cursor: pointer; font-size: .7rem; display: none; line-height: 1;
-  }
+  .search-clear { position: absolute; right: .6rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--ink3); cursor: pointer; font-size: .7rem; display: none; }
   .search-clear.visible { display: block; }
 
-  /* Category pills */
-  .cat-pills { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .cat-pills { display: flex; flex-wrap: wrap; gap: .4rem; flex: 1; }
   .cat-pill {
     font-size: .7rem; color: var(--ink3);
     background: var(--surface); border: 1.5px solid var(--border2);
     border-radius: 6px; padding: .3rem .85rem;
-    cursor: pointer; transition: all .15s;
-    white-space: nowrap; font-family: var(--body);
-    display: inline-flex; align-items: center; gap: .2rem;
+    cursor: pointer; transition: all .15s; white-space: nowrap;
+    font-family: var(--body); display: inline-flex; align-items: center; gap: .2rem;
   }
   .cat-pill:hover { border-color: var(--sage); color: var(--ink); }
   .cat-pill.active { background: var(--ink); border-color: var(--ink); color: var(--bg); }
   .cat-pill.coming { opacity: .45; cursor: default; }
-  .pill-soon {
-    font-size: .55rem; border: 1px solid currentColor;
-    border-radius: 3px; padding: .05rem .3rem; opacity: .7;
-  }
+  .pill-soon { font-size: .55rem; border: 1px solid currentColor; border-radius: 3px; padding: .05rem .3rem; opacity: .7; }
 
-  /* Mobile pills toggle */
   .cat-mobile { display: none; }
   .cat-toggle-btn {
     display: flex; align-items: center; justify-content: space-between;
     width: 100%; background: var(--surface);
     border: 1.5px solid var(--border2); border-radius: 8px;
     padding: .6rem 1rem; font-family: var(--body);
-    font-size: .8rem; color: var(--ink2); cursor: pointer;
-    margin-bottom: .5rem;
+    font-size: .8rem; color: var(--ink2); cursor: pointer; margin-bottom: .5rem;
   }
   .cat-caret { font-size: .6rem; color: var(--ink3); transition: transform .2s; }
   .cat-mobile.open .cat-caret { transform: rotate(180deg); }
   .cat-mobile-pills { display: none; flex-wrap: wrap; gap: .4rem; }
   .cat-mobile.open .cat-mobile-pills { display: flex; }
 
-  /* Results */
-  .results-note { font-size: .72rem; color: var(--ink3); margin-bottom: 1rem; min-height: 1rem; padding: 0 3rem; }
-  .results-note .content-inner { max-width: 760px; margin: 0 auto; }
-  .no-results { display: none; padding: 3rem 3rem; }
+  .results-note { font-size: .72rem; color: var(--ink3); margin-bottom: 1rem; min-height: 1rem; }
+  .no-results { display: none; padding: 3rem 0; }
   .no-results.visible { display: block; }
-  .no-results p { font-family: var(--display); font-size: .9rem; font-style: italic; color: var(--ink3); line-height: 1.8; max-width: 760px; margin: 0 auto; }
+  .no-results p { font-family: var(--display); font-size: .9rem; font-style: italic; color: var(--ink3); line-height: 1.8; }
 
-  /* ── Content — single column, generous spacing ── */
-  .lib-content {
-    padding: 0 3rem 6rem;
-    position: relative; z-index: 1;
-  }
-  .lib-inner { max-width: 760px; margin: 0 auto; }
+  .lib-content { padding-bottom: 6rem; position: relative; z-index: 1; }
+  .lib-inner { max-width: 760px; }
 
-  .cat-section { margin-bottom: 3.5rem; }
+  .cat-section { margin-bottom: 3rem; }
   .cat-head {
     display: flex; align-items: baseline;
     justify-content: space-between; gap: 1rem;
-    padding-bottom: .65rem; margin-bottom: 1rem;
+    padding-bottom: .6rem; margin-bottom: 1rem;
     border-bottom: 1px solid var(--border);
   }
   .cat-name { font-family: var(--display); font-size: .95rem; font-weight: 400; color: var(--ink); }
-  .cat-meta { font-size: .65rem; color: var(--ink3); font-style: italic; font-family: var(--display); white-space: nowrap; }
+  .cat-desc { font-size: .7rem; color: var(--ink3); font-style: italic; font-family: var(--display); }
+  .cat-meta { font-size: .65rem; color: var(--ink3); font-style: italic; font-family: var(--display); white-space: nowrap; margin-left: auto; }
   .cat-meta.soon { font-style: normal; font-family: var(--body); font-size: .6rem; letter-spacing: .08em; text-transform: uppercase; color: var(--terra); }
 
   .reads { display: flex; flex-direction: column; gap: .5rem; }
   .read-row {
     display: flex; align-items: baseline;
     justify-content: space-between; gap: 1.5rem;
-    padding: 1rem 1.3rem;
+    padding: .95rem 1.2rem;
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 10px; text-decoration: none;
-    transition: box-shadow .15s, transform .12s, border-color .15s;
-    cursor: pointer;
+    transition: box-shadow .15s, transform .12s, border-color .15s; cursor: pointer;
   }
-  .read-row:not(.placeholder):hover {
-    box-shadow: 0 2px 16px rgba(26,29,46,.06);
-    transform: translateY(-1px); border-color: var(--border2);
-  }
+  .read-row:not(.placeholder):hover { box-shadow: 0 2px 16px rgba(26,29,46,.06); transform: translateY(-1px); border-color: var(--border2); }
   .read-row.placeholder { opacity: .5; pointer-events: none; }
   .read-body { flex: 1; min-width: 0; }
   .read-title { font-family: var(--display); font-size: .92rem; font-weight: 400; color: var(--ink); line-height: 1.3; margin-bottom: .2rem; }
   .read-desc  { font-size: .78rem; color: var(--ink3); line-height: 1.55; }
   .read-time  { font-size: .68rem; color: var(--ink3); font-family: var(--display); font-style: italic; white-space: nowrap; flex-shrink: 0; }
 
-  /* ── Signup nudge ── */
-  .lib-nudge {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 1.8rem 2rem;
-    margin-top: .5rem;
-  }
+  .lib-nudge { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.8rem 2rem; margin-top: .5rem; max-width: 760px; }
   .lib-nudge-title { font-family: var(--display); font-size: .98rem; font-weight: 300; color: var(--ink); margin-bottom: .25rem; }
   .lib-nudge-title em { font-style: italic; color: var(--sage); }
   .lib-nudge p { font-size: .8rem; color: var(--ink3); margin-bottom: .9rem; line-height: 1.6; }
 
   @media (max-width: 900px) {
-    .lib-search-wrap { padding: 0 1.5rem 2rem; }
-    .lib-content { padding: 0 1.5rem 4rem; }
-    .results-note { padding: 0 1.5rem; }
-    .no-results { padding: 2rem 1.5rem; }
     .cat-pills { display: none; }
     .cat-mobile { display: block; width: 100%; }
-    .search-inner { flex-direction: column; align-items: stretch; }
-    .search-box { min-width: 0; }
+    .search-input { width: 100%; }
+    .lib-controls { flex-direction: column; align-items: stretch; }
+    .search-box { width: 100%; }
   }
 </style>
 
 <main>
+<div class="page-wrap">
 
-  <!-- Hero -->
-  <div class="section-wrap tight" style="position:relative;z-index:1;">
-    <div class="content-wide">
-      <div class="page-hero" style="padding-top:3rem;">
-        <div class="eyebrow">Library</div>
-        <h1 class="page-title">A calm companion,<br><em>for clearer days.</em></h1>
-        <p class="page-subtitle">Short reads on clarity, daily rhythm, and simpler living.</p>
-      </div>
-    </div>
+  <div class="page-hero">
+    <div class="eyebrow">Library</div>
+    <h1 class="page-title">Reads for women<br>who want to <em>carry less.</em></h1>
+    <p class="page-subtitle">
+      Short, practical pieces on making space for yourself — in your day, your mind, and your life.
+      Return whenever you need it.
+    </p>
   </div>
 
-  <!-- Search + pills -->
-  <div class="lib-search-wrap">
-    <div class="search-inner">
-      <div class="search-box">
-        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none">
-          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/>
-          <path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-        </svg>
-        <input type="text" id="lib-search" class="search-input" placeholder="What do you need today?" autocomplete="off">
-        <button class="search-clear" id="search-clear" aria-label="Clear">✕</button>
-      </div>
-
-      <!-- Desktop pills -->
-      <div class="cat-pills" id="cat-pills-desktop">
+  <!-- Controls -->
+  <div class="lib-controls">
+    <div class="search-box">
+      <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none">
+        <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <input type="text" id="lib-search" class="search-input" placeholder="What do you need today?" autocomplete="off">
+      <button class="search-clear" id="search-clear" aria-label="Clear">✕</button>
+    </div>
+    <div class="cat-pills" id="cat-pills-desktop">
+      <button class="cat-pill active" data-cat="all">All</button>
+      {categories.map(cat => {
+        const has = live(cat.slug).length > 0;
+        return (
+          <button class={`cat-pill${!has ? ' coming' : ''}`} data-cat={cat.slug}>
+            {cat.star ? '⭐ ' : ''}{cat.label}
+            {!has && <span class="pill-soon">soon</span>}
+          </button>
+        );
+      })}
+    </div>
+    <div class="cat-mobile" id="cat-mobile">
+      <button class="cat-toggle-btn" onclick="window.toggleMobileCat()">
+        <span>Browse by topic</span><span class="cat-caret">▾</span>
+      </button>
+      <div class="cat-mobile-pills">
         <button class="cat-pill active" data-cat="all">All</button>
         {categories.map(cat => {
           const has = live(cat.slug).length > 0;
@@ -237,36 +216,16 @@ const placeholders = {
           );
         })}
       </div>
-
-      <!-- Mobile collapse -->
-      <div class="cat-mobile" id="cat-mobile">
-        <button class="cat-toggle-btn" onclick="window.toggleMobileCat()">
-          <span>Browse by topic</span>
-          <span class="cat-caret">▾</span>
-        </button>
-        <div class="cat-mobile-pills">
-          <button class="cat-pill active" data-cat="all">All</button>
-          {categories.map(cat => {
-            const has = live(cat.slug).length > 0;
-            return (
-              <button class={`cat-pill${!has ? ' coming' : ''}`} data-cat={cat.slug}>
-                {cat.star ? '⭐ ' : ''}{cat.label}
-                {!has && <span class="pill-soon">soon</span>}
-              </button>
-            );
-          })}
-        </div>
-      </div>
     </div>
   </div>
 
-  <div class="results-note" id="results-note"><div class="content-inner"></div></div>
-  <div class="no-results" id="no-results"><p>Nothing found. Try "mornings", "overwhelm", or "reset".</p></div>
+  <div class="results-note" id="results-note"></div>
+  <div class="no-results" id="no-results">
+    <p>Nothing found. Try "heavy", "morning", or "rest".</p>
+  </div>
 
-  <!-- Content -->
   <div class="lib-content">
     <div class="lib-inner">
-
       {categories.map(cat => {
         const liveItems = live(cat.slug);
         const phItems   = placeholders[cat.slug] || [];
@@ -274,7 +233,10 @@ const placeholders = {
         return (
           <div class="cat-section" data-section={cat.slug}>
             <div class="cat-head">
-              <span class="cat-name">{cat.star ? '⭐ ' : ''}{cat.label}</span>
+              <div>
+                <span class="cat-name">{cat.star ? '⭐ ' : ''}{cat.label}</span>
+                {cat.desc && <span class="cat-desc" style="margin-left:.6rem;">{cat.desc}</span>}
+              </div>
               <span class={`cat-meta${!liveItems.length ? ' soon' : ''}`}>
                 {liveItems.length ? `${liveItems.length} read${liveItems.length !== 1 ? 's' : ''}` : 'Start here soon'}
               </span>
@@ -307,10 +269,9 @@ const placeholders = {
         );
       })}
 
-      <!-- Signup nudge -->
       <div class="lib-nudge">
         <div class="lib-nudge-title">A quieter <em>inbox.</em></div>
-        <p>Weekly letters with practical tools for calmer, clearer days.</p>
+        <p>Weekly letters for women who want to carry less and feel more like themselves.</p>
         <div id="nudge-form">
           <div class="inline-form">
             <input type="email" id="nudge-email" class="inline-email" placeholder="your@email.com" autocomplete="email">
@@ -320,9 +281,9 @@ const placeholders = {
         </div>
         <div class="inline-success" id="nudge-success">✓ Check your inbox to confirm.</div>
       </div>
-
     </div>
   </div>
+</div>
 </main>
 
 <script>
@@ -353,8 +314,7 @@ const placeholders = {
       sec.style.display = vis ? '' : 'none';
     });
     noResults.classList.toggle('visible', count === 0);
-    resultsNote.querySelector('.content-inner').textContent =
-      query ? `${count} result${count !== 1 ? 's' : ''} for "${query}"` : '';
+    resultsNote.textContent = query ? `${count} result${count !== 1 ? 's' : ''} for "${query}"` : '';
   }
 
   searchEl.addEventListener('input', () => {
@@ -380,8 +340,8 @@ const placeholders = {
 
   window.nudgeSignup = function() {
     const email = document.getElementById('nudge-email').value.trim();
-    if (!email || !email.includes('@')) { document.getElementById('nudge-email').style.borderColor='#B86A43'; return; }
-    document.getElementById('nudge-email').style.borderColor='rgba(26,29,46,.14)';
+    if (!email || !email.includes('@')) { document.getElementById('nudge-email').style.borderColor = '#B86A43'; return; }
+    document.getElementById('nudge-email').style.borderColor = 'rgba(26,29,46,.14)';
     fetch('https://velani-subscribe.velani-app.workers.dev/', {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email })
     }).then(() => done()).catch(() => done());
