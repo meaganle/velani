@@ -332,7 +332,7 @@ const faqs = [
 </div>
 </main>
 
-<script>
+<script is:inline>
   window.toggleFaq = function(i) {
     const item = document.getElementById(`faq-${i}`);
     const isOpen = item.classList.contains('open');

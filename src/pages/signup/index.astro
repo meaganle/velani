@@ -2,8 +2,8 @@
 import Base from '../../layouts/Base.astro';
 ---
 <Base
-  title="Join Velani"
-  description="A little more clarity each week. Weekly thoughtful letters, practical tools, and gentle systems for clearer days."
+  title="Join the Velani Letter"
+  description="A Sunday letter for women who are carrying too much and want to feel like themselves again."
   currentPath="/signup"
 >
 <style>
@@ -13,213 +13,242 @@ import Base from '../../layouts/Base.astro';
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 4rem 1.5rem 5rem;
-    position: relative;
-    z-index: 1;
+    padding: 5rem 1.5rem 6rem;
+    position: relative; z-index: 1;
   }
+
   .wrap {
-    width: 100%;
-    max-width: 440px;
-    animation: rise .75s cubic-bezier(.22,1,.36,1) forwards;
+    width: 100%; max-width: 460px;
+    animation: rise .8s cubic-bezier(.22,1,.36,1) forwards;
   }
   @keyframes rise {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(22px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+
+  /* Header */
   .eyebrow {
-    font-size: .62rem;
-    letter-spacing: .2em;
-    text-transform: uppercase;
-    color: var(--terra);
-    font-weight: 500;
-    margin-bottom: .8rem;
+    font-size: .58rem; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--terra);
+    font-weight: 600; margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: .65rem;
   }
+  .eyebrow::before {
+    content: ''; display: block;
+    width: 20px; height: 1.5px; background: var(--terra);
+    opacity: .55; flex-shrink: 0;
+  }
+
   .headline {
     font-family: var(--display);
-    font-size: clamp(1.85rem, 4vw, 2.3rem);
-    font-weight: 300;
-    line-height: 1.1;
-    color: var(--ink);
-    margin-bottom: .7rem;
-    letter-spacing: -.015em;
+    font-size: clamp(2rem, 5vw, 2.7rem);
+    font-weight: 300; line-height: 1.1;
+    color: var(--ink); margin-bottom: 1rem;
+    letter-spacing: -.022em;
   }
   .headline em { font-style: italic; color: var(--sage); }
+
   .subhead {
-    font-size: .9rem;
-    color: var(--ink2);
-    line-height: 1.75;
-    margin-bottom: 2rem;
+    font-size: .95rem; color: var(--ink2);
+    line-height: 1.85; margin-bottom: 1.8rem;
   }
+
+  /* Pull quote */
+  .pull {
+    font-family: var(--display);
+    font-size: .9rem; font-weight: 300;
+    font-style: italic; color: var(--ink3);
+    border-left: 2px solid var(--sage);
+    padding: .7rem 0 .7rem 1.1rem;
+    margin-bottom: 2.2rem; line-height: 1.7;
+  }
+
+  /* Card */
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 2rem 2.2rem;
-    box-shadow: 0 4px 24px rgba(26,29,46,.05);
+    border-radius: 18px;
+    padding: 2.2rem 2.4rem;
+    box-shadow: 0 6px 36px rgba(26,29,46,.07);
   }
-  .field-row {
-    display: flex;
-    gap: .6rem;
-    margin-bottom: .5rem;
+
+  .card-label {
+    font-size: .58rem; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--ink3);
+    font-weight: 600; margin-bottom: 1.4rem;
   }
+
+  /* Benefits */
+  .benefits { margin-bottom: 1.8rem; display: flex; flex-direction: column; gap: .75rem; }
+  .benefit {
+    display: flex; align-items: flex-start; gap: .7rem;
+    font-size: .86rem; color: var(--ink2); line-height: 1.6;
+  }
+  .benefit-mark {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--sage-gl); border: 1px solid rgba(91,140,122,.2);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: .1em;
+  }
+  .benefit-mark svg { display: block; }
+  .benefit strong { color: var(--ink); font-weight: 500; }
+
+  /* Divider */
+  .card-rule { height: 1px; background: var(--border); margin: 1.6rem 0; }
+
+  /* Form */
+  .field-row { display: flex; gap: .55rem; margin-bottom: .5rem; }
   .field-email {
-    flex: 1;
-    min-width: 0;
-    background: var(--bg);
-    border: 1.5px solid var(--border2);
-    border-radius: 10px;
-    padding: .85rem 1rem;
-    font-family: var(--body);
-    font-size: .88rem;
-    color: var(--ink);
-    outline: none;
+    flex: 1; min-width: 0; background: var(--bg);
+    border: 1.5px solid var(--border2); border-radius: 10px;
+    padding: .88rem 1rem; font-family: var(--body);
+    font-size: .88rem; color: var(--ink); outline: none;
     transition: border-color .2s, box-shadow .2s;
   }
-  .field-email:focus {
-    border-color: var(--sage);
-    box-shadow: 0 0 0 3px var(--sage-gl);
-  }
+  .field-email:focus { border-color: var(--sage); box-shadow: 0 0 0 3px var(--sage-gl); }
   .field-email::placeholder { color: var(--ink3); }
+
   .btn-submit {
-    background: var(--ink);
-    color: var(--bg);
-    font-family: var(--body);
-    font-size: .78rem;
-    font-weight: 500;
-    letter-spacing: .07em;
-    text-transform: uppercase;
-    padding: .85rem 1.3rem;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    white-space: nowrap;
-    flex-shrink: 0;
+    background: var(--ink); color: var(--bg);
+    font-family: var(--body); font-size: .76rem; font-weight: 500;
+    letter-spacing: .07em; text-transform: uppercase;
+    padding: .88rem 1.4rem; border-radius: 10px; border: none;
+    cursor: pointer; white-space: nowrap; flex-shrink: 0;
     transition: background .2s, transform .15s;
   }
-  .btn-submit:hover { background: var(--sage2, #3D6B59); transform: translateY(-1px); }
+  .btn-submit:hover { background: var(--sage2); transform: translateY(-1px); }
   .btn-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
-  .field-error {
-    font-size: .7rem;
-    color: var(--terra);
-    min-height: .9rem;
-    margin-bottom: .4rem;
-    display: block;
-  }
-  .consent-note {
-    font-size: .67rem;
-    color: var(--ink3);
-    line-height: 1.6;
-  }
+
+  .field-error { font-size: .7rem; color: var(--terra); min-height: .9rem; margin-bottom: .35rem; display: block; }
+  .consent-note { font-size: .63rem; color: var(--ink3); line-height: 1.6; }
   .consent-note a { color: var(--sage); text-decoration: none; }
 
-  /* What you'll receive */
-  .what {
-    border-top: 1px solid var(--border);
-    margin-top: 1.4rem;
-    padding-top: 1.2rem;
+  /* Trust row */
+  .trust-row {
+    display: flex; flex-wrap: wrap; align-items: center;
+    gap: .5rem; margin-top: 1.2rem; justify-content: center;
   }
-  .what-label {
-    font-size: .6rem;
-    letter-spacing: .16em;
-    text-transform: uppercase;
-    color: var(--ink3);
-    font-weight: 500;
-    margin-bottom: .65rem;
-  }
-  .what-item {
-    display: flex;
-    align-items: flex-start;
-    gap: .55rem;
-    font-size: .82rem;
-    color: var(--ink2);
-    line-height: 1.65;
-    margin-bottom: .4rem;
-  }
-  .what-item:last-child { margin-bottom: 0; }
-  .check { color: var(--sage); flex-shrink: 0; margin-top: .1em; font-size: .8rem; }
+  .trust-item { font-size: .6rem; color: var(--ink3); letter-spacing: .06em; }
+  .trust-dot { color: var(--border2); }
 
   /* Success */
-  .success { display: none; text-align: center; padding: .5rem 0; }
+  .success { display: none; text-align: center; }
   .success.visible { display: block; }
-  .success-mark {
-    width: 52px; height: 52px;
-    border-radius: 50%;
-    background: var(--sage-gl);
-    border: 1.5px solid rgba(91,140,122,.25);
+  .success-circle {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--sage-gl); border: 1.5px solid rgba(91,140,122,.25);
     display: flex; align-items: center; justify-content: center;
-    margin: 0 auto 1rem;
+    margin: 0 auto 1.4rem;
   }
   .success-title {
     font-family: var(--display);
-    font-size: 1.2rem;
-    font-weight: 300;
-    color: var(--ink);
-    margin-bottom: .4rem;
+    font-size: 1.35rem; font-weight: 300;
+    color: var(--ink); margin-bottom: .5rem; line-height: 1.2;
   }
   .success-title em { font-style: italic; color: var(--sage); }
-  .success-sub { font-size: .83rem; color: var(--ink3); line-height: 1.75; }
-
-  .field-message {
-    display: block;
-    font-size: .75rem;
-    color: var(--sage);
-    margin-top: .5rem;
-    min-height: 1rem;
+  .success-sub { font-size: .85rem; color: var(--ink3); line-height: 1.8; margin-bottom: 1.4rem; }
+  .success-link {
+    font-size: .75rem; color: var(--sage);
+    text-decoration: none; letter-spacing: .03em;
   }
+  .success-link:hover { text-decoration: underline; }
 
   @media (max-width: 480px) {
-    main { padding: 2.5rem 1.2rem 4rem; }
-    .card { padding: 1.6rem 1.4rem; }
+    main { padding: 3rem 1.2rem 4rem; }
+    .card { padding: 1.8rem 1.6rem; }
     .field-row { flex-direction: column; }
-    .btn-submit { width: 100%; padding: .9rem; }
+    .btn-submit { width: 100%; padding: .9rem; justify-content: center; }
   }
 </style>
 
 <main>
   <div class="wrap">
 
-    <div class="eyebrow">Join Velani</div>
-    <h1 class="headline">A little more<br><em>clarity each week.</em></h1>
+    <p class="eyebrow">The Velani Letter</p>
+    <h1 class="headline">For the woman<br>who forgot to save<br>room for <em>herself.</em></h1>
     <p class="subhead">
-      Weekly thoughtful letters, practical tools, and gentle systems for clearer days.
+      You've been showing up for everyone else.<br>
+      This letter is for <em style="font-style:italic;color:var(--ink);">you.</em>
     </p>
 
-    <!-- Form -->
+    <p class="pull">
+      A quiet Sunday letter for women who are carrying too much
+      and want to feel like themselves again.
+    </p>
+
+    <!-- Form card -->
     <div class="card" id="form-state">
+      <div class="card-label">What you'll receive</div>
+      <div class="benefits">
+        <div class="benefit">
+          <span class="benefit-mark">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12.5L10 17.5L19 7" stroke="#5B8C7A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span><strong>Every Sunday</strong> — a warm, honest letter that meets you where you are and helps you carry a little less into the week</span>
+        </div>
+        <div class="benefit">
+          <span class="benefit-mark">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12.5L10 17.5L19 7" stroke="#5B8C7A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span><strong>Small practices</strong> — gentle tools that actually fit a real, full life — not another system to manage</span>
+        </div>
+        <div class="benefit">
+          <span class="benefit-mark">
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none">
+              <path d="M5 12.5L10 17.5L19 7" stroke="#5B8C7A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span><strong>Permission</strong> — to slow down, to rest, and to be on your own list again</span>
+        </div>
+      </div>
+
+      <div class="card-rule"></div>
+
       <div class="field-row">
         <input type="email" id="su-email" class="field-email" placeholder="your@email.com" autocomplete="email">
-        <button class="btn-submit" id="su-btn" onclick="window.handleSignup()">Join now</button>
+        <button class="btn-submit" id="su-btn" onclick="window.handleSignup()">I'm ready</button>
       </div>
       <span class="field-error" id="su-error"></span>
       <p class="consent-note">
         By joining, you agree to receive occasional Velani emails.
         <a href="/privacy" target="_blank">Privacy policy</a>.
       </p>
-      <span class="field-message" id="su-message"></span>
+    </div>
 
-      <div class="what">
-        <div class="what-label">What you'll receive</div>
-        <div class="what-item"><span class="check">✓</span><span><strong>Every Sunday</strong> — a thoughtful letter to reset, reflect, and move into the week with more clarity.</span></div>
-        <div class="what-item"><span class="check">✓</span><span><strong>Occasionally</strong> — simple tools, templates, and quiet encouragement.</span></div>
-        <div class="what-item"><span class="check">✓</span><span><strong>Always</strong> — calm support, no pressure, no noise.</span></div>
-      </div>
+    <!-- Trust row -->
+    <div class="trust-row">
+      <span class="trust-item">Every Sunday</span>
+      <span class="trust-dot">·</span>
+      <span class="trust-item">Free</span>
+      <span class="trust-dot">·</span>
+      <span class="trust-item">Unsubscribe anytime</span>
+      <span class="trust-dot">·</span>
+      <span class="trust-item">No noise</span>
     </div>
 
     <!-- Success -->
     <div class="card success" id="success-state">
-      <div class="success-mark">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <div class="success-circle">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
           <path d="M5 12.5L10 17.5L19 7" stroke="#5B8C7A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </div>
-      <div class="success-title">You're in.<br><em>Check your inbox.</em></div>
-      <p class="success-sub">Confirm your email to complete signup.<br>Your first letter arrives Sunday.</p>
+      <div class="success-title">You're in.<br><em>Welcome.</em></div>
+      <p class="success-sub">
+        Check your inbox to confirm — then your first letter arrives Sunday.<br>
+        You deserve this space.
+      </p>
+      <a href="/" class="success-link">← Back to Velani</a>
     </div>
 
   </div>
 </main>
 
-<script>
+<script is:inline>
   window.handleSignup = function() {
     const email   = document.getElementById('su-email').value.trim();
     const errorEl = document.getElementById('su-error');
@@ -231,8 +260,7 @@ import Base from '../../layouts/Base.astro';
       return;
     }
     document.getElementById('su-email').style.borderColor = 'rgba(26,29,46,.14)';
-    btn.disabled    = true;
-    btn.textContent = 'Sending…';
+    btn.disabled = true; btn.textContent = 'Sending…';
     fetch('https://velani-subscribe.velani-app.workers.dev/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
