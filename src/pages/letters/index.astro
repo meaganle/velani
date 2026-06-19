@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 
-const allLetters = await Astro.glob('../../content/letter/*.md');
+const allLetters = await Astro.glob('../../content/letters/*.md');
 const letters = allLetters
   .filter(l => !l.frontmatter.draft)
   .sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date));
