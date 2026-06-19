@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 
-const allLetters = await Astro.glob('../../content/letters/*.md');
+const allLetters = await Astro.glob('../../content/letter/*.md');
 const letters = allLetters
   .filter(l => !l.frontmatter.draft)
   .sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date));
@@ -27,95 +27,211 @@ const phArchive = [
 ];
 ---
 <Base
-  title="Letters"
+  title="The Velani Letter"
   description="A Sunday letter for women who want to feel more like themselves again."
   currentPath="/letters"
 >
 <style>
   main { flex: 1; }
 
-  .letters-hero-section {
-    padding: 5rem 3rem 4rem;
+  /* ── Hero ── */
+  .letters-hero {
+    padding: 5rem 3rem 4.5rem;
     position: relative; z-index: 1;
   }
   .letters-hero-inner {
-    max-width: 960px; margin: 0 auto;
+    max-width: 980px; margin: 0 auto;
     display: grid; grid-template-columns: 1fr 360px;
-    gap: 5rem; align-items: start;
+    gap: 5rem; align-items: stretch;
   }
 
-  .find-block { margin-top: 1.8rem; }
-  .find-label { font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink3); font-weight: 500; margin-bottom: .7rem; }
-  .find-items { display: flex; flex-direction: column; gap: .35rem; }
-  .find-item { display: flex; align-items: center; gap: .65rem; font-size: .88rem; color: var(--ink2); line-height: 1.5; }
-  .find-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--sage); flex-shrink: 0; }
+  /* Left column */
+  .hero-eyebrow {
+    font-size: .6rem; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--terra);
+    font-weight: 600; margin-bottom: 1.4rem;
+    display: flex; align-items: center; gap: .75rem;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block;
+    width: 24px; height: 1.5px; background: var(--terra);
+    opacity: .6; flex-shrink: 0;
+  }
+  .hero-title {
+    font-family: var(--display);
+    font-size: clamp(2.2rem, 4vw, 3rem);
+    font-weight: 300; line-height: 1.1;
+    letter-spacing: -.02em; color: var(--ink);
+    margin-bottom: 1.2rem;
+  }
+  .hero-title em { font-style: italic; color: var(--sage); }
+  .hero-desc {
+    font-size: .95rem; color: var(--ink2);
+    line-height: 1.85; margin-bottom: 2rem;
+    max-width: 460px;
+  }
 
+  .find-block { margin-top: .5rem; }
+  .find-label {
+    font-size: .58rem; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--ink3);
+    font-weight: 600; margin-bottom: .9rem;
+  }
+  .find-items { display: flex; flex-direction: column; gap: .5rem; }
+  .find-item {
+    display: flex; align-items: flex-start; gap: .75rem;
+    font-size: .88rem; color: var(--ink2); line-height: 1.55;
+  }
+  .find-dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--sage); flex-shrink: 0; margin-top: .45em;
+  }
+
+  /* Right column: signup card */
   .signup-card {
     background: var(--surface); border: 1px solid var(--border);
-    border-radius: 14px; padding: 2rem 2.2rem;
-    box-shadow: 0 4px 24px rgba(26,29,46,.04);
+    border-radius: 16px; padding: 2.2rem 2.4rem;
+    box-shadow: 0 4px 32px rgba(26,29,46,.06);
+    display: flex; flex-direction: column; justify-content: center;
   }
-  .signup-eyebrow { font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--terra); font-weight: 500; margin-bottom: .4rem; }
-  .signup-hed { font-family: var(--display); font-size: 1.2rem; font-weight: 300; color: var(--ink); margin-bottom: .5rem; line-height: 1.2; }
+  .signup-eyebrow {
+    font-size: .58rem; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--terra);
+    font-weight: 600; margin-bottom: .6rem;
+  }
+  .signup-hed {
+    font-family: var(--display); font-size: 1.35rem;
+    font-weight: 300; color: var(--ink);
+    margin-bottom: .6rem; line-height: 1.2;
+  }
   .signup-hed em { font-style: italic; color: var(--sage); }
-  .signup-desc { font-size: .82rem; color: var(--ink2); line-height: 1.7; margin-bottom: 1.2rem; }
+  .signup-desc {
+    font-size: .83rem; color: var(--ink2);
+    line-height: 1.75; margin-bottom: 1.4rem;
+  }
 
+  /* Trust badges */
+  .signup-trust {
+    display: flex; flex-wrap: wrap; gap: .5rem;
+    margin-top: 1rem;
+  }
+  .trust-badge {
+    font-size: .6rem; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--ink3);
+    display: flex; align-items: center; gap: .35rem;
+  }
+  .trust-badge::before {
+    content: ''; display: block;
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--sage); opacity: .6; flex-shrink: 0;
+  }
+  .trust-sep { color: var(--border2); font-size: .65rem; }
+
+  /* Archive section */
   .archive-section {
-    padding: 0 3rem 6rem;
+    background: var(--surface);
     border-top: 1px solid var(--border);
+    padding: 4rem 3rem 6rem;
     position: relative; z-index: 1;
   }
-  .archive-inner { max-width: 760px; margin: 0 auto; padding-top: 3rem; }
+  .archive-inner { max-width: 760px; margin: 0 auto; }
 
-  .section-label { font-size: .6rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ink3); font-weight: 500; margin-bottom: 1rem; }
-  .archive-intro { font-size: .78rem; color: var(--ink3); font-style: italic; font-family: var(--display); margin-bottom: .9rem; }
+  .section-label {
+    font-size: .58rem; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--ink3);
+    font-weight: 600; margin-bottom: 1.2rem;
+  }
+  .archive-intro {
+    font-size: .82rem; color: var(--ink3);
+    font-style: italic; font-family: var(--display);
+    margin-bottom: 1.2rem; margin-top: -.4rem;
+  }
 
-  .featured-list { display: flex; flex-direction: column; gap: .7rem; margin-bottom: 3rem; }
+  /* Featured cards */
+  .featured-list { display: flex; flex-direction: column; gap: .75rem; margin-bottom: 3rem; }
   .feat-card {
-    display: block; padding: 1.6rem 1.8rem;
-    background: var(--surface); border: 1px solid rgba(91,140,122,.22);
-    border-radius: 12px; text-decoration: none;
-    transition: box-shadow .15s, transform .12s;
+    display: block; padding: 1.8rem 2rem;
+    background: var(--bg); border: 1px solid rgba(91,140,122,.18);
+    border-radius: 14px; text-decoration: none;
+    transition: box-shadow .18s, transform .14s, border-color .18s;
   }
-  .feat-card:not(.placeholder):hover { box-shadow: 0 4px 20px rgba(26,29,46,.06); transform: translateY(-1px); }
-  .feat-card.placeholder { opacity: .55; pointer-events: none; border-style: dashed; }
-  .feat-title { font-family: var(--display); font-size: 1rem; font-weight: 400; color: var(--ink); line-height: 1.3; margin-bottom: .4rem; }
-  .feat-preview { font-size: .82rem; color: var(--ink2); line-height: 1.7; margin-bottom: .5rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .feat-time { font-size: .68rem; color: var(--sage); font-family: var(--display); font-style: italic; }
+  .feat-card:not(.placeholder):hover {
+    box-shadow: 0 6px 28px rgba(26,29,46,.07);
+    transform: translateY(-2px);
+    border-color: rgba(91,140,122,.35);
+  }
+  .feat-card.placeholder { opacity: .5; pointer-events: none; border-style: dashed; }
+  .feat-eyebrow {
+    font-size: .57rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--sage); font-weight: 600; margin-bottom: .55rem;
+  }
+  .feat-title {
+    font-family: var(--display); font-size: 1.05rem;
+    font-weight: 400; color: var(--ink);
+    line-height: 1.3; margin-bottom: .5rem;
+  }
+  .feat-preview {
+    font-size: .83rem; color: var(--ink2); line-height: 1.72;
+    margin-bottom: .6rem;
+    display: -webkit-box; -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .feat-time {
+    font-size: .68rem; color: var(--sage);
+    font-family: var(--display); font-style: italic;
+  }
 
-  .archive-list { display: flex; flex-direction: column; gap: .5rem; }
+  /* Archive list */
+  .archive-list { display: flex; flex-direction: column; gap: .45rem; }
   .arc-item {
-    display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
-    padding: .95rem 1.3rem; background: var(--surface); border: 1px solid var(--border);
-    border-radius: 10px; text-decoration: none;
-    transition: box-shadow .15s, transform .12s;
+    display: flex; align-items: baseline;
+    justify-content: space-between; gap: 1.2rem;
+    padding: 1rem 1.4rem; background: var(--bg);
+    border: 1px solid var(--border); border-radius: 10px;
+    text-decoration: none;
+    transition: box-shadow .15s, transform .12s, border-color .15s;
   }
-  .arc-item:not(.placeholder):hover { box-shadow: 0 2px 12px rgba(26,29,46,.05); transform: translateY(-1px); }
-  .arc-item.placeholder { opacity: .55; pointer-events: none; border-style: dashed; }
+  .arc-item:not(.placeholder):hover {
+    box-shadow: 0 2px 16px rgba(26,29,46,.05);
+    transform: translateY(-1px); border-color: var(--border2);
+  }
+  .arc-item.placeholder { opacity: .5; pointer-events: none; border-style: dashed; }
   .arc-left { flex: 1; min-width: 0; }
-  .arc-title { font-family: var(--display); font-size: .9rem; font-weight: 400; color: var(--ink); line-height: 1.3; margin-bottom: .2rem; }
-  .arc-preview { font-size: .75rem; color: var(--ink3); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+  .arc-title {
+    font-family: var(--display); font-size: .9rem;
+    font-weight: 400; color: var(--ink);
+    line-height: 1.3; margin-bottom: .2rem;
+  }
+  .arc-preview {
+    font-size: .75rem; color: var(--ink3); line-height: 1.5;
+    display: -webkit-box; -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical; overflow: hidden;
+  }
   .arc-right { flex-shrink: 0; text-align: right; }
   .arc-date { font-size: .68rem; color: var(--ink3); font-family: var(--display); font-style: italic; white-space: nowrap; }
   .arc-time { font-size: .65rem; color: var(--ink3); }
-  .empty-note { text-align: center; padding: 1.5rem 0; font-family: var(--display); font-size: .85rem; font-style: italic; color: var(--ink3); line-height: 1.8; }
+  .empty-note {
+    text-align: center; padding: 2rem 0;
+    font-family: var(--display); font-size: .88rem;
+    font-style: italic; color: var(--ink3); line-height: 1.9;
+  }
 
   @media (max-width: 860px) {
-    .letters-hero-section { padding: 3rem 1.5rem 2.5rem; }
+    .letters-hero { padding: 3.5rem 1.5rem 3rem; }
     .letters-hero-inner { grid-template-columns: 1fr; gap: 2rem; }
-    .archive-section { padding: 0 1.5rem 4rem; }
+    .archive-section { padding: 3rem 1.5rem 4rem; }
   }
 </style>
 
 <main>
 
-  <div class="letters-hero-section">
+  <div class="letters-hero">
     <div class="letters-hero-inner">
 
       <div>
-        <div class="eyebrow">The Velani Letter</div>
-        <h1 class="page-title">A Sunday letter<br>for <em>women carrying too much.</em></h1>
-        <p class="page-subtitle">
+        <p class="hero-eyebrow">The Velani Letter</p>
+        <h1 class="hero-title">A Sunday letter<br>for <em>women carrying too much.</em></h1>
+        <p class="hero-desc">
           Not a newsletter about productivity. A quiet weekly letter about making room for yourself again — in your days, your mind, and your life.
         </p>
 
@@ -125,6 +241,7 @@ const phArchive = [
             <div class="find-item"><span class="find-dot"></span>Permission to carry less</div>
             <div class="find-item"><span class="find-dot"></span>Small practices that actually help</div>
             <div class="find-item"><span class="find-dot"></span>Warm, honest reflections on ordinary life</div>
+            <div class="find-item"><span class="find-dot"></span>One idea that makes the week feel lighter</div>
           </div>
         </div>
       </div>
@@ -133,13 +250,12 @@ const phArchive = [
         <div class="signup-eyebrow">Receive the letter</div>
         <h2 class="signup-hed">A quieter <em>Sunday.</em></h2>
         <p class="signup-desc">
-          Weekly letters for women who want to feel more like themselves again.
-          Warm, practical, and calm — arriving every Sunday morning.
+          Warm, practical letters arriving every Sunday morning. Written for women who want to feel more like themselves again.
         </p>
         <div id="letters-form">
           <div class="inline-form">
             <input type="email" id="let-email" class="inline-email" placeholder="your@email.com" autocomplete="email">
-            <button class="inline-btn" onclick="window.lettersSignup()">Join Velani</button>
+            <button class="inline-btn" onclick="window.lettersSignup()">Join</button>
           </div>
           <p class="inline-consent">
             By joining, you agree to receive occasional Velani emails.
@@ -147,6 +263,13 @@ const phArchive = [
           </p>
         </div>
         <div class="inline-success" id="let-success">✓ Check your inbox to confirm.</div>
+        <div class="signup-trust">
+          <span class="trust-badge">Every Sunday</span>
+          <span class="trust-sep">·</span>
+          <span class="trust-badge">Free</span>
+          <span class="trust-sep">·</span>
+          <span class="trust-badge">Unsubscribe anytime</span>
+        </div>
       </div>
 
     </div>
@@ -160,6 +283,7 @@ const phArchive = [
         {featured.length > 0
           ? featured.map(l => (
               <a href={l.url} class="feat-card">
+                <div class="feat-eyebrow">Featured</div>
                 <div class="feat-title">{l.frontmatter.title}</div>
                 {l.frontmatter.preview && <div class="feat-preview">{l.frontmatter.preview}</div>}
                 <div class="feat-time">{l.frontmatter.readTime || '3 min read'}</div>
@@ -167,6 +291,7 @@ const phArchive = [
             ))
           : phFeatured.map(p => (
               <div class="feat-card placeholder">
+                <div class="feat-eyebrow">Featured</div>
                 <div class="feat-title">{p.title}</div>
                 <div class="feat-preview">{p.preview}</div>
                 <div class="feat-time">{p.time}</div>
