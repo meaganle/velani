@@ -31,7 +31,7 @@ import Base from '../layouts/Base.astro';
 
   /* ── Hero ── */
   .hero {
-    padding: 8rem 3rem 7rem;
+    padding: 4rem 3rem 3rem;
     max-width: 820px;
     margin: 0 auto;
     animation: rise .9s cubic-bezier(.22,1,.36,1) forwards;
@@ -40,21 +40,21 @@ import Base from '../layouts/Base.astro';
   .hero-eyebrow {
     font-size: .62rem; letter-spacing: .2em;
     text-transform: uppercase; color: var(--sage);
-    font-weight: 500; margin-bottom: 2rem;
+    font-weight: 500; margin-bottom: 1rem;
   }
   .hero-headline {
     font-family: var(--display);
     font-size: clamp(2.4rem, 5vw, 3.8rem);
     font-weight: 300; line-height: 1.1;
     letter-spacing: -.02em; color: var(--ink);
-    margin-bottom: 2.5rem;
+    margin-bottom: 1.5rem;
   }
   .hero-headline em { font-style: italic; color: var(--sage); }
 
   /* The list — short breath, one per line */
   .hero-list {
     list-style: none;
-    margin-bottom: 2.5rem;
+    margin-bottom: 1.5rem;
     display: flex; flex-direction: column; gap: .2rem;
   }
   .hero-list li {
@@ -66,7 +66,7 @@ import Base from '../layouts/Base.astro';
 
   .hero-close {
     font-size: 1.05rem; color: var(--ink2);
-    line-height: 1.8; margin-bottom: 3rem;
+    line-height: 1.8; margin-bottom: 2rem;
     max-width: 540px;
   }
   .hero-close strong {
@@ -106,7 +106,6 @@ import Base from '../layouts/Base.astro';
     display: flex; align-items: baseline; gap: .75rem;
     font-size: .95rem; color: var(--ink2); line-height: 1.6;
   }
-  .s2-dash { color: var(--ink3); flex-shrink: 0; }
   .s2-answer {
     font-family: var(--display);
     font-size: 1.05rem; font-weight: 300;
@@ -293,11 +292,11 @@ import Base from '../layouts/Base.astro';
         solving every problem, postponing yourself.
       </p>
       <ul class="s2-list">
-        <li><span class="s2-dash">—</span>managing logistics</li>
-        <li><span class="s2-dash">—</span>carrying everyone else's needs</li>
-        <li><span class="s2-dash">—</span>remembering everything</li>
-        <li><span class="s2-dash">—</span>solving every problem</li>
-        <li><span class="s2-dash">—</span>postponing yourself</li>
+        <li>Managing logistics</li>
+        <li>Carrying everyone else's needs</li>
+        <li>Remembering everything</li>
+        <li>Solving every problem</li>
+        <li>Postponing yourself</li>
       </ul>
       <p class="s2-answer">
         The answer isn't doing more.<br>
