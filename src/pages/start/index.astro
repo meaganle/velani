@@ -1,15 +1,13 @@
 ---
-import Base from '../layouts/Base.astro';
+import Base from '../../layouts/Base.astro';
 ---
 <Base
   title="Velani — Your First Move"
   description="One clear move. One clearer day."
   currentPath="/start"
 >
-  <!-- Nav: brand only, no right links -->
-  <span slot="nav-right"></span>
-
 <style>
+/* ── MAIN ── */
 main {
   flex: 1;
   display: flex; align-items: flex-start; justify-content: center;
@@ -32,32 +30,16 @@ main {
 /* ── PROGRESS ── */
 .progress-wrap { margin-bottom: 2.8rem; }
 .progress-track {
-  height: 2px;
-  background: var(--border2);
-  border-radius: 100px;
-  overflow: hidden;
-  margin-bottom: .7rem;
+  height: 2px; background: var(--border2);
+  border-radius: 100px; overflow: hidden; margin-bottom: .7rem;
 }
 .progress-fill {
-  height: 100%;
-  background: var(--sage);
-  border-radius: 100px;
-  transition: width .5s cubic-bezier(.22,1,.36,1);
+  height: 100%; background: var(--sage);
+  border-radius: 100px; transition: width .5s cubic-bezier(.22,1,.36,1);
 }
-.progress-row {
-  display: flex; align-items: center; justify-content: space-between;
-}
-.progress-label {
-  font-size: .62rem;
-  color: var(--ink3);
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}
-.back-link {
-  font-size: .62rem; color: var(--ink3);
-  cursor: pointer; transition: color .2s;
-  letter-spacing: .02em;
-}
+.progress-row { display: flex; align-items: center; justify-content: space-between; }
+.progress-label { font-size: .62rem; color: var(--ink3); letter-spacing: .12em; text-transform: uppercase; }
+.back-link { font-size: .62rem; color: var(--ink3); cursor: pointer; transition: color .2s; letter-spacing: .02em; }
 .back-link:hover { color: var(--ink); }
 
 /* ── TYPOGRAPHY ── */
@@ -68,25 +50,18 @@ h1, h2 {
   margin-bottom: .6rem; letter-spacing: -.015em;
 }
 h1 em, h2 em { font-style: italic; color: var(--sage); }
-.subheading {
-  font-size: .88rem; color: var(--ink3);
-  margin-bottom: 1.8rem; line-height: 1.72;
-}
+.subheading { font-size: .88rem; color: var(--ink3); margin-bottom: 1.8rem; line-height: 1.72; }
 
 /* ── INPUTS ── */
 .field-label {
-  display: block;
-  font-size: .65rem; font-weight: 500;
+  display: block; font-size: .65rem; font-weight: 500;
   letter-spacing: .12em; text-transform: uppercase;
   color: var(--ink2); margin-bottom: .55rem;
 }
 textarea, .field-email {
-  width: 100%;
-  background: var(--surface);
-  border: 1.5px solid var(--border2);
-  border-radius: 12px;
-  padding: 1rem 1.15rem;
-  font-family: var(--body);
+  width: 100%; background: var(--surface);
+  border: 1.5px solid var(--border2); border-radius: 12px;
+  padding: 1rem 1.15rem; font-family: var(--body);
   font-size: .92rem; color: var(--ink);
   line-height: 1.7; resize: none; outline: none;
   transition: border-color .2s;
@@ -101,13 +76,10 @@ textarea::placeholder, .field-email::placeholder { color: var(--ink3); font-styl
 .btn-primary {
   display: inline-flex; align-items: center; gap: .55rem;
   background: var(--ink); color: var(--bg);
-  font-family: var(--body);
-  font-size: .8rem; font-weight: 500;
+  font-family: var(--body); font-size: .8rem; font-weight: 500;
   letter-spacing: .07em; text-transform: uppercase;
-  padding: .88rem 2rem;
-  border-radius: 100px; border: none; cursor: pointer;
-  transition: background .2s, transform .15s;
-  text-decoration: none;
+  padding: .88rem 2rem; border-radius: 100px; border: none; cursor: pointer;
+  transition: background .2s, transform .15s; text-decoration: none;
 }
 .btn-primary:hover { background: var(--sage2); transform: translateY(-1px); }
 .btn-primary svg { transition: transform .2s; }
@@ -123,132 +95,59 @@ textarea::placeholder, .field-email::placeholder { color: var(--ink3); font-styl
 
 /* ── TIMER ── */
 .timer-block {
-  background: var(--surface);
-  border: 1.5px solid var(--border2);
-  border-radius: 16px;
-  padding: 2.4rem 1.8rem;
-  margin-bottom: .4rem;
-  text-align: center;
+  background: var(--surface); border: 1.5px solid var(--border2);
+  border-radius: 16px; padding: 2.4rem 1.8rem; margin-bottom: .4rem; text-align: center;
 }
 .timer-display {
-  font-family: var(--display);
-  font-size: 3.4rem; font-weight: 300;
-  color: var(--ink); letter-spacing: -.04em;
-  line-height: 1; margin-bottom: .5rem;
-  transition: color .4s;
+  font-family: var(--display); font-size: 3.4rem; font-weight: 300;
+  color: var(--ink); letter-spacing: -.04em; line-height: 1;
+  margin-bottom: .5rem; transition: color .4s;
 }
 .timer-display.done { color: var(--sage); }
-.timer-sub {
-  font-size: .7rem; color: var(--ink3); margin-bottom: 1.5rem;
-  letter-spacing: .02em;
-}
+.timer-sub { font-size: .7rem; color: var(--ink3); margin-bottom: 1.5rem; letter-spacing: .02em; }
 .timer-btn-row { display: flex; gap: .6rem; justify-content: center; }
 .timer-btn {
-  font-size: .72rem; font-weight: 500;
-  letter-spacing: .07em; text-transform: uppercase;
-  padding: .5rem 1.2rem; border-radius: 100px;
-  border: 1.5px solid var(--border2);
-  background: transparent; color: var(--ink2);
-  cursor: pointer; transition: all .2s;
+  font-size: .72rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase;
+  padding: .5rem 1.2rem; border-radius: 100px; border: 1.5px solid var(--border2);
+  background: transparent; color: var(--ink2); cursor: pointer; transition: all .2s;
 }
 .timer-btn:hover { border-color: var(--sage); color: var(--sage); }
 .timer-btn.running { border-color: var(--terra); color: var(--terra); }
 
 /* ── QUIET WIN CARD ── */
 .win-card {
-  background: rgba(91,140,122,.14);
-  border: 1px solid rgba(91,140,122,.2);
-  border-radius: 16px;
-  padding: 1.6rem 1.8rem;
-  margin-bottom: 2rem;
+  background: var(--sage-gl2); border: 1px solid rgba(91,140,122,.2);
+  border-radius: 16px; padding: 1.6rem 1.8rem; margin-bottom: 2rem;
 }
-.win-icon-row {
-  display: flex; align-items: center; gap: .75rem;
-  margin-bottom: .55rem;
-}
+.win-icon-row { display: flex; align-items: center; gap: .75rem; margin-bottom: .55rem; }
 .win-icon {
   width: 32px; height: 32px; border-radius: 50%;
-  background: rgba(91,140,122,.12);
-  border: 1px solid rgba(91,140,122,.25);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
+  background: rgba(91,140,122,.12); border: 1px solid rgba(91,140,122,.25);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
-.win-headline {
-  font-family: var(--display);
-  font-size: 1.1rem; font-weight: 400;
-  color: var(--sage2);
-}
-.win-body {
-  font-size: .85rem; color: var(--ink2); line-height: 1.7;
-}
+.win-headline { font-family: var(--display); font-size: 1.1rem; font-weight: 400; color: var(--sage2); }
+.win-body { font-size: .85rem; color: var(--ink2); line-height: 1.7; }
 
-/* ── SCREEN 5 SIGNUP ── */
-.consent-row {
-  display: flex; align-items: flex-start; gap: .65rem;
-  margin-bottom: .5rem;
-}
-.consent-row input[type="checkbox"] {
-  width: 15px; height: 15px;
-  cursor: pointer; accent-color: var(--sage);
-  flex-shrink: 0; margin-top: .22em;
-}
-.consent-label {
-  font-size: .7rem; color: var(--ink3); line-height: 1.6; cursor: pointer;
-}
-.consent-label a { color: var(--sage); text-decoration: none; }
-.field-error {
-  display: block;
-  font-size: .7rem; color: var(--terra);
-  min-height: 1.1rem; margin-bottom: .4rem;
-}
-.field-footnote {
-  font-size: .65rem; color: var(--ink3);
-  letter-spacing: .02em; margin-bottom: 1.6rem;
-}
-.field-message {
-  display: block;
-  font-size: .72rem;
-  min-height: 1rem; margin-top: .5rem;
-}
+/* ── SCREEN 5 ── */
+.field-error { display: block; font-size: .7rem; color: var(--terra); min-height: 1.1rem; margin-bottom: .4rem; }
+.field-message { display: block; font-size: .72rem; min-height: 1rem; margin-top: .5rem; }
 
 /* ── SCREEN 6 SUCCESS ── */
 .success-card {
-  background: rgba(91,140,122,.14);
-  border: 1px solid rgba(91,140,122,.2);
-  border-radius: 16px;
-  padding: 2rem 2.2rem;
-  margin-bottom: 2rem;
-  text-align: center;
+  background: var(--sage-gl2); border: 1px solid rgba(91,140,122,.2);
+  border-radius: 16px; padding: 2rem 2.2rem; margin-bottom: 2rem; text-align: center;
 }
 .success-icon {
   width: 44px; height: 44px; border-radius: 50%;
-  background: rgba(91,140,122,.12);
-  border: 1px solid rgba(91,140,122,.25);
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 1.1rem;
+  background: rgba(91,140,122,.12); border: 1px solid rgba(91,140,122,.25);
+  display: flex; align-items: center; justify-content: center; margin: 0 auto 1.1rem;
 }
-.success-headline {
-  font-family: var(--display);
-  font-size: 1.4rem; font-weight: 300;
-  color: var(--sage2); margin-bottom: .4rem;
-  letter-spacing: -.01em;
-}
-.success-body {
-  font-size: .85rem; color: var(--ink2); line-height: 1.7;
-}
-.format-links {
-  font-size: .75rem; color: var(--ink3);
-  text-align: center; margin-top: 1.3rem;
-}
-.format-links a {
-  color: var(--sage); text-decoration: none; margin: 0 .5rem;
-}
+.success-headline { font-family: var(--display); font-size: 1.4rem; font-weight: 300; color: var(--sage2); margin-bottom: .4rem; letter-spacing: -.01em; }
+.success-body { font-size: .85rem; color: var(--ink2); line-height: 1.7; }
+.format-links { font-size: .75rem; color: var(--ink3); text-align: center; margin-top: 1.3rem; }
+.format-links a { color: var(--sage); text-decoration: none; margin: 0 .5rem; }
 .format-links a:hover { text-decoration: underline; }
-.closing-line {
-  font-family: var(--display);
-  font-size: .88rem; font-style: italic; font-weight: 300;
-  color: var(--ink3); text-align: center; margin-top: 2.2rem;
-}
+.closing-line { font-family: var(--display); font-size: .88rem; font-style: italic; font-weight: 300; color: var(--ink3); text-align: center; margin-top: 2.2rem; }
 
 @media (max-width: 540px) {
   main { padding: 2.5rem 1.2rem 4rem; }
@@ -259,40 +158,39 @@ textarea::placeholder, .field-email::placeholder { color: var(--ink3); font-styl
 
 <main>
 
-  <!-- SCREEN 1: CHOOSE -->
+  <!-- SCREEN 1: TODAY -->
   <div class="screen active" id="s1">
     <div class="progress-wrap">
       <div class="progress-track"><div class="progress-fill" style="width:16.66%"></div></div>
       <div class="progress-row">
-        <span class="progress-label">A small start</span>
+        <span class="progress-label">One clear move</span>
       </div>
     </div>
-    <h1>What matters <em>today?</em></h1>
-    <p class="subheading">Not a list. Just one thing that would make today feel lighter.</p>
-    <label class="field-label" for="move">Choose one thing</label>
-    <textarea id="move" rows="3" placeholder="e.g. Send the proposal that's been hanging"></textarea>
+    <h2>What's your one <em>move</em> today?</h2>
+    <p class="subheading">Not a list. Just one thing — the thing that would make today feel meaningful.</p>
+    <label class="field-label" for="today">Today's move</label>
+    <textarea id="today" rows="3" placeholder="e.g. Send the proposal that's been sitting in drafts"></textarea>
     <div class="btn-row">
       <button class="btn-primary" onclick="nextScreen(1)">
-        Continue
+        That's my move
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
           <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
-      <button class="btn-ghost" onclick="nextScreen(1)">Skip</button>
     </div>
   </div>
 
-  <!-- SCREEN 2: ACT -->
+  <!-- SCREEN 2: TIMER -->
   <div class="screen" id="s2">
     <div class="progress-wrap">
       <div class="progress-track"><div class="progress-fill" style="width:33.33%"></div></div>
       <div class="progress-row">
-        <span class="progress-label">Keep going</span>
+        <span class="progress-label">Now do it</span>
         <span class="back-link" onclick="prevScreen(2)">← Back</span>
       </div>
     </div>
-    <h2>Start it.</h2>
-    <p class="subheading">Give it two focused minutes. Small progress counts.</p>
+    <h2>Two minutes. <em>Start now.</em></h2>
+    <p class="subheading">You don't need to finish it. You just need to start. Two minutes of real attention changes everything.</p>
     <div class="timer-block">
       <div class="timer-display" id="timer-display">2:00</div>
       <div class="timer-sub" id="timer-sub">Press start — then focus</div>
@@ -303,12 +201,11 @@ textarea::placeholder, .field-email::placeholder { color: var(--ink3); font-styl
     </div>
     <div class="btn-row">
       <button class="btn-primary" onclick="nextScreen(2)">
-        Continue
+        Done — or close enough
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
           <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </button>
-      <button class="btn-ghost" onclick="nextScreen(2)">Skip</button>
     </div>
   </div>
 
@@ -370,7 +267,7 @@ textarea::placeholder, .field-email::placeholder { color: var(--ink3); font-styl
     </div>
   </div>
 
-  <!-- SCREEN 5: SIGNUP -->
+  <!-- SCREEN 5: SIGNUP — one click -->
   <div class="screen" id="s5">
     <div class="progress-wrap">
       <div class="progress-track"><div class="progress-fill" style="width:83.33%"></div></div>
@@ -379,29 +276,24 @@ textarea::placeholder, .field-email::placeholder { color: var(--ink3); font-styl
         <span class="back-link" onclick="prevScreen(5)">← Back</span>
       </div>
     </div>
-    <h2>Keep the momentum going</h2>
-    <p class="subheading">Weekly letters for clearer days, lighter thinking, and meaningful progress. Quiet, practical emails to help life feel lighter.</p>
+    <h2>Keep the momentum <em>going.</em></h2>
+    <p class="subheading">Weekly letters for clearer days and meaningful progress. Quiet, practical emails accompanying you through the week.</p>
 
-    <input type="email" id="s5-email" class="field-email" placeholder="your@email.com" autocomplete="email" style="margin-bottom:.6rem;">
+    <div style="display:flex;gap:.55rem;margin-bottom:.5rem;">
+      <input type="email" id="s5-email" class="field-email" placeholder="your@email.com" autocomplete="email" style="margin-bottom:0;flex:1;min-width:0;">
+      <button class="btn-primary" onclick="subscribeAndContinue()" style="flex-shrink:0;white-space:nowrap;padding:.85rem 1.3rem;border-radius:10px;">
+        Stay in touch
+      </button>
+    </div>
 
     <span class="field-error" id="s5-error"></span>
 
-    <div class="consent-row">
-      <input type="checkbox" id="s5-consent">
-      <label class="consent-label" for="s5-consent">
-        Send me Velani letters and updates. See our <a href="/privacy" target="_blank">privacy policy</a>.
-      </label>
-    </div>
+    <p style="font-size:.64rem;color:var(--ink3);line-height:1.55;margin-bottom:1.2rem;">
+      By joining, you agree to occasional Velani emails.
+      <a href="/privacy" target="_blank" style="color:var(--sage);text-decoration:none;">Privacy policy</a>.
+    </p>
 
-    <p class="field-footnote">Quiet inbox. Unsubscribe anytime.</p>
-
-    <div class="btn-row">
-      <button class="btn-primary" onclick="subscribeAndContinue()">
-        I'm in
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-          <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
+    <div class="btn-row" style="margin-top:.5rem;">
       <button class="btn-ghost" onclick="nextScreen(5)">Skip</button>
     </div>
 
@@ -444,7 +336,7 @@ textarea::placeholder, .field-email::placeholder { color: var(--ink3); font-styl
 
 </main>
 
-<script is:inline>
+<script>
 let timerInterval = null;
 let secondsLeft = 120;
 let timerRunning = false;
@@ -454,14 +346,8 @@ function showScreen(n) {
   document.getElementById('s' + n).classList.add('active');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-function nextScreen(n) {
-  showScreen(n + 1);
-  trackEvent('screen_' + (n + 1) + '_viewed');
-}
-function prevScreen(n) {
-  showScreen(n - 1);
-  trackEvent('screen_' + (n - 1) + '_viewed');
-}
+function nextScreen(n) { showScreen(n + 1); }
+function prevScreen(n) { showScreen(n - 1); }
 
 function pad(n) { return n < 10 ? '0' + n : n; }
 function updateDisplay() {
@@ -479,7 +365,6 @@ function toggleTimer() {
   } else {
     if (secondsLeft <= 0) return;
     timerRunning = true;
-    trackEvent('timer_started');
     document.getElementById('timer-btn').textContent = 'Pause';
     document.getElementById('timer-btn').classList.add('running');
     document.getElementById('timer-sub').textContent = 'Focus. Come back when done.';
@@ -491,10 +376,9 @@ function toggleTimer() {
         timerRunning = false;
         document.getElementById('timer-display').textContent = 'Done';
         document.getElementById('timer-display').classList.add('done');
-        document.getElementById('timer-sub').textContent = "Nice. Whenever you're ready.";
+        document.getElementById('timer-sub').textContent = 'Nice. Whenever you\'re ready.';
         document.getElementById('timer-btn').textContent = 'Start';
         document.getElementById('timer-btn').classList.remove('running');
-        trackEvent('timer_completed');
       }
     }, 1000);
   }
@@ -510,61 +394,34 @@ function resetTimer() {
   document.getElementById('timer-btn').classList.remove('running');
 }
 
-function submitToKit(email) {
-  return fetch('https://velani-subscribe.velani-app.workers.dev/', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email: email })
-  });
-}
-
 function subscribeAndContinue() {
   const email   = document.getElementById('s5-email').value.trim();
-  const consent = document.getElementById('s5-consent').checked;
   const errorEl = document.getElementById('s5-error');
   const msgEl   = document.getElementById('s5-message');
-
   errorEl.textContent = '';
   msgEl.textContent   = '';
-
   if (!email || !email.includes('@')) {
     errorEl.textContent = 'Please enter a valid email.';
     document.getElementById('s5-email').style.borderColor = '#B86A43';
     return;
   }
-  if (!consent) {
-    errorEl.textContent = 'Please check the box to continue.';
-    return;
-  }
-
   document.getElementById('s5-email').style.borderColor = 'rgba(26,29,46,.14)';
-  msgEl.textContent  = 'Sending...';
-  msgEl.style.color  = 'var(--ink3)';
-
-  trackEvent('email_subscribed', { email: email });
-
-  submitToKit(email)
-    .then(res => res.json())
-    .then(() => {
-      trackEvent('kit_submission_success');
-      msgEl.textContent = '✓ Check your inbox to confirm!';
-      msgEl.style.color = 'var(--sage)';
-      setTimeout(() => { nextScreen(5); }, 1800);
-    })
-    .catch(() => {
-      msgEl.textContent = '✓ Check your inbox to confirm!';
-      msgEl.style.color = 'var(--sage)';
-      setTimeout(() => { nextScreen(5); }, 1800);
-    });
-}
-
-function trackEvent(eventName, eventData) {
-  if (window.plausible) {
-    window.plausible(eventName, { props: eventData || {} });
+  msgEl.textContent = 'Sending...';
+  msgEl.style.color = 'var(--ink3)';
+  fetch('https://velani-subscribe.velani-app.workers.dev/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email })
+  })
+  .then(() => done())
+  .catch(() => done());
+  function done() {
+    msgEl.textContent = '✓ Check your inbox to confirm!';
+    msgEl.style.color = 'var(--sage)';
+    setTimeout(() => { nextScreen(5); }, 1800);
   }
 }
 
-trackEvent('start_page_viewed');
 updateDisplay();
 </script>
 
