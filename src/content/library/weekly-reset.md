@@ -1,6 +1,6 @@
 ---
-title: "Weekly reset"
-description: "A slow Sunday ritual that actually works."
+title: "The weekly reset"
+description: "A slow Sunday ritual for women who carry too much into Monday."
 date: "2026-06-04"
 category: "start-here"
 readTime: "5 min"
@@ -8,24 +8,38 @@ readTime: "5 min"
 
 Most weeks don't end cleanly.
 
-Things spill over. Plans change. Energy shifts. We carry unfinished thoughts into Monday and hope motivation somehow catches up.
+Things spill over. Plans change. Energy shifts. You carry unfinished thoughts, unresolved feelings, and other people's needs straight into Monday — and hope that somehow, this week will be different.
 
-But starting the week overwhelmed usually means starting the week reacting.
+It rarely is. Not because you're not trying. But because you never had a moment to set any of it down.
 
-That's why a gentle reset matters. Not an intense life audit. Not a productivity sprint. Just a small pause. A moment to notice what happened before rushing ahead.
+That's what a gentle reset is for.
 
-At Velani, a weekly reset starts with simple questions.
+Not an intense life audit. Not a productivity sprint. Not another system to manage.
 
-**What quietly moved forward this week?** Even small things count. The appointment booked. The hard conversation. The moment you finally rested.
+Just a small pause. A Sunday ritual that asks you to notice what happened before rushing into what's next.
 
-**What felt heavy?** Not to judge yourself. Just to notice. Sometimes naming the weight changes everything.
+At Velani, a weekly reset starts with three simple questions:
 
-**What matters next?** Not ten priorities. Just one direction. One thing worth protecting time for.
+**What quietly moved forward this week?**
 
-A good reset doesn't make life perfect. It simply helps tomorrow feel a little lighter than today.
+Even the smallest things count. The appointment you finally booked. The hard conversation you had. The moment you actually rested instead of pushing through.
+
+Women who are carrying a lot often forget to notice what they did. They move from one responsibility to the next without pausing to acknowledge what moved. This question is for that.
+
+**What felt heavy?**
+
+Not to judge yourself. Just to notice. Sometimes naming the weight is enough to make it slightly lighter. Sometimes it helps you see that you've been carrying something that isn't actually yours to carry.
+
+**What matters next?**
+
+Not ten priorities. Just one direction. One thing worth protecting time for in the week ahead — ideally something for you.
+
+A good reset doesn't make life perfect. It simply helps you arrive at Monday a little more like yourself.
 
 ---
 
-**Try this:**
+**This Sunday:**
 
-Before the next week begins, give yourself ten quiet minutes to pause and ask: *What do I want to carry forward — and what can I leave here?*
+Give yourself ten quiet minutes — with tea, without your phone — and sit with those three questions. You don't have to write them down. Just let yourself think.
+
+*What do I want to carry forward? And what can I leave here?*
