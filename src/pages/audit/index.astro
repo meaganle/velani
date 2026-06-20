@@ -1,407 +1,553 @@
 ---
-import Base from '../../layouts/Base.astro';
-
-const questions = [
-  {
-    id: 'q1',
-    area: 'Mental load',
-    q: 'How often do you feel like you\'re the only one holding all the details — appointments, deadlines, what\'s in the fridge?',
-    options: ['Rarely — things feel shared', 'Sometimes — a few things pile up', 'Often — I track most things', 'Almost always — it\'s exhausting']
-  },
-  {
-    id: 'q2',
-    area: 'Emotional labour',
-    q: 'When someone in your life is struggling, how often are you the one who shows up first?',
-    options: ['Not usually — it\'s balanced', 'Sometimes it\'s me', 'Usually me', 'Always me — I\'m the one who holds everyone together']
-  },
-  {
-    id: 'q3',
-    area: 'Rest',
-    q: 'When did you last rest without feeling like you should be doing something else?',
-    options: ['Recently — rest feels okay', 'A little while ago', 'It\'s been a long time', 'I can\'t remember']
-  },
-  {
-    id: 'q4',
-    area: 'Your own needs',
-    q: 'How often do your own needs — rest, joy, space, time — make it onto your actual to-do list?',
-    options: ['Regularly', 'Sometimes', 'Rarely', 'Almost never']
-  },
-  {
-    id: 'q5',
-    area: 'Decision fatigue',
-    q: 'By the end of the day, how much mental energy do you have left for yourself?',
-    options: ['Plenty — I still feel like myself', 'A little', 'Very little', 'Nothing — I\'m running on empty']
-  },
-  {
-    id: 'q6',
-    area: 'Sense of self',
-    q: 'How connected do you feel to the version of yourself that exists outside of your responsibilities?',
-    options: ['Very connected', 'Somewhat connected', 'Faintly — it\'s hard to remember', 'Disconnected — I\'m not sure who that is anymore']
-  },
-];
+// Standalone full-screen page — no Base layout
 ---
-<Base
-  title="The Invisible Load Audit"
-  description="Find out exactly where your load is heaviest — in 4 minutes."
-  currentPath="/audit"
->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Invisible Load Audit — Velani</title>
+<meta name="description" content="Discover your Capacity Score. Find out exactly where your energy is going and what's quietly consuming your capacity to feel like yourself.">
+<meta property="og:title" content="The Invisible Load Audit — Velani">
+<meta property="og:description" content="10 questions. 4 minutes. Instant Capacity Score across your 4 life domains.">
+<meta property="og:url" content="https://velani.app/audit">
+<meta property="og:type" content="website">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  main {
-    flex: 1; position: relative; z-index: 1;
-    padding: 5rem 1.5rem 7rem;
-  }
+:root {
+  --cream:#F7F6F3; --ink:#1A1D2E; --sage:#5B8C7A; --terra:#C4785A;
+  --warm:#FDFCFA; --mist:#E8E4DC; --mist-d:#D4CFC5; --ink2:#3a3d4e;
+  --sage-l:#EBF2EF; --terra-l:#FAF0EB;
+  --material:#6B8FB5; --material-l:#EEF3FA;
+  --inner:#8E5EA7; --inner-l:#F5EEF8;
+  --live:#5B8C7A; --live-l:#EBF2EF;
+  --connect:#C4785A; --connect-l:#FAF0EB;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;min-height:100vh;}
+.screen{display:none;min-height:100vh;}
+.screen.active{display:flex;flex-direction:column;}
 
-  .audit-wrap { max-width: 620px; margin: 0 auto; }
+/* Intro screen */
+#si{background:var(--ink);align-items:center;justify-content:center;padding:40px 24px;text-align:center;position:relative;overflow:hidden;}
+#si::before{content:'';position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(91,140,122,.13) 0%,transparent 68%);top:-120px;left:50%;transform:translateX(-50%);pointer-events:none;}
+.ii{max-width:540px;position:relative;z-index:1;}
+.i-brand{font-family:'Lora',serif;font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sage);margin-bottom:36px;}
+.i-h1{font-family:'Lora',serif;font-size:clamp(2rem,5vw,3.1rem);font-weight:400;color:#FDFCFA;line-height:1.18;margin-bottom:22px;}
+.i-h1 em{font-style:italic;color:var(--terra);}
+.i-sub{font-size:.93rem;color:rgba(247,246,243,.62);line-height:1.88;margin-bottom:32px;max-width:420px;margin-left:auto;margin-right:auto;}
+.i-domains{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:36px;}
+.i-domain{font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(247,246,243,.48);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:6px 14px;border-radius:20px;}
+.i-cta{display:inline-block;background:var(--terra);color:#fff;padding:15px 34px;border-radius:10px;font-size:.93rem;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:transform .15s,opacity .15s;}
+.i-cta:hover{transform:translateY(-1px);opacity:.9;}
+.i-time{font-size:.73rem;color:rgba(247,246,243,.32);margin-top:13px;}
 
-  /* Header */
-  .audit-eyebrow {
-    font-size: .58rem; letter-spacing: .22em; text-transform: uppercase;
-    color: var(--terra); font-weight: 600; margin-bottom: 1.2rem;
-    display: flex; align-items: center; gap: .65rem;
-  }
-  .audit-eyebrow::before {
-    content: ''; display: block; width: 20px; height: 1.5px;
-    background: var(--terra); opacity: .55; flex-shrink: 0;
-  }
-  .audit-title {
-    font-family: var(--display);
-    font-size: clamp(2rem, 4vw, 2.8rem);
-    font-weight: 300; line-height: 1.1;
-    color: var(--ink); margin-bottom: 1rem;
-    letter-spacing: -.022em;
-  }
-  .audit-title em { font-style: italic; color: var(--sage); }
-  .audit-desc {
-    font-size: .95rem; color: var(--ink2);
-    line-height: 1.85; margin-bottom: .6rem;
-  }
-  .audit-meta {
-    font-size: .72rem; color: var(--ink3);
-    font-family: var(--display); font-style: italic;
-    margin-bottom: 3rem;
-  }
+/* Question screen */
+#sq{background:var(--cream);}
+.qh{padding:18px 32px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--mist);background:var(--warm);position:sticky;top:0;z-index:10;}
+.qh-brand{font-family:'Lora',serif;font-size:.83rem;color:var(--sage);letter-spacing:.1em;}
+.qh-right{display:flex;align-items:center;gap:12px;}
+.pb-bg{width:130px;height:4px;background:var(--mist);border-radius:4px;overflow:hidden;}
+.pb-fill{height:100%;background:var(--sage);border-radius:4px;transition:width .4s ease;width:0%;}
+.pb-txt{font-size:.7rem;font-weight:600;color:var(--ink2);white-space:nowrap;}
+.qbody{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px;}
+.qcard{max-width:560px;width:100%;}
+.dtag{display:inline-flex;align-items:center;gap:6px;font-size:.67rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:5px 13px;border-radius:20px;margin-bottom:20px;}
+.dtag.home{background:#EEF3FA;color:var(--material);}
+.dtag.work{background:var(--sage-l);color:var(--sage);}
+.dtag.self-e{background:var(--terra-l);color:var(--terra);}
+.dtag.self-i{background:var(--inner-l);color:var(--inner);}
+.qtxt{font-family:'Lora',serif;font-size:clamp(1.15rem,3vw,1.52rem);font-weight:400;color:var(--ink);line-height:1.4;margin-bottom:30px;}
+.qopts{display:flex;flex-direction:column;gap:10px;}
+.qopt{background:var(--warm);border:1.5px solid var(--mist);border-radius:12px;padding:15px 18px;cursor:pointer;transition:all .15s;display:flex;gap:13px;align-items:flex-start;text-align:left;font-family:'DM Sans',sans-serif;width:100%;}
+.qopt:hover{border-color:var(--sage);background:var(--sage-l);}
+.qopt.sel{border-color:var(--sage);background:var(--sage-l);}
+.qopt.sel .radio{background:var(--sage);border-color:var(--sage);}
+.qopt.sel .radio::after{opacity:1;}
+.radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--mist-d);flex-shrink:0;margin-top:2px;transition:all .15s;position:relative;}
+.radio::after{content:'';position:absolute;width:8px;height:8px;background:#fff;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0;transition:opacity .15s;}
+.opt-lbl{font-size:.88rem;color:var(--ink);line-height:1.5;font-weight:500;}
+.qnav{padding:18px 32px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--mist);background:var(--warm);}
+.btn-back{background:none;border:1.5px solid var(--mist);color:var(--ink2);padding:10px 20px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.83rem;cursor:pointer;}
+.btn-back:disabled{opacity:.3;cursor:default;}
+.btn-next{background:var(--ink);color:var(--cream);padding:11px 26px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.86rem;font-weight:600;cursor:pointer;border:none;opacity:.38;pointer-events:none;transition:all .15s;}
+.btn-next.rdy{opacity:1;pointer-events:all;}
+.btn-next.rdy:hover{background:var(--sage);}
 
-  /* Progress */
-  .progress-wrap { margin-bottom: 2.5rem; }
-  .progress-track {
-    height: 2px; background: var(--border);
-    border-radius: 100px; overflow: hidden; margin-bottom: .55rem;
-  }
-  .progress-fill {
-    height: 100%; background: var(--sage);
-    border-radius: 100px; transition: width .4s cubic-bezier(.22,1,.36,1);
-    width: 0%;
-  }
-  .progress-label {
-    font-size: .62rem; color: var(--ink3);
-    letter-spacing: .1em; text-transform: uppercase;
-  }
+/* Loading screen */
+#sl{background:var(--ink);align-items:center;justify-content:center;text-align:center;padding:40px 24px;}
+.spin{width:58px;height:58px;border-radius:50%;border:3px solid rgba(91,140,122,.25);border-top-color:var(--sage);margin:0 auto 28px;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.l-title{font-family:'Lora',serif;font-size:1.35rem;color:var(--warm);margin-bottom:10px;}
+.l-sub{font-size:.83rem;color:rgba(247,246,243,.48);line-height:1.7;max-width:360px;margin:0 auto;}
+.l-steps{margin-top:28px;display:flex;flex-direction:column;gap:9px;max-width:300px;margin-left:auto;margin-right:auto;}
+.l-step{display:flex;align-items:center;gap:11px;font-size:.8rem;color:rgba(247,246,243,.38);transition:color .3s;text-align:left;}
+.l-step.done{color:var(--sage);}
+.l-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.13);flex-shrink:0;transition:background .3s;}
+.l-step.done .l-dot{background:var(--sage);}
 
-  /* Question card */
-  .q-card {
-    display: none;
-    animation: rise .4s cubic-bezier(.22,1,.36,1) forwards;
-  }
-  .q-card.active { display: block; }
-  @keyframes rise {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+/* Results screen */
+#sr{background:var(--cream);}
+.rh{background:var(--ink);padding:52px 40px 44px;text-align:center;}
+.rh-inner{max-width:580px;margin:0 auto;}
+.r-eye{font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--sage);margin-bottom:10px;}
+.r-profile{font-family:'Lora',serif;font-size:clamp(1.5rem,4vw,2.3rem);font-weight:500;color:var(--warm);margin-bottom:8px;line-height:1.2;}
+.r-tag{font-size:.88rem;color:rgba(247,246,243,.58);line-height:1.75;max-width:420px;margin:0 auto 28px;}
+.score-wrap{display:flex;align-items:center;justify-content:center;gap:24px;margin:8px 0 20px;}
+.score-ring{position:relative;width:110px;height:110px;flex-shrink:0;}
+.score-ring svg{transform:rotate(-90deg);}
+.ring-bg{fill:none;stroke:rgba(255,255,255,.1);stroke-width:8;}
+.ring-fill{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1.4s ease;}
+.score-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Lora',serif;font-size:1.6rem;font-weight:500;color:var(--warm);}
+.score-side{text-align:left;}
+.score-label{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(247,246,243,.4);margin-bottom:6px;}
+.score-desc{font-size:.85rem;color:rgba(247,246,243,.7);line-height:1.6;max-width:220px;}
+.domain-bars{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px;max-width:480px;margin-left:auto;margin-right:auto;text-align:left;}
+.dbar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
+.dbar-name{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(247,246,243,.55);}
+.dbar-pct{font-size:.7rem;font-weight:700;color:rgba(247,246,243,.7);}
+.dbar-bg{height:5px;background:rgba(255,255,255,.1);border-radius:5px;overflow:hidden;}
+.dbar-fill{height:100%;border-radius:5px;transition:width 1s ease .3s;}
+.fill-material{background:var(--material);}
+.fill-inner{background:var(--inner);}
+.fill-liveliness{background:var(--live);}
+.fill-connection{background:var(--connect);}
+.rb{max-width:660px;margin:0 auto;padding:40px 24px 60px;}
+.rs-title{font-size:.67rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--sage);margin-bottom:16px;}
+.d-cards{display:flex;flex-direction:column;gap:12px;margin-bottom:36px;}
+.d-card{background:var(--warm);border:1px solid var(--mist);border-radius:14px;padding:20px 22px;}
+.d-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.d-card-name{font-weight:600;font-size:.88rem;color:var(--ink);display:flex;align-items:center;gap:8px;}
+.d-badge{font-size:.67rem;font-weight:700;padding:3px 10px;border-radius:20px;}
+.badge-critical{background:#FDECEA;color:#C0392B;}
+.badge-high{background:#FEF3E0;color:#D4820A;}
+.badge-mod{background:var(--sage-l);color:var(--sage);}
+.badge-low{background:#EBF5EB;color:#2E7D32;}
+.d-card-bar-bg{height:5px;background:var(--mist);border-radius:5px;overflow:hidden;margin-bottom:12px;}
+.d-card-bar-fill{height:100%;border-radius:5px;transition:width 1s ease .2s;}
+.d-card-insight{font-size:.83rem;color:var(--ink2);line-height:1.68;}
+.insight-box{background:var(--ink);border-radius:16px;padding:26px 28px;margin-bottom:32px;}
+.insight-label{font-size:.66rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--terra);margin-bottom:11px;}
+.insight-txt{font-family:'Lora',serif;font-size:1rem;color:var(--warm);line-height:1.72;font-style:italic;}
+.next-box{border-radius:16px;padding:28px 28px 24px;margin-bottom:28px;border:2px solid transparent;}
+.next-box.material{background:var(--material-l);border-color:#BDD0E8;}
+.next-box.inner{background:var(--inner-l);border-color:#D4B8E4;}
+.next-box.liveliness{background:var(--sage-l);border-color:#C5DDD7;}
+.next-box.connection{background:var(--terra-l);border-color:#E8C4A8;}
+.next-eye{font-size:.65rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px;}
+.next-box.material .next-eye{color:var(--material);}
+.next-box.inner .next-eye{color:var(--inner);}
+.next-box.liveliness .next-eye{color:var(--sage);}
+.next-box.connection .next-eye{color:var(--terra);}
+.next-title{font-family:'Lora',serif;font-size:1.15rem;font-weight:500;color:var(--ink);margin-bottom:8px;line-height:1.3;}
+.next-body{font-size:.85rem;color:var(--ink2);line-height:1.75;margin-bottom:20px;}
+.next-cta{display:inline-block;background:var(--ink);color:var(--cream);padding:13px 26px;border-radius:9px;font-size:.88rem;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:background .15s;text-decoration:none;}
+.next-cta:hover{background:var(--sage);}
+.next-price{font-size:.73rem;color:var(--ink2);margin-top:9px;}
+.next-price strong{color:var(--terra);font-weight:700;}
+.optin{background:var(--warm);border:1px solid var(--mist);border-radius:14px;padding:24px 26px;margin-bottom:20px;text-align:center;}
+.optin h3{font-family:'Lora',serif;font-size:.98rem;font-weight:500;margin-bottom:7px;}
+.optin p{font-size:.82rem;color:var(--ink2);margin-bottom:15px;line-height:1.62;}
+.optin-row{display:flex;gap:8px;max-width:370px;margin:0 auto;}
+.optin-in{flex:1;padding:11px 14px;border:1.5px solid var(--mist-d);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.84rem;background:var(--cream);color:var(--ink);}
+.optin-btn{background:var(--sage);color:#fff;border:none;padding:11px 17px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap;}
+.share-row{text-align:center;padding-top:8px;}
+.share-row p{font-size:.78rem;color:var(--ink2);margin-bottom:10px;}
+.share-btn{background:none;border:1.5px solid var(--mist-d);color:var(--ink2);padding:8px 18px;border-radius:8px;font-size:.78rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin:0 4px;transition:all .15s;}
+.share-btn:hover{border-color:var(--ink);color:var(--ink);}
+.rfooter{text-align:center;padding:0 24px 36px;font-size:.76rem;color:var(--mist-d);}
+.rfooter a{color:var(--sage);text-decoration:none;}
 
-  .q-area {
-    font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
-    color: var(--sage); font-weight: 600; margin-bottom: .75rem;
-  }
-  .q-text {
-    font-family: var(--display); font-size: 1.25rem;
-    font-weight: 300; color: var(--ink);
-    line-height: 1.35; margin-bottom: 2rem;
-    letter-spacing: -.01em;
-  }
-
-  .options { display: flex; flex-direction: column; gap: .55rem; }
-  .option-btn {
-    width: 100%; text-align: left;
-    background: var(--surface); border: 1.5px solid var(--border2);
-    border-radius: 12px; padding: 1rem 1.3rem;
-    font-family: var(--body); font-size: .88rem;
-    color: var(--ink2); cursor: pointer; line-height: 1.5;
-    transition: border-color .18s, background .18s, color .18s, transform .12s;
-  }
-  .option-btn:hover {
-    border-color: var(--sage); color: var(--ink);
-    transform: translateX(3px);
-  }
-  .option-btn.selected {
-    background: var(--sage-gl2); border-color: var(--sage);
-    color: var(--ink);
-  }
-
-  /* Result */
-  .result-card {
-    display: none;
-    animation: rise .6s cubic-bezier(.22,1,.36,1) forwards;
-  }
-  .result-card.visible { display: block; }
-
-  .result-badge {
-    display: inline-block;
-    font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
-    color: var(--sage); font-weight: 600;
-    background: var(--sage-gl2); border: 1px solid rgba(91,140,122,.2);
-    padding: .3rem .8rem; border-radius: 100px; margin-bottom: 1.4rem;
-  }
-  .result-title {
-    font-family: var(--display);
-    font-size: clamp(1.7rem, 3.5vw, 2.3rem);
-    font-weight: 300; line-height: 1.15;
-    color: var(--ink); margin-bottom: 1rem;
-    letter-spacing: -.018em;
-  }
-  .result-title em { font-style: italic; color: var(--sage); }
-  .result-body {
-    font-size: .95rem; color: var(--ink2);
-    line-height: 1.88; margin-bottom: 2rem;
-    max-width: 520px;
-  }
-
-  .result-areas {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 14px; padding: 1.8rem 2rem; margin-bottom: 2rem;
-  }
-  .result-areas-label {
-    font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
-    color: var(--ink3); font-weight: 600; margin-bottom: 1.2rem;
-  }
-  .result-area-row {
-    display: flex; align-items: center;
-    justify-content: space-between; gap: 1rem;
-    padding: .6rem 0; border-bottom: 1px solid var(--border);
-  }
-  .result-area-row:last-child { border-bottom: none; }
-  .result-area-name { font-size: .85rem; color: var(--ink2); }
-  .result-area-bar-wrap { flex: 1; max-width: 140px; }
-  .result-area-bar {
-    height: 4px; background: var(--border); border-radius: 100px; overflow: hidden;
-  }
-  .result-area-fill {
-    height: 100%; background: var(--sage); border-radius: 100px;
-    transition: width .8s cubic-bezier(.22,1,.36,1);
-  }
-
-  /* CTA */
-  .result-cta {
-    background: var(--ink); border-radius: 16px;
-    padding: 2.2rem 2.4rem;
-  }
-  .result-cta-hed {
-    font-family: var(--display); font-size: 1.1rem;
-    font-weight: 300; color: var(--bg);
-    margin-bottom: .4rem; line-height: 1.3;
-  }
-  .result-cta-hed em { font-style: italic; color: rgba(91,140,122,.85); }
-  .result-cta p { font-size: .83rem; color: rgba(247,246,243,.6); line-height: 1.7; margin-bottom: 1.4rem; }
-  .result-cta-form { display: flex; gap: .5rem; }
-  .result-cta-email {
-    flex: 1; min-width: 0; background: rgba(247,246,243,.1);
-    border: 1.5px solid rgba(247,246,243,.2); border-radius: 8px;
-    padding: .8rem 1rem; font-family: var(--body);
-    font-size: .85rem; color: var(--bg); outline: none;
-    transition: border-color .2s;
-  }
-  .result-cta-email:focus { border-color: var(--sage); }
-  .result-cta-email::placeholder { color: rgba(247,246,243,.4); }
-  .result-cta-btn {
-    background: var(--bg); color: var(--ink);
-    font-family: var(--body); font-size: .72rem; font-weight: 500;
-    letter-spacing: .07em; text-transform: uppercase;
-    padding: .8rem 1.3rem; border-radius: 8px; border: none;
-    cursor: pointer; white-space: nowrap; flex-shrink: 0;
-    transition: background .2s;
-  }
-  .result-cta-btn:hover { background: var(--sage-gl2); }
-  .result-cta-consent {
-    font-size: .62rem; color: rgba(247,246,243,.4);
-    line-height: 1.5; margin-top: .7rem;
-  }
-  .result-cta-consent a { color: rgba(91,140,122,.7); text-decoration: none; }
-  .result-cta-success {
-    display: none; font-family: var(--display);
-    font-size: .88rem; font-style: italic;
-    color: var(--sage); margin-top: .7rem;
-  }
-  .result-cta-success.visible { display: block; }
-
-  @media (max-width: 600px) {
-    main { padding: 3rem 1.2rem 5rem; }
-    .result-cta-form { flex-direction: column; }
-    .result-cta-btn { width: 100%; padding: .85rem; }
-  }
+@media(max-width:600px){
+  .qh{padding:13px 18px;} .qnav{padding:14px 18px;} .qbody{padding:26px 14px;}
+  .rh{padding:36px 18px 32px;} .rb{padding:26px 14px 48px;}
+  .domain-bars{grid-template-columns:1fr;} .score-wrap{flex-direction:column;gap:14px;}
+  .score-side{text-align:center;} .score-desc{max-width:100%;}
+  .optin-row{flex-direction:column;} .next-box{padding:22px 18px 20px;}
+}
 </style>
+</head>
+<body>
 
-<main>
-  <div class="audit-wrap">
-
-    <!-- Intro (shown before audit starts) -->
-    <div id="audit-intro">
-      <p class="audit-eyebrow">Invisible Load Audit</p>
-      <h1 class="audit-title">Find out exactly where<br>your load is <em>heaviest.</em></h1>
-      <p class="audit-desc">
-        Six questions. Honest answers. A clear picture of where you're carrying the most — so you know where to start.
-      </p>
-      <p class="audit-meta">4 minutes · Free · No signup required</p>
-      <button class="option-btn" style="max-width:200px;text-align:center;" onclick="window.startAudit()">Begin the audit →</button>
+<!-- Intro -->
+<div class="screen active" id="si">
+  <div class="ii">
+    <div class="i-brand">Velani</div>
+    <h1 class="i-h1">The <em>Invisible Load</em><br>Audit</h1>
+    <p class="i-sub">There's a kind of exhaustion that sleep doesn't fix. This audit shows you exactly where your energy is going — and what's quietly consuming your capacity to feel like yourself.</p>
+    <div class="i-domains">
+      <span class="i-domain">🏠 Home &amp; Family</span>
+      <span class="i-domain">💼 Work &amp; Career</span>
+      <span class="i-domain">⚡ Energy &amp; Body</span>
+      <span class="i-domain">✦ Identity &amp; Joy</span>
     </div>
-
-    <!-- Questions -->
-    <div id="audit-questions" style="display:none;">
-      <div class="progress-wrap">
-        <div class="progress-track"><div class="progress-fill" id="audit-progress"></div></div>
-        <div class="progress-label" id="audit-progress-label">Question 1 of {questions.length}</div>
-      </div>
-
-      {questions.map((q, i) => (
-        <div class="q-card" id={`qcard-${i}`} data-index={i}>
-          <div class="q-area">{q.area}</div>
-          <p class="q-text">{q.q}</p>
-          <div class="options">
-            {q.options.map((opt, j) => (
-              <button
-                class="option-btn"
-                data-q={i}
-                data-score={j}
-                onclick={`window.selectOption(${i}, ${j}, this)`}
-              >{opt}</button>
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-
-    <!-- Result -->
-    <div class="result-card" id="audit-result"></div>
-
+    <button class="i-cta" onclick="start()">Begin the audit</button>
+    <p class="i-time">10 questions · 4 minutes · instant Capacity Score</p>
   </div>
-</main>
+</div>
+
+<!-- Questions -->
+<div class="screen" id="sq">
+  <div class="qh">
+    <div class="qh-brand">Velani Audit</div>
+    <div class="qh-right">
+      <div class="pb-bg"><div class="pb-fill" id="pb"></div></div>
+      <div class="pb-txt" id="pb-txt">1 of 10</div>
+    </div>
+  </div>
+  <div class="qbody">
+    <div class="qcard">
+      <div class="dtag" id="dtag"></div>
+      <div class="qtxt" id="qtxt"></div>
+      <div class="qopts" id="qopts"></div>
+    </div>
+  </div>
+  <div class="qnav">
+    <button class="btn-back" id="bbk" onclick="prev()" disabled>&#8592; Back</button>
+    <button class="btn-next" id="bnx" onclick="next()">Continue &#8594;</button>
+  </div>
+</div>
+
+<!-- Loading -->
+<div class="screen" id="sl">
+  <div style="max-width:380px;margin:auto;text-align:center;">
+    <div class="spin"></div>
+    <div class="l-title">Mapping your load&#8230;</div>
+    <p class="l-sub">Calculating where responsibility has accumulated and where capacity has quietly disappeared.</p>
+    <div class="l-steps">
+      <div class="l-step" id="ls1"><div class="l-dot"></div>Analysing Home &amp; Family</div>
+      <div class="l-step" id="ls2"><div class="l-dot"></div>Analysing Work &amp; Career</div>
+      <div class="l-step" id="ls3"><div class="l-dot"></div>Analysing Energy &amp; Body</div>
+      <div class="l-step" id="ls4"><div class="l-dot"></div>Analysing Identity &amp; Joy</div>
+      <div class="l-step" id="ls5"><div class="l-dot"></div>Calculating your Capacity Score</div>
+    </div>
+  </div>
+</div>
+
+<!-- Results -->
+<div class="screen" id="sr">
+  <div class="rh">
+    <div class="rh-inner">
+      <div class="r-eye">Your Invisible Load Audit · Velani</div>
+      <div class="r-profile" id="r-profile"></div>
+      <div class="r-tag" id="r-tag"></div>
+      <div class="score-wrap">
+        <div class="score-ring">
+          <svg width="110" height="110" viewBox="0 0 110 110">
+            <circle class="ring-bg" cx="55" cy="55" r="46"/>
+            <circle class="ring-fill" id="ring-fill" cx="55" cy="55" r="46" stroke-dasharray="289" stroke-dashoffset="289"/>
+          </svg>
+          <div class="score-num" id="score-num">--</div>
+        </div>
+        <div class="score-side">
+          <div class="score-label">Capacity Score</div>
+          <div class="score-desc" id="score-desc"></div>
+        </div>
+      </div>
+      <div class="domain-bars" id="domain-bars"></div>
+    </div>
+  </div>
+  <div class="rb">
+    <div class="rs-title">Where your load is heaviest</div>
+    <div class="d-cards" id="d-cards"></div>
+    <div class="insight-box">
+      <div class="insight-label">What your score tells us</div>
+      <div class="insight-txt" id="insight-txt"></div>
+    </div>
+    <div class="rs-title">Your one clear move</div>
+    <div id="next-step-box"></div>
+    <div class="optin">
+      <h3>Get the weekly Velani Letter</h3>
+      <p>Each Sunday — warm, honest writing about carrying less and making room for yourself again. Velani Lite PDF included in your first email.</p>
+      <div class="optin-row">
+        <input class="optin-in" type="email" id="oe" placeholder="your@email.com">
+        <button class="optin-btn" onclick="optin()">Join</button>
+      </div>
+    </div>
+    <div class="share-row">
+      <p>Know someone who needs to see this?</p>
+      <button class="share-btn" onclick="doShare()">Share this audit</button>
+      <button class="share-btn" onclick="start()">Retake</button>
+    </div>
+  </div>
+  <div class="rfooter"><a href="https://velani.app">velani.app</a> · Making room for yourself again</div>
+</div>
 
 <script is:inline>
-  const totalQ = 6;
-  const scores = {};
-  const areas  = ['Mental load', 'Emotional labour', 'Rest', 'Your own needs', 'Decision fatigue', 'Sense of self'];
+var Qs=[
+  {felt:'home',tag:'🏠 Home & Family',cls:'home',velani:'connection',
+   q:"How often are you mentally tracking household and family logistics — appointments, groceries, repairs, coordination — even when you're trying to rest?",
+   opts:[
+     {l:"Rarely — home runs without much mental effort from me",s:1},
+     {l:"Sometimes — I notice it but it stays manageable",s:2},
+     {l:"Often — it lives in the background even when I'm at work or with friends",s:3},
+     {l:"Almost always — it's one of the loudest things in my head",s:4}
+   ]},
+  {felt:'home',tag:'🏠 Home & Family',cls:'home',velani:'connection',
+   q:"Beyond your own needs, how many people's emotional, practical, or logistical needs filter through you on a regular basis?",
+   opts:[
+     {l:"Mostly my own — I'm in a fairly independent season",s:1},
+     {l:"1–2 people — meaningful and manageable",s:2},
+     {l:"3–4 people — children, partner, parents, or others",s:3},
+     {l:"5 or more — I'm the person everyone brings things to",s:4}
+   ]},
+  {felt:'home',tag:'🏠 Home & Family',cls:'home',velani:'connection',
+   q:"When you think about your relationships and family responsibilities overall, how do they feel?",
+   opts:[
+     {l:"Nourishing — they give me energy more than they take it",s:1},
+     {l:"Meaningful but tiring — I love them, it's just a lot",s:2},
+     {l:"Heavy — I often feel like I'm keeping everyone else afloat",s:3},
+     {l:"Depleting — there's nothing left after meeting everyone else's needs",s:4}
+   ]},
+  {felt:'work',tag:'💼 Work & Career',cls:'work',velani:'material',
+   q:"How much of your mental energy outside work hours is spent thinking about work — open projects, emails, unfinished things?",
+   opts:[
+     {l:"Very little — I can switch off reasonably well",s:1},
+     {l:"Some — work thoughts appear occasionally outside hours",s:2},
+     {l:"A lot — work follows me into evenings and weekends",s:3},
+     {l:"Constantly — I barely remember what it felt like to not think about work",s:4}
+   ]},
+  {felt:'work',tag:'💼 Work & Career',cls:'work',velani:'material',
+   q:"Think about unfinished things at work — decisions pending, conversations delayed, tasks half-done. How many open loops are you carrying right now?",
+   opts:[
+     {l:"A few — nothing that keeps me up at night",s:1},
+     {l:"A moderate amount — I know what they are",s:2},
+     {l:"A lot — more than I can clearly name right now",s:3},
+     {l:"So many I've stopped counting — it's background noise I live with",s:4}
+   ]},
+  {felt:'self-e',tag:'⚡ Energy & Body',cls:'self-e',velani:'liveliness',
+   q:"How would you describe your physical and emotional energy most days?",
+   opts:[
+     {l:"Generally good — I feel like myself most of the time",s:1},
+     {l:"Variable — some good days, some depleted ones",s:2},
+     {l:"Often low — I'm running on less than I need",s:3},
+     {l:"Persistently depleted — I don't remember what full energy feels like",s:4}
+   ]},
+  {felt:'self-e',tag:'⚡ Energy & Body',cls:'self-e',velani:'liveliness',
+   q:"How well are you protecting the basics that restore your energy — sleep, movement, time alone, genuine rest?",
+   opts:[
+     {l:"Well — these feel like non-negotiables I protect",s:1},
+     {l:"Okay — I get most of them most of the time",s:2},
+     {l:"Poorly — they're the first things I cut when life gets full",s:3},
+     {l:"Not at all — I've been running on empty for a long time",s:4}
+   ]},
+  {felt:'self-i',tag:'✦ Identity & Joy',cls:'self-i',velani:'inner',
+   q:"When did you last do something that was entirely for you — not productive, not for anyone else, just something that felt like you?",
+   opts:[
+     {l:"Recently — I make time for this fairly regularly",s:1},
+     {l:"A few weeks ago — it happens but not as often as I'd like",s:2},
+     {l:"A while ago — I can't quite remember the last real one",s:3},
+     {l:"I honestly can't remember — it's become very rare",s:4}
+   ]},
+  {felt:'self-i',tag:'✦ Identity & Joy',cls:'self-i',velani:'inner',
+   q:"How connected do you feel to the version of yourself that existed before all the responsibility accumulated?",
+   opts:[
+     {l:"Pretty connected — she's still here, I hear from her regularly",s:1},
+     {l:"Somewhat — I catch glimpses of her occasionally",s:2},
+     {l:"Barely — I know she's in there somewhere but she's quiet",s:3},
+     {l:"Completely disconnected — I'm not sure I know who she is anymore",s:4}
+   ]},
+  {felt:'self-i',tag:'✦ Identity & Joy',cls:'self-i',velani:'inner',
+   q:"Beauty, curiosity, creativity, spontaneity — the parts of life that feel alive rather than productive. How present are these in your daily life?",
+   opts:[
+     {l:"Present and protected — they're part of how I live",s:1},
+     {l:"Occasional — I catch them in small moments",s:2},
+     {l:"Rare — they feel like luxuries I'll get back to someday",s:3},
+     {l:"Almost absent — life has become mostly maintenance",s:4}
+   ]},
+];
 
-  window.startAudit = function() {
-    document.getElementById('audit-intro').style.display = 'none';
-    document.getElementById('audit-questions').style.display = 'block';
-    showQuestion(0);
+var cur=0,ans=new Array(Qs.length).fill(null);
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function start(){cur=0;ans=new Array(Qs.length).fill(null);render();show('sq');}
+
+function render(){
+  var q=Qs[cur],tot=Qs.length;
+  document.getElementById('pb').style.width=(cur/tot*100)+'%';
+  document.getElementById('pb-txt').textContent=(cur+1)+' of '+tot;
+  var tag=document.getElementById('dtag');tag.textContent=q.tag;tag.className='dtag '+q.cls;
+  document.getElementById('qtxt').textContent=q.q;
+  var c=document.getElementById('qopts');c.innerHTML='';
+  q.opts.forEach(function(o,i){
+    var b=document.createElement('button');
+    b.className='qopt'+(ans[cur]===i?' sel':'');
+    b.innerHTML='<div class="radio"></div><div class="opt-lbl">'+o.l+'</div>';
+    b.onclick=(function(idx){return function(){pick(idx);};})(i);
+    c.appendChild(b);
+  });
+  document.getElementById('bbk').disabled=cur===0;
+  updNext();
+}
+
+function pick(i){
+  ans[cur]=i;
+  document.querySelectorAll('.qopt').forEach(function(el,j){
+    var on=j===i;
+    el.classList.toggle('sel',on);
+    var r=el.querySelector('.radio');
+    r.style.background=on?'var(--sage)':'';
+    r.style.borderColor=on?'var(--sage)':'';
+  });
+  updNext();
+  setTimeout(function(){
+    if(ans[cur]!==null&&document.getElementById('bnx').classList.contains('rdy'))next();
+  },550);
+}
+
+function updNext(){
+  var b=document.getElementById('bnx');
+  b.textContent=cur===Qs.length-1?'See my Capacity Score →':'Continue →';
+  ans[cur]!==null?b.classList.add('rdy'):b.classList.remove('rdy');
+}
+
+function next(){if(ans[cur]===null)return;if(cur<Qs.length-1){cur++;render();}else{loading();}}
+function prev(){if(cur>0){cur--;render();}}
+
+function loading(){
+  show('sl');
+  var ids=['ls1','ls2','ls3','ls4','ls5'];
+  ids.forEach(function(id){document.getElementById(id).classList.remove('done');});
+  var i=0;
+  var t=setInterval(function(){
+    if(i<ids.length){document.getElementById(ids[i]).classList.add('done');i++;}
+    else{clearInterval(t);setTimeout(function(){buildResults();show('sr');},350);}
+  },400);
+}
+
+function buildResults(){
+  var vm={
+    connection:{label:'Connection',emoji:'🤝',score:0,max:0},
+    material:{label:'Material',emoji:'💼',score:0,max:0},
+    liveliness:{label:'Liveliness',emoji:'⚡',score:0,max:0},
+    inner:{label:'Inner',emoji:'✦',score:0,max:0}
   };
+  Qs.forEach(function(q,i){var s=ans[i]||0;vm[q.velani].score+=q.opts[s].s;vm[q.velani].max+=4;});
+  var tS=0,tM=0;
+  Object.keys(vm).forEach(function(k){tS+=vm[k].score;tM+=vm[k].max;});
+  var capScore=100-Math.round(tS/tM*100);
+  var prof=profile(capScore);
+  document.getElementById('r-profile').textContent=prof.name;
+  document.getElementById('r-tag').textContent=prof.tag;
+  document.getElementById('score-num').textContent=capScore;
+  document.getElementById('score-desc').textContent=prof.scoreDesc;
+  var fill=document.getElementById('ring-fill');
+  fill.style.stroke=prof.ringColor;
+  setTimeout(function(){fill.style.strokeDashoffset=289-(289*capScore/100);},150);
 
-  function showQuestion(i) {
-    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('active'));
-    const card = document.getElementById('qcard-' + i);
-    if (card) {
-      card.classList.add('active');
-      const pct = (i / totalQ * 100).toFixed(0);
-      document.getElementById('audit-progress').style.width = pct + '%';
-      document.getElementById('audit-progress-label').textContent = 'Question ' + (i + 1) + ' of ' + totalQ;
-    }
-  }
+  var barsEl=document.getElementById('domain-bars');barsEl.innerHTML='';
+  Object.keys(vm).forEach(function(key){
+    var d=vm[key];var dp=Math.round(d.score/d.max*100);
+    barsEl.innerHTML+='<div><div class="dbar-top"><span class="dbar-name">'+d.emoji+' '+d.label+'</span><span class="dbar-pct">'+dp+'%</span></div><div class="dbar-bg"><div class="dbar-fill fill-'+key+'" style="width:0%" data-w="'+dp+'%"></div></div></div>';
+  });
+  setTimeout(function(){document.querySelectorAll('.dbar-fill').forEach(function(el){el.style.width=el.dataset.w;});},200);
 
-  window.selectOption = function(qIndex, score, btn) {
-    // Mark selected
-    btn.closest('.options').querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    scores[qIndex] = score;
+  var sorted=Object.keys(vm).map(function(k){var d=vm[k];return {key:k,label:d.label,emoji:d.emoji,score:d.score,max:d.max,pct:Math.round(d.score/d.max*100)};}).sort(function(a,b){return b.pct-a.pct;});
+  var dc=document.getElementById('d-cards');dc.innerHTML='';
+  sorted.forEach(function(d){
+    var lv=level(d.pct);
+    dc.innerHTML+='<div class="d-card"><div class="d-card-top"><div class="d-card-name">'+d.emoji+' '+d.label+'</div><div class="d-badge '+lv.cls+'">'+lv.label+'</div></div><div class="d-card-bar-bg"><div class="d-card-bar-fill fill-'+d.key+'" style="width:0%" data-w="'+d.pct+'%"></div></div><div class="d-card-insight">'+domainInsight(d.key,d.pct)+'</div></div>';
+  });
+  setTimeout(function(){document.querySelectorAll('.d-card-bar-fill').forEach(function(el){el.style.width=el.dataset.w;});},300);
 
-    // Auto-advance after short delay
-    setTimeout(() => {
-      if (qIndex < totalQ - 1) {
-        showQuestion(qIndex + 1);
-      } else {
-        showResult();
-      }
-    }, 380);
+  document.getElementById('insight-txt').textContent=prof.insight;
+  document.getElementById('next-step-box').innerHTML=nextStep(sorted[0].key);
+}
+
+function profile(cap){
+  if(cap<=30)return{
+    name:'Carrying at Capacity',
+    tag:"You're running on very little reserve. The invisible load is significant — and it's time to put some things down.",
+    scoreDesc:"Very little capacity remaining. Rest is not a reward — it's a requirement.",
+    ringColor:'#E57373',
+    insight:"Your score shows that responsibility has accumulated across almost every domain of your life. This is not a discipline problem or a time management problem. It's an accumulation problem — and it's been building for a long time. The most important first move is not to add another system. It's to name what you're carrying and decide what you're willing to stop carrying first."
   };
+  if(cap<=50)return{
+    name:'High Invisible Load',
+    tag:"You're carrying more than most people see — and it's quietly consuming capacity you could use for yourself.",
+    scoreDesc:"Capacity significantly reduced. You're functioning, but not freely.",
+    ringColor:'#FFB74D',
+    insight:"Your score reveals a significant invisible load across multiple domains. You've found ways to keep things moving, but the cost is real — less energy, less presence, less of you available for what actually matters. The good news: your heaviest domain is clear, and targeted change there creates more relief than trying to fix everything at once."
+  };
+  if(cap<=70)return{
+    name:'Moderate Accumulation',
+    tag:"You're managing — but managing has become the ceiling. There's more space available than you're currently accessing.",
+    scoreDesc:"Moderate capacity remaining. More is possible than you're currently experiencing.",
+    ringColor:'#5B8C7A',
+    insight:"You're holding things together well, but the weight of accumulated responsibility is present. There's enough capacity to start making deliberate changes — and your results show exactly where to start. The shift from managing to actually living happens in the domain where your load is heaviest."
+  };
+  return{
+    name:'Carrying Well',
+    tag:"Your load is relatively light right now. This is a good time to protect the space you have — deliberately.",
+    scoreDesc:'Good capacity remaining. The risk now is gradual accumulation, not crisis.',
+    ringColor:'#81C784',
+    insight:"You're in a more spacious season than many. What got you here is worth protecting. The most important move now is making the structures that create this space more intentional — so they hold even when life gets fuller, which it will."
+  };
+}
 
-  function showResult() {
-    document.getElementById('audit-questions').style.display = 'none';
-    document.getElementById('audit-progress').style.width = '100%';
+function level(pct){
+  if(pct>=80)return{label:'Critical',cls:'badge-critical'};
+  if(pct>=60)return{label:'Heavy',cls:'badge-high'};
+  if(pct>=40)return{label:'Moderate',cls:'badge-mod'};
+  return{label:'Manageable',cls:'badge-low'};
+}
 
-    const total = Object.values(scores).reduce((a, b) => a + b, 0);
-    const max   = totalQ * 3;
-    const pct   = total / max;
-
-    let level, title, body;
-    if (pct < 0.35) {
-      level = 'Carrying a moderate load';
-      title = 'You\'re managing — but <em>watch the edges.</em>';
-      body  = 'Your load is real but not overwhelming right now. The risk is that it creeps quietly. Small, consistent practices will keep you ahead of it before it becomes heavy.';
-    } else if (pct < 0.65) {
-      level = 'Carrying a significant load';
-      title = 'You\'re holding a lot — <em>more than you should be alone.</em>';
-      body  = 'You\'re capable, which means you\'ve been carrying this longer than most people would. That capability is a strength. But it\'s also why the weight has been allowed to build. It\'s time to put some of it down.';
-    } else {
-      level = 'Carrying a heavy load';
-      title = 'You\'ve been carrying this <em>far too long.</em>';
-      body  = 'You are exhausted in a way that sleep doesn\'t fix. The invisible things — the planning, the holding, the never being fully off — have accumulated. This isn\'t a discipline problem. It\'s a weight problem. And you don\'t have to carry all of it.';
-    }
-
-    // Per-area scores (0–3 scale → percentage)
-    const areaScores = Object.keys(scores).map(k => ({ area: areas[k], score: scores[k] }));
-
-    const areasHTML = areaScores.map(a => `
-      <div class="result-area-row">
-        <span class="result-area-name">${a.area}</span>
-        <div class="result-area-bar-wrap">
-          <div class="result-area-bar">
-            <div class="result-area-fill" style="width:${Math.round(a.score / 3 * 100)}%"></div>
-          </div>
-        </div>
-      </div>
-    `).join('');
-
-    document.getElementById('audit-result').innerHTML = `
-      <span class="result-badge">${level}</span>
-      <h2 class="result-title">${title}</h2>
-      <p class="result-body">${body}</p>
-
-      <div class="result-areas">
-        <div class="result-areas-label">Where you're carrying the most</div>
-        ${areasHTML}
-      </div>
-
-      <div class="result-cta">
-        <div class="result-cta-hed">A quieter week starts <em>Sunday.</em></div>
-        <p>The Velani Letter arrives every Sunday — warm, practical letters for women who are ready to carry less. Plus Velani Lite, a free daily structure, delivered in your first email.</p>
-        <div class="result-cta-form" id="audit-signup-form">
-          <input type="email" id="audit-email" class="result-cta-email" placeholder="your@email.com" autocomplete="email">
-          <button class="result-cta-btn" onclick="window.auditSignup()">I'm ready</button>
-        </div>
-        <p class="result-cta-consent">By joining, you agree to occasional Velani emails. <a href="/privacy" target="_blank">Privacy policy</a>.</p>
-        <div class="result-cta-success" id="audit-signup-success">✓ Check your inbox to confirm. First letter arrives Sunday.</div>
-      </div>
-    `;
-
-    const resultEl = document.getElementById('audit-result');
-    resultEl.classList.add('visible');
-    resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-
-  window.auditSignup = function() {
-    const email = document.getElementById('audit-email').value.trim();
-    if (!email || !email.includes('@')) {
-      document.getElementById('audit-email').style.borderColor = '#B86A43';
-      return;
-    }
-    document.getElementById('audit-email').style.borderColor = 'rgba(247,246,243,.2)';
-    fetch('https://velani-subscribe.velani-app.workers.dev/', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email })
-    }).then(() => done()).catch(() => done());
-    function done() {
-      document.getElementById('audit-signup-form').style.display = 'none';
-      document.getElementById('audit-signup-success').classList.add('visible');
+function domainInsight(key,pct){
+  var ins={
+    connection:{
+      h:"Your Connection domain is carrying the most weight. You're holding significant emotional, logistical, and relational responsibility for others — and the mental overhead of coordinating everyone else's lives is quietly consuming the energy you need for your own.",
+      m:"Connection responsibility is real and present. The invisible coordination work is there even if it's not yet overwhelming.",
+      l:"Connection feels relatively balanced. You're caring for people without losing yourself in the process."
+    },
+    material:{
+      h:"Your Material domain is significantly consuming your capacity. Work is following you home, and open loops are draining attention even when you're not at your desk.",
+      m:"Career load is present and real. There are likely specific open loops worth closing.",
+      l:"Work isn't your primary source of invisible load right now."
+    },
+    liveliness:{
+      h:"Your Liveliness domain shows significant depletion. The basics that restore energy — sleep, movement, rest — have been consistently deprioritised. This isn't about discipline. It's about what gets cut when everything else fills up.",
+      m:"Energy and body care are present but not well protected. Worth noticing before they deplete further.",
+      l:"You're doing a reasonable job of protecting your physical energy and restoration."
+    },
+    inner:{
+      h:"Your Inner domain shows the most significant depletion. The version of you that existed before all the responsibility accumulated has become quiet. This is often the last thing women notice and the first thing that needs attention.",
+      m:"Your Inner life is present but not consistently nourished. The things that feel like you are occasional rather than woven into daily life.",
+      l:"You have reasonable connection to your own identity and what brings you alive. Worth protecting."
     }
   };
+  var d=ins[key];return pct>=60?d.h:pct>=40?d.m:d.l;
+}
+
+function nextStep(key){
+  var steps={
+    connection:{cls:'connection',eye:'Your heaviest domain: Connection',title:'Make room for yourself inside the relationships that need you most.',body:"The Velani Companion walks you through a guided 30-day experience starting with your Connection domain — helping you see what you're carrying, what can be redistributed, and how to show up fully for others without disappearing in the process.",cta:'Get the Velani Companion →',price:'One-time · <strong>$29</strong> · Instant access'},
+    material:{cls:'material',eye:'Your heaviest domain: Material',title:'Close the loops that are following you home.',body:"The Velani Companion starts where your score is heaviest — your career and the invisible mental load of unfinished work. Over 30 days, it walks you through a daily structure that closes open loops, protects your attention, and creates a cleaner separation between work and the rest of your life.",cta:'Get the Velani Companion →',price:'One-time · <strong>$29</strong> · Instant access'},
+    liveliness:{cls:'liveliness',eye:'Your heaviest domain: Liveliness',title:'Restore the energy that everything else in your life runs on.',body:"The Velani Companion begins with your Liveliness domain — the sleep, movement, rest, and physical care that have been quietly deprioritised. Not with a wellness overhaul. With one clear, sustainable move at a time.",cta:'Get the Velani Companion →',price:'One-time · <strong>$29</strong> · Instant access'},
+    inner:{cls:'inner',eye:'Your heaviest domain: Inner',title:"Find your way back to the version of yourself you've been missing.",body:"Your Inner domain is where the most is missing — and where the most is possible. The Velani Companion helps you make room for the parts of yourself that aren't useful to anyone — which turns out to be the most useful thing you can do.",cta:'Get the Velani Companion →',price:'One-time · <strong>$29</strong> · Instant access'}
+  };
+  var s=steps[key];
+  return '<div class="next-box '+s.cls+'"><div class="next-eye">'+s.eye+'</div><div class="next-title">'+s.title+'</div><div class="next-body">'+s.body+'</div><a class="next-cta" href="/start" target="_blank">'+s.cta+'</a><div class="next-price">'+s.price+'</div></div>';
+}
+
+function optin(){
+  var e=document.getElementById('oe');
+  if(!e.value||e.value.indexOf('@')===-1){e.style.borderColor='var(--terra)';return;}
+  fetch('https://velani-subscribe.velani-app.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e.value,tags:['audit-complete']})}).catch(function(){});
+  document.querySelector('.optin').innerHTML="<h3>You're in.</h3><p>The Velani Letter arrives Sunday morning. Your first email includes Velani Lite — a simple daily structure to start carrying less.</p>";
+}
+
+function doShare(){
+  var cap=document.getElementById('score-num').textContent;
+  var name=document.getElementById('r-profile').textContent;
+  var txt='I just took the Invisible Load Audit at velani.app — my Capacity Score is '+cap+'/100 ('+name+'). Find out yours:';
+  if(navigator.share){navigator.share({title:'My Invisible Load Audit — Velani',text:txt,url:'https://velani.app/audit'});}
+  else{navigator.clipboard.writeText(txt+' https://velani.app/audit').then(function(){alert('Copied — ready to share.');});}
+}
 </script>
-
-</Base>
+</body>
+</html>
