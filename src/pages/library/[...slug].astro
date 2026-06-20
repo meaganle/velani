@@ -164,6 +164,44 @@ const formattedDate = frontmatter.date
     padding-right: 1.6rem;
   }
 
+  /* Audit CTA */
+  .audit-cta {
+    margin-top: 3.5rem;
+    background: var(--surface);
+    border: 1px solid rgba(91,140,122,.2);
+    border-left: 3px solid var(--sage);
+    border-radius: 0 14px 14px 0;
+    padding: 1.6rem 2rem;
+    display: flex; align-items: center;
+    justify-content: space-between; gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .audit-cta-left {}
+  .audit-cta-q {
+    font-size: .72rem; color: var(--ink3);
+    margin-bottom: .35rem; line-height: 1.5;
+  }
+  .audit-cta-hed {
+    font-family: var(--display); font-size: 1rem;
+    font-weight: 400; color: var(--ink); line-height: 1.3;
+  }
+  .audit-cta-hed em { font-style: italic; color: var(--sage); }
+  .audit-cta-link {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: var(--ink); color: var(--bg);
+    font-family: var(--body); font-size: .72rem; font-weight: 500;
+    letter-spacing: .07em; text-transform: uppercase;
+    padding: .75rem 1.4rem; border-radius: 100px;
+    text-decoration: none; white-space: nowrap; flex-shrink: 0;
+    transition: background .2s, transform .15s;
+  }
+  .audit-cta-link:hover { background: var(--sage2); transform: translateY(-1px); }
+  .audit-cta-time {
+    font-size: .62rem; color: var(--ink3);
+    font-style: italic; font-family: var(--display);
+    margin-top: .4rem;
+  }
+
   /* Footer */
   .article-footer {
     margin-top: 5rem; padding-top: 3rem;
@@ -231,6 +269,21 @@ const formattedDate = frontmatter.date
 
     <div class="article-body">
       <Fragment set:html={compiledContent} />
+    </div>
+
+    <!-- Invisible Load Audit CTA -->
+    <div class="audit-cta">
+      <div class="audit-cta-left">
+        <p class="audit-cta-q">Want to know exactly where your load is heaviest?</p>
+        <div class="audit-cta-hed">Take the <em>Invisible Load Audit</em></div>
+        <div class="audit-cta-time">4 minutes · Free</div>
+      </div>
+      <a class="audit-cta-link" href="/audit">
+        Start the audit
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+          <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
     </div>
 
     <div class="article-footer">

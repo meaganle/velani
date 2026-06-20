@@ -1,0 +1,407 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const questions = [
+  {
+    id: 'q1',
+    area: 'Mental load',
+    q: 'How often do you feel like you\'re the only one holding all the details — appointments, deadlines, what\'s in the fridge?',
+    options: ['Rarely — things feel shared', 'Sometimes — a few things pile up', 'Often — I track most things', 'Almost always — it\'s exhausting']
+  },
+  {
+    id: 'q2',
+    area: 'Emotional labour',
+    q: 'When someone in your life is struggling, how often are you the one who shows up first?',
+    options: ['Not usually — it\'s balanced', 'Sometimes it\'s me', 'Usually me', 'Always me — I\'m the one who holds everyone together']
+  },
+  {
+    id: 'q3',
+    area: 'Rest',
+    q: 'When did you last rest without feeling like you should be doing something else?',
+    options: ['Recently — rest feels okay', 'A little while ago', 'It\'s been a long time', 'I can\'t remember']
+  },
+  {
+    id: 'q4',
+    area: 'Your own needs',
+    q: 'How often do your own needs — rest, joy, space, time — make it onto your actual to-do list?',
+    options: ['Regularly', 'Sometimes', 'Rarely', 'Almost never']
+  },
+  {
+    id: 'q5',
+    area: 'Decision fatigue',
+    q: 'By the end of the day, how much mental energy do you have left for yourself?',
+    options: ['Plenty — I still feel like myself', 'A little', 'Very little', 'Nothing — I\'m running on empty']
+  },
+  {
+    id: 'q6',
+    area: 'Sense of self',
+    q: 'How connected do you feel to the version of yourself that exists outside of your responsibilities?',
+    options: ['Very connected', 'Somewhat connected', 'Faintly — it\'s hard to remember', 'Disconnected — I\'m not sure who that is anymore']
+  },
+];
+---
+<Base
+  title="The Invisible Load Audit"
+  description="Find out exactly where your load is heaviest — in 4 minutes."
+  currentPath="/audit"
+>
+<style>
+  main {
+    flex: 1; position: relative; z-index: 1;
+    padding: 5rem 1.5rem 7rem;
+  }
+
+  .audit-wrap { max-width: 620px; margin: 0 auto; }
+
+  /* Header */
+  .audit-eyebrow {
+    font-size: .58rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--terra); font-weight: 600; margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: .65rem;
+  }
+  .audit-eyebrow::before {
+    content: ''; display: block; width: 20px; height: 1.5px;
+    background: var(--terra); opacity: .55; flex-shrink: 0;
+  }
+  .audit-title {
+    font-family: var(--display);
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 300; line-height: 1.1;
+    color: var(--ink); margin-bottom: 1rem;
+    letter-spacing: -.022em;
+  }
+  .audit-title em { font-style: italic; color: var(--sage); }
+  .audit-desc {
+    font-size: .95rem; color: var(--ink2);
+    line-height: 1.85; margin-bottom: .6rem;
+  }
+  .audit-meta {
+    font-size: .72rem; color: var(--ink3);
+    font-family: var(--display); font-style: italic;
+    margin-bottom: 3rem;
+  }
+
+  /* Progress */
+  .progress-wrap { margin-bottom: 2.5rem; }
+  .progress-track {
+    height: 2px; background: var(--border);
+    border-radius: 100px; overflow: hidden; margin-bottom: .55rem;
+  }
+  .progress-fill {
+    height: 100%; background: var(--sage);
+    border-radius: 100px; transition: width .4s cubic-bezier(.22,1,.36,1);
+    width: 0%;
+  }
+  .progress-label {
+    font-size: .62rem; color: var(--ink3);
+    letter-spacing: .1em; text-transform: uppercase;
+  }
+
+  /* Question card */
+  .q-card {
+    display: none;
+    animation: rise .4s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .q-card.active { display: block; }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-area {
+    font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--sage); font-weight: 600; margin-bottom: .75rem;
+  }
+  .q-text {
+    font-family: var(--display); font-size: 1.25rem;
+    font-weight: 300; color: var(--ink);
+    line-height: 1.35; margin-bottom: 2rem;
+    letter-spacing: -.01em;
+  }
+
+  .options { display: flex; flex-direction: column; gap: .55rem; }
+  .option-btn {
+    width: 100%; text-align: left;
+    background: var(--surface); border: 1.5px solid var(--border2);
+    border-radius: 12px; padding: 1rem 1.3rem;
+    font-family: var(--body); font-size: .88rem;
+    color: var(--ink2); cursor: pointer; line-height: 1.5;
+    transition: border-color .18s, background .18s, color .18s, transform .12s;
+  }
+  .option-btn:hover {
+    border-color: var(--sage); color: var(--ink);
+    transform: translateX(3px);
+  }
+  .option-btn.selected {
+    background: var(--sage-gl2); border-color: var(--sage);
+    color: var(--ink);
+  }
+
+  /* Result */
+  .result-card {
+    display: none;
+    animation: rise .6s cubic-bezier(.22,1,.36,1) forwards;
+  }
+  .result-card.visible { display: block; }
+
+  .result-badge {
+    display: inline-block;
+    font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--sage); font-weight: 600;
+    background: var(--sage-gl2); border: 1px solid rgba(91,140,122,.2);
+    padding: .3rem .8rem; border-radius: 100px; margin-bottom: 1.4rem;
+  }
+  .result-title {
+    font-family: var(--display);
+    font-size: clamp(1.7rem, 3.5vw, 2.3rem);
+    font-weight: 300; line-height: 1.15;
+    color: var(--ink); margin-bottom: 1rem;
+    letter-spacing: -.018em;
+  }
+  .result-title em { font-style: italic; color: var(--sage); }
+  .result-body {
+    font-size: .95rem; color: var(--ink2);
+    line-height: 1.88; margin-bottom: 2rem;
+    max-width: 520px;
+  }
+
+  .result-areas {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.8rem 2rem; margin-bottom: 2rem;
+  }
+  .result-areas-label {
+    font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink3); font-weight: 600; margin-bottom: 1.2rem;
+  }
+  .result-area-row {
+    display: flex; align-items: center;
+    justify-content: space-between; gap: 1rem;
+    padding: .6rem 0; border-bottom: 1px solid var(--border);
+  }
+  .result-area-row:last-child { border-bottom: none; }
+  .result-area-name { font-size: .85rem; color: var(--ink2); }
+  .result-area-bar-wrap { flex: 1; max-width: 140px; }
+  .result-area-bar {
+    height: 4px; background: var(--border); border-radius: 100px; overflow: hidden;
+  }
+  .result-area-fill {
+    height: 100%; background: var(--sage); border-radius: 100px;
+    transition: width .8s cubic-bezier(.22,1,.36,1);
+  }
+
+  /* CTA */
+  .result-cta {
+    background: var(--ink); border-radius: 16px;
+    padding: 2.2rem 2.4rem;
+  }
+  .result-cta-hed {
+    font-family: var(--display); font-size: 1.1rem;
+    font-weight: 300; color: var(--bg);
+    margin-bottom: .4rem; line-height: 1.3;
+  }
+  .result-cta-hed em { font-style: italic; color: rgba(91,140,122,.85); }
+  .result-cta p { font-size: .83rem; color: rgba(247,246,243,.6); line-height: 1.7; margin-bottom: 1.4rem; }
+  .result-cta-form { display: flex; gap: .5rem; }
+  .result-cta-email {
+    flex: 1; min-width: 0; background: rgba(247,246,243,.1);
+    border: 1.5px solid rgba(247,246,243,.2); border-radius: 8px;
+    padding: .8rem 1rem; font-family: var(--body);
+    font-size: .85rem; color: var(--bg); outline: none;
+    transition: border-color .2s;
+  }
+  .result-cta-email:focus { border-color: var(--sage); }
+  .result-cta-email::placeholder { color: rgba(247,246,243,.4); }
+  .result-cta-btn {
+    background: var(--bg); color: var(--ink);
+    font-family: var(--body); font-size: .72rem; font-weight: 500;
+    letter-spacing: .07em; text-transform: uppercase;
+    padding: .8rem 1.3rem; border-radius: 8px; border: none;
+    cursor: pointer; white-space: nowrap; flex-shrink: 0;
+    transition: background .2s;
+  }
+  .result-cta-btn:hover { background: var(--sage-gl2); }
+  .result-cta-consent {
+    font-size: .62rem; color: rgba(247,246,243,.4);
+    line-height: 1.5; margin-top: .7rem;
+  }
+  .result-cta-consent a { color: rgba(91,140,122,.7); text-decoration: none; }
+  .result-cta-success {
+    display: none; font-family: var(--display);
+    font-size: .88rem; font-style: italic;
+    color: var(--sage); margin-top: .7rem;
+  }
+  .result-cta-success.visible { display: block; }
+
+  @media (max-width: 600px) {
+    main { padding: 3rem 1.2rem 5rem; }
+    .result-cta-form { flex-direction: column; }
+    .result-cta-btn { width: 100%; padding: .85rem; }
+  }
+</style>
+
+<main>
+  <div class="audit-wrap">
+
+    <!-- Intro (shown before audit starts) -->
+    <div id="audit-intro">
+      <p class="audit-eyebrow">Invisible Load Audit</p>
+      <h1 class="audit-title">Find out exactly where<br>your load is <em>heaviest.</em></h1>
+      <p class="audit-desc">
+        Six questions. Honest answers. A clear picture of where you're carrying the most — so you know where to start.
+      </p>
+      <p class="audit-meta">4 minutes · Free · No signup required</p>
+      <button class="option-btn" style="max-width:200px;text-align:center;" onclick="window.startAudit()">Begin the audit →</button>
+    </div>
+
+    <!-- Questions -->
+    <div id="audit-questions" style="display:none;">
+      <div class="progress-wrap">
+        <div class="progress-track"><div class="progress-fill" id="audit-progress"></div></div>
+        <div class="progress-label" id="audit-progress-label">Question 1 of {questions.length}</div>
+      </div>
+
+      {questions.map((q, i) => (
+        <div class="q-card" id={`qcard-${i}`} data-index={i}>
+          <div class="q-area">{q.area}</div>
+          <p class="q-text">{q.q}</p>
+          <div class="options">
+            {q.options.map((opt, j) => (
+              <button
+                class="option-btn"
+                data-q={i}
+                data-score={j}
+                onclick={`window.selectOption(${i}, ${j}, this)`}
+              >{opt}</button>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Result -->
+    <div class="result-card" id="audit-result"></div>
+
+  </div>
+</main>
+
+<script is:inline>
+  const totalQ = 6;
+  const scores = {};
+  const areas  = ['Mental load', 'Emotional labour', 'Rest', 'Your own needs', 'Decision fatigue', 'Sense of self'];
+
+  window.startAudit = function() {
+    document.getElementById('audit-intro').style.display = 'none';
+    document.getElementById('audit-questions').style.display = 'block';
+    showQuestion(0);
+  };
+
+  function showQuestion(i) {
+    document.querySelectorAll('.q-card').forEach(c => c.classList.remove('active'));
+    const card = document.getElementById('qcard-' + i);
+    if (card) {
+      card.classList.add('active');
+      const pct = (i / totalQ * 100).toFixed(0);
+      document.getElementById('audit-progress').style.width = pct + '%';
+      document.getElementById('audit-progress-label').textContent = 'Question ' + (i + 1) + ' of ' + totalQ;
+    }
+  }
+
+  window.selectOption = function(qIndex, score, btn) {
+    // Mark selected
+    btn.closest('.options').querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    scores[qIndex] = score;
+
+    // Auto-advance after short delay
+    setTimeout(() => {
+      if (qIndex < totalQ - 1) {
+        showQuestion(qIndex + 1);
+      } else {
+        showResult();
+      }
+    }, 380);
+  };
+
+  function showResult() {
+    document.getElementById('audit-questions').style.display = 'none';
+    document.getElementById('audit-progress').style.width = '100%';
+
+    const total = Object.values(scores).reduce((a, b) => a + b, 0);
+    const max   = totalQ * 3;
+    const pct   = total / max;
+
+    let level, title, body;
+    if (pct < 0.35) {
+      level = 'Carrying a moderate load';
+      title = 'You\'re managing — but <em>watch the edges.</em>';
+      body  = 'Your load is real but not overwhelming right now. The risk is that it creeps quietly. Small, consistent practices will keep you ahead of it before it becomes heavy.';
+    } else if (pct < 0.65) {
+      level = 'Carrying a significant load';
+      title = 'You\'re holding a lot — <em>more than you should be alone.</em>';
+      body  = 'You\'re capable, which means you\'ve been carrying this longer than most people would. That capability is a strength. But it\'s also why the weight has been allowed to build. It\'s time to put some of it down.';
+    } else {
+      level = 'Carrying a heavy load';
+      title = 'You\'ve been carrying this <em>far too long.</em>';
+      body  = 'You are exhausted in a way that sleep doesn\'t fix. The invisible things — the planning, the holding, the never being fully off — have accumulated. This isn\'t a discipline problem. It\'s a weight problem. And you don\'t have to carry all of it.';
+    }
+
+    // Per-area scores (0–3 scale → percentage)
+    const areaScores = Object.keys(scores).map(k => ({ area: areas[k], score: scores[k] }));
+
+    const areasHTML = areaScores.map(a => `
+      <div class="result-area-row">
+        <span class="result-area-name">${a.area}</span>
+        <div class="result-area-bar-wrap">
+          <div class="result-area-bar">
+            <div class="result-area-fill" style="width:${Math.round(a.score / 3 * 100)}%"></div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    document.getElementById('audit-result').innerHTML = `
+      <span class="result-badge">${level}</span>
+      <h2 class="result-title">${title}</h2>
+      <p class="result-body">${body}</p>
+
+      <div class="result-areas">
+        <div class="result-areas-label">Where you're carrying the most</div>
+        ${areasHTML}
+      </div>
+
+      <div class="result-cta">
+        <div class="result-cta-hed">A quieter week starts <em>Sunday.</em></div>
+        <p>The Velani Letter arrives every Sunday — warm, practical letters for women who are ready to carry less. Plus Velani Lite, a free daily structure, delivered in your first email.</p>
+        <div class="result-cta-form" id="audit-signup-form">
+          <input type="email" id="audit-email" class="result-cta-email" placeholder="your@email.com" autocomplete="email">
+          <button class="result-cta-btn" onclick="window.auditSignup()">I'm ready</button>
+        </div>
+        <p class="result-cta-consent">By joining, you agree to occasional Velani emails. <a href="/privacy" target="_blank">Privacy policy</a>.</p>
+        <div class="result-cta-success" id="audit-signup-success">✓ Check your inbox to confirm. First letter arrives Sunday.</div>
+      </div>
+    `;
+
+    const resultEl = document.getElementById('audit-result');
+    resultEl.classList.add('visible');
+    resultEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  window.auditSignup = function() {
+    const email = document.getElementById('audit-email').value.trim();
+    if (!email || !email.includes('@')) {
+      document.getElementById('audit-email').style.borderColor = '#B86A43';
+      return;
+    }
+    document.getElementById('audit-email').style.borderColor = 'rgba(247,246,243,.2)';
+    fetch('https://velani-subscribe.velani-app.workers.dev/', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    }).then(() => done()).catch(() => done());
+    function done() {
+      document.getElementById('audit-signup-form').style.display = 'none';
+      document.getElementById('audit-signup-success').classList.add('visible');
+    }
+  };
+</script>
+
+</Base>
