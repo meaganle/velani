@@ -12,164 +12,588 @@
 <meta property="og:description" content="10 questions. 4 minutes. Instant Capacity Score across your 4 life domains.">
 <meta property="og:url" content="https://velani.app/audit">
 <meta property="og:type" content="website">
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
+/* ── Tokens (mirrors Velani site) ── */
 :root {
-  --cream:#F7F6F3; --ink:#1A1D2E; --sage:#5B8C7A; --terra:#C4785A;
-  --warm:#FDFCFA; --mist:#E8E4DC; --mist-d:#D4CFC5; --ink2:#3a3d4e;
-  --sage-l:#EBF2EF; --terra-l:#FAF0EB;
-  --material:#6B8FB5; --material-l:#EEF3FA;
-  --inner:#8E5EA7; --inner-l:#F5EEF8;
-  --live:#5B8C7A; --live-l:#EBF2EF;
-  --connect:#C4785A; --connect-l:#FAF0EB;
+  --cream:  #F7F6F3;
+  --ink:    #1A1D2E;
+  --ink2:   #3a3d4e;
+  --ink3:   #6E7191;
+  --sage:   #5B8C7A;
+  --sage2:  #3D6B59;
+  --sage-l: #EBF2EF;
+  --terra:  #C4785A;
+  --warm:   #FDFCFA;
+  --mist:   #E8E4DC;
+  --mist-d: #D4CFC5;
+  --material: #6B8FB5;
+  --material-l: #EEF3FA;
+  --inner:  #8E5EA7;
+  --inner-l:#F5EEF8;
+  --connect:#C4785A;
+  --connect-l:#FAF0EB;
+  --display:'Lora', Georgia, serif;
+  --body:   'DM Sans', system-ui, sans-serif;
 }
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);line-height:1.7;min-height:100vh;}
-.screen{display:none;min-height:100vh;}
-.screen.active{display:flex;flex-direction:column;}
 
-/* Intro screen */
-#si{background:var(--ink);align-items:center;justify-content:center;padding:40px 24px;text-align:center;position:relative;overflow:hidden;}
-#si::before{content:'';position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(91,140,122,.13) 0%,transparent 68%);top:-120px;left:50%;transform:translateX(-50%);pointer-events:none;}
-.ii{max-width:540px;position:relative;z-index:1;}
-.i-brand{font-family:'Lora',serif;font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sage);margin-bottom:36px;}
-.i-h1{font-family:'Lora',serif;font-size:clamp(2rem,5vw,3.1rem);font-weight:400;color:#FDFCFA;line-height:1.18;margin-bottom:22px;}
-.i-h1 em{font-style:italic;color:var(--terra);}
-.i-sub{font-size:.93rem;color:rgba(247,246,243,.62);line-height:1.88;margin-bottom:32px;max-width:420px;margin-left:auto;margin-right:auto;}
-.i-domains{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:36px;}
-.i-domain{font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(247,246,243,.48);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:6px 14px;border-radius:20px;}
-.i-cta{display:inline-block;background:var(--terra);color:#fff;padding:15px 34px;border-radius:10px;font-size:.93rem;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:transform .15s,opacity .15s;}
-.i-cta:hover{transform:translateY(-1px);opacity:.9;}
-.i-time{font-size:.73rem;color:rgba(247,246,243,.32);margin-top:13px;}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: var(--body);
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.7;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
 
-/* Question screen */
-#sq{background:var(--cream);}
-.qh{padding:18px 32px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--mist);background:var(--warm);position:sticky;top:0;z-index:10;}
-.qh-brand{font-family:'Lora',serif;font-size:.83rem;color:var(--sage);letter-spacing:.1em;}
-.qh-right{display:flex;align-items:center;gap:12px;}
-.pb-bg{width:130px;height:4px;background:var(--mist);border-radius:4px;overflow:hidden;}
-.pb-fill{height:100%;background:var(--sage);border-radius:4px;transition:width .4s ease;width:0%;}
-.pb-txt{font-size:.7rem;font-weight:600;color:var(--ink2);white-space:nowrap;}
-.qbody{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 24px;}
-.qcard{max-width:560px;width:100%;}
-.dtag{display:inline-flex;align-items:center;gap:6px;font-size:.67rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:5px 13px;border-radius:20px;margin-bottom:20px;}
-.dtag.home{background:#EEF3FA;color:var(--material);}
-.dtag.work{background:var(--sage-l);color:var(--sage);}
-.dtag.self-e{background:var(--terra-l);color:var(--terra);}
-.dtag.self-i{background:var(--inner-l);color:var(--inner);}
-.qtxt{font-family:'Lora',serif;font-size:clamp(1.15rem,3vw,1.52rem);font-weight:400;color:var(--ink);line-height:1.4;margin-bottom:30px;}
-.qopts{display:flex;flex-direction:column;gap:10px;}
-.qopt{background:var(--warm);border:1.5px solid var(--mist);border-radius:12px;padding:15px 18px;cursor:pointer;transition:all .15s;display:flex;gap:13px;align-items:flex-start;text-align:left;font-family:'DM Sans',sans-serif;width:100%;}
-.qopt:hover{border-color:var(--sage);background:var(--sage-l);}
-.qopt.sel{border-color:var(--sage);background:var(--sage-l);}
-.qopt.sel .radio{background:var(--sage);border-color:var(--sage);}
-.qopt.sel .radio::after{opacity:1;}
-.radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--mist-d);flex-shrink:0;margin-top:2px;transition:all .15s;position:relative;}
-.radio::after{content:'';position:absolute;width:8px;height:8px;background:#fff;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);opacity:0;transition:opacity .15s;}
-.opt-lbl{font-size:.88rem;color:var(--ink);line-height:1.5;font-weight:500;}
-.qnav{padding:18px 32px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--mist);background:var(--warm);}
-.btn-back{background:none;border:1.5px solid var(--mist);color:var(--ink2);padding:10px 20px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.83rem;cursor:pointer;}
-.btn-back:disabled{opacity:.3;cursor:default;}
-.btn-next{background:var(--ink);color:var(--cream);padding:11px 26px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.86rem;font-weight:600;cursor:pointer;border:none;opacity:.38;pointer-events:none;transition:all .15s;}
-.btn-next.rdy{opacity:1;pointer-events:all;}
-.btn-next.rdy:hover{background:var(--sage);}
+/* ── Screens ── */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
 
-/* Loading screen */
-#sl{background:var(--ink);align-items:center;justify-content:center;text-align:center;padding:40px 24px;}
-.spin{width:58px;height:58px;border-radius:50%;border:3px solid rgba(91,140,122,.25);border-top-color:var(--sage);margin:0 auto 28px;animation:spin 1s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.l-title{font-family:'Lora',serif;font-size:1.35rem;color:var(--warm);margin-bottom:10px;}
-.l-sub{font-size:.83rem;color:rgba(247,246,243,.48);line-height:1.7;max-width:360px;margin:0 auto;}
-.l-steps{margin-top:28px;display:flex;flex-direction:column;gap:9px;max-width:300px;margin-left:auto;margin-right:auto;}
-.l-step{display:flex;align-items:center;gap:11px;font-size:.8rem;color:rgba(247,246,243,.38);transition:color .3s;text-align:left;}
-.l-step.done{color:var(--sage);}
-.l-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.13);flex-shrink:0;transition:background .3s;}
-.l-step.done .l-dot{background:var(--sage);}
+/* ════════════════════════════════
+   INTRO SCREEN
+════════════════════════════════ */
+#si {
+  background: var(--ink);
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+#si::before {
+  content: '';
+  position: absolute;
+  width: 800px; height: 800px;
+  background: radial-gradient(circle, rgba(91,140,122,.12) 0%, transparent 65%);
+  top: -160px; left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+.ii { max-width: 520px; position: relative; z-index: 1; }
 
-/* Results screen */
-#sr{background:var(--cream);}
-.rh{background:var(--ink);padding:52px 40px 44px;text-align:center;}
-.rh-inner{max-width:580px;margin:0 auto;}
-.r-eye{font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--sage);margin-bottom:10px;}
-.r-profile{font-family:'Lora',serif;font-size:clamp(1.5rem,4vw,2.3rem);font-weight:500;color:var(--warm);margin-bottom:8px;line-height:1.2;}
-.r-tag{font-size:.88rem;color:rgba(247,246,243,.58);line-height:1.75;max-width:420px;margin:0 auto 28px;}
-.score-wrap{display:flex;align-items:center;justify-content:center;gap:24px;margin:8px 0 20px;}
-.score-ring{position:relative;width:110px;height:110px;flex-shrink:0;}
-.score-ring svg{transform:rotate(-90deg);}
-.ring-bg{fill:none;stroke:rgba(255,255,255,.1);stroke-width:8;}
-.ring-fill{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1.4s ease;}
-.score-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Lora',serif;font-size:1.6rem;font-weight:500;color:var(--warm);}
-.score-side{text-align:left;}
-.score-label{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(247,246,243,.4);margin-bottom:6px;}
-.score-desc{font-size:.85rem;color:rgba(247,246,243,.7);line-height:1.6;max-width:220px;}
-.domain-bars{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px;max-width:480px;margin-left:auto;margin-right:auto;text-align:left;}
-.dbar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;}
-.dbar-name{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(247,246,243,.55);}
-.dbar-pct{font-size:.7rem;font-weight:700;color:rgba(247,246,243,.7);}
-.dbar-bg{height:5px;background:rgba(255,255,255,.1);border-radius:5px;overflow:hidden;}
-.dbar-fill{height:100%;border-radius:5px;transition:width 1s ease .3s;}
-.fill-material{background:var(--material);}
-.fill-inner{background:var(--inner);}
-.fill-liveliness{background:var(--live);}
-.fill-connection{background:var(--connect);}
-.rb{max-width:660px;margin:0 auto;padding:40px 24px 60px;}
-.rs-title{font-size:.67rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--sage);margin-bottom:16px;}
-.d-cards{display:flex;flex-direction:column;gap:12px;margin-bottom:36px;}
-.d-card{background:var(--warm);border:1px solid var(--mist);border-radius:14px;padding:20px 22px;}
-.d-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-.d-card-name{font-weight:600;font-size:.88rem;color:var(--ink);display:flex;align-items:center;gap:8px;}
-.d-badge{font-size:.67rem;font-weight:700;padding:3px 10px;border-radius:20px;}
-.badge-critical{background:#FDECEA;color:#C0392B;}
-.badge-high{background:#FEF3E0;color:#D4820A;}
-.badge-mod{background:var(--sage-l);color:var(--sage);}
-.badge-low{background:#EBF5EB;color:#2E7D32;}
-.d-card-bar-bg{height:5px;background:var(--mist);border-radius:5px;overflow:hidden;margin-bottom:12px;}
-.d-card-bar-fill{height:100%;border-radius:5px;transition:width 1s ease .2s;}
-.d-card-insight{font-size:.83rem;color:var(--ink2);line-height:1.68;}
-.insight-box{background:var(--ink);border-radius:16px;padding:26px 28px;margin-bottom:32px;}
-.insight-label{font-size:.66rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--terra);margin-bottom:11px;}
-.insight-txt{font-family:'Lora',serif;font-size:1rem;color:var(--warm);line-height:1.72;font-style:italic;}
-.next-box{border-radius:16px;padding:28px 28px 24px;margin-bottom:28px;border:2px solid transparent;}
-.next-box.material{background:var(--material-l);border-color:#BDD0E8;}
-.next-box.inner{background:var(--inner-l);border-color:#D4B8E4;}
-.next-box.liveliness{background:var(--sage-l);border-color:#C5DDD7;}
-.next-box.connection{background:var(--terra-l);border-color:#E8C4A8;}
-.next-eye{font-size:.65rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px;}
-.next-box.material .next-eye{color:var(--material);}
-.next-box.inner .next-eye{color:var(--inner);}
-.next-box.liveliness .next-eye{color:var(--sage);}
-.next-box.connection .next-eye{color:var(--terra);}
-.next-title{font-family:'Lora',serif;font-size:1.15rem;font-weight:500;color:var(--ink);margin-bottom:8px;line-height:1.3;}
-.next-body{font-size:.85rem;color:var(--ink2);line-height:1.75;margin-bottom:20px;}
-.next-cta{display:inline-block;background:var(--ink);color:var(--cream);padding:13px 26px;border-radius:9px;font-size:.88rem;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:background .15s;text-decoration:none;}
-.next-cta:hover{background:var(--sage);}
-.next-price{font-size:.73rem;color:var(--ink2);margin-top:9px;}
-.next-price strong{color:var(--terra);font-weight:700;}
-.optin{background:var(--warm);border:1px solid var(--mist);border-radius:14px;padding:24px 26px;margin-bottom:20px;text-align:center;}
-.optin h3{font-family:'Lora',serif;font-size:.98rem;font-weight:500;margin-bottom:7px;}
-.optin p{font-size:.82rem;color:var(--ink2);margin-bottom:15px;line-height:1.62;}
-.optin-row{display:flex;gap:8px;max-width:370px;margin:0 auto;}
-.optin-in{flex:1;padding:11px 14px;border:1.5px solid var(--mist-d);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.84rem;background:var(--cream);color:var(--ink);}
-.optin-btn{background:var(--sage);color:#fff;border:none;padding:11px 17px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap;}
-.share-row{text-align:center;padding-top:8px;}
-.share-row p{font-size:.78rem;color:var(--ink2);margin-bottom:10px;}
-.share-btn{background:none;border:1.5px solid var(--mist-d);color:var(--ink2);padding:8px 18px;border-radius:8px;font-size:.78rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin:0 4px;transition:all .15s;}
-.share-btn:hover{border-color:var(--ink);color:var(--ink);}
-.rfooter{text-align:center;padding:0 24px 36px;font-size:.76rem;color:var(--mist-d);}
-.rfooter a{color:var(--sage);text-decoration:none;}
+.i-brand {
+  font-family: var(--display);
+  font-size: .78rem; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--sage);
+  margin-bottom: 40px;
+  display: flex; align-items: center; justify-content: center; gap: .7rem;
+}
+.i-brand::before, .i-brand::after {
+  content: ''; display: block;
+  width: 20px; height: 1px;
+  background: var(--sage); opacity: .5;
+}
 
-@media(max-width:600px){
-  .qh{padding:13px 18px;} .qnav{padding:14px 18px;} .qbody{padding:26px 14px;}
-  .rh{padding:36px 18px 32px;} .rb{padding:26px 14px 48px;}
-  .domain-bars{grid-template-columns:1fr;} .score-wrap{flex-direction:column;gap:14px;}
-  .score-side{text-align:center;} .score-desc{max-width:100%;}
-  .optin-row{flex-direction:column;} .next-box{padding:22px 18px 20px;}
+.i-h1 {
+  font-family: var(--display);
+  font-size: clamp(2.2rem, 5.5vw, 3.2rem);
+  font-weight: 400; color: #FDFCFA;
+  line-height: 1.14; margin-bottom: 24px;
+}
+.i-h1 em { font-style: italic; color: var(--terra); }
+
+.i-sub {
+  font-size: .95rem;
+  color: rgba(247,246,243,.58);
+  line-height: 1.9; margin-bottom: 36px;
+  max-width: 400px; margin-left: auto; margin-right: auto;
+}
+
+.i-domains {
+  display: flex; justify-content: center;
+  gap: 8px; flex-wrap: wrap; margin-bottom: 40px;
+}
+.i-domain {
+  font-size: .68rem; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(247,246,243,.42);
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  padding: 7px 15px; border-radius: 100px;
+}
+
+.i-cta {
+  display: inline-block;
+  background: var(--terra); color: #fff;
+  padding: 17px 40px; border-radius: 12px;
+  font-size: .95rem; font-weight: 600;
+  cursor: pointer; border: none;
+  font-family: var(--body);
+  transition: transform .15s, opacity .15s;
+  letter-spacing: .02em;
+}
+.i-cta:hover { transform: translateY(-2px); opacity: .92; }
+
+.i-time {
+  font-size: .72rem;
+  color: rgba(247,246,243,.28);
+  margin-top: 16px;
+  font-family: var(--display);
+  font-style: italic;
+}
+
+/* ════════════════════════════════
+   QUESTION SCREEN
+════════════════════════════════ */
+#sq { background: var(--cream); }
+
+.qh {
+  padding: 16px 32px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid var(--mist);
+  background: rgba(253,252,250,.97);
+  backdrop-filter: blur(8px);
+  position: sticky; top: 0; z-index: 10;
+}
+.qh-brand {
+  font-family: var(--display);
+  font-size: .8rem; color: var(--sage);
+  letter-spacing: .1em; font-style: italic;
+}
+.qh-right { display: flex; align-items: center; gap: 14px; }
+.pb-bg {
+  width: 120px; height: 3px;
+  background: var(--mist); border-radius: 3px; overflow: hidden;
+}
+.pb-fill {
+  height: 100%; background: var(--sage);
+  border-radius: 3px; transition: width .4s ease; width: 0%;
+}
+.pb-txt {
+  font-size: .68rem; font-weight: 600;
+  color: var(--ink3); white-space: nowrap;
+}
+
+.qbody {
+  flex: 1; display: flex;
+  align-items: center; justify-content: center;
+  padding: 48px 24px;
+}
+.qcard { max-width: 580px; width: 100%; }
+
+/* Domain tag */
+.dtag {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: .65rem; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase;
+  padding: 6px 14px; border-radius: 100px;
+  margin-bottom: 24px;
+}
+.dtag.home     { background: var(--material-l); color: var(--material); }
+.dtag.work     { background: var(--sage-l);      color: var(--sage);     }
+.dtag.self-e   { background: var(--connect-l);   color: var(--connect);  }
+.dtag.self-i   { background: var(--inner-l);     color: var(--inner);    }
+
+.qtxt {
+  font-family: var(--display);
+  font-size: clamp(1.2rem, 3vw, 1.55rem);
+  font-weight: 400; color: var(--ink);
+  line-height: 1.42; margin-bottom: 32px;
+}
+
+.qopts { display: flex; flex-direction: column; gap: 10px; }
+
+.qopt {
+  background: var(--warm);
+  border: 1.5px solid var(--mist);
+  border-radius: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: border-color .15s, background .15s, transform .1s;
+  display: flex; gap: 14px;
+  align-items: flex-start; text-align: left;
+  font-family: var(--body); width: 100%;
+  min-height: 56px; /* touch-friendly */
+}
+.qopt:hover {
+  border-color: var(--sage);
+  background: var(--sage-l);
+  transform: translateX(3px);
+}
+.qopt.sel {
+  border-color: var(--sage);
+  background: var(--sage-l);
+}
+.qopt.sel .radio { background: var(--sage); border-color: var(--sage); }
+.qopt.sel .radio::after { opacity: 1; }
+
+.radio {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid var(--mist-d);
+  flex-shrink: 0; margin-top: 1px;
+  transition: all .15s; position: relative;
+}
+.radio::after {
+  content: '';
+  position: absolute;
+  width: 9px; height: 9px;
+  background: #fff; border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0; transition: opacity .15s;
+}
+.opt-lbl {
+  font-size: .9rem; color: var(--ink2);
+  line-height: 1.55; font-weight: 400;
+  padding-top: 2px;
+}
+
+.qnav {
+  padding: 16px 32px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid var(--mist);
+  background: rgba(253,252,250,.97);
+}
+.btn-back {
+  background: none;
+  border: 1.5px solid var(--mist);
+  color: var(--ink3);
+  padding: 11px 22px; border-radius: 100px;
+  font-family: var(--body); font-size: .82rem;
+  cursor: pointer; min-height: 44px;
+  transition: border-color .15s, color .15s;
+}
+.btn-back:hover:not(:disabled) { border-color: var(--mist-d); color: var(--ink2); }
+.btn-back:disabled { opacity: .3; cursor: default; }
+
+.btn-next {
+  background: var(--ink); color: var(--cream);
+  padding: 12px 28px; border-radius: 100px;
+  font-family: var(--body); font-size: .84rem; font-weight: 500;
+  cursor: pointer; border: none;
+  opacity: .32; pointer-events: none;
+  transition: background .15s, opacity .15s, transform .1s;
+  min-height: 44px; letter-spacing: .03em;
+}
+.btn-next.rdy { opacity: 1; pointer-events: all; }
+.btn-next.rdy:hover { background: var(--sage2); transform: translateY(-1px); }
+
+/* ════════════════════════════════
+   LOADING SCREEN
+════════════════════════════════ */
+#sl {
+  background: var(--ink);
+  align-items: center; justify-content: center;
+  text-align: center; padding: 64px 24px;
+}
+.sl-inner { max-width: 360px; margin: auto; }
+
+.spin {
+  width: 52px; height: 52px; border-radius: 50%;
+  border: 2.5px solid rgba(91,140,122,.22);
+  border-top-color: var(--sage);
+  margin: 0 auto 32px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.l-title {
+  font-family: var(--display);
+  font-size: 1.3rem; font-weight: 400;
+  color: var(--warm); margin-bottom: 10px;
+  font-style: italic;
+}
+.l-sub {
+  font-size: .82rem; color: rgba(247,246,243,.42);
+  line-height: 1.75; max-width: 320px; margin: 0 auto 32px;
+}
+
+.l-steps { display: flex; flex-direction: column; gap: 10px; }
+.l-step {
+  display: flex; align-items: center; gap: 12px;
+  font-size: .79rem; color: rgba(247,246,243,.3);
+  transition: color .4s; text-align: left;
+}
+.l-step.done { color: var(--sage); }
+.l-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,.1); flex-shrink: 0;
+  transition: background .4s;
+}
+.l-step.done .l-dot { background: var(--sage); }
+
+/* ════════════════════════════════
+   RESULTS SCREEN
+════════════════════════════════ */
+#sr { background: var(--cream); }
+
+/* Results hero — dark */
+.rh {
+  background: var(--ink);
+  padding: 56px 40px 48px;
+  text-align: center;
+}
+.rh-inner { max-width: 560px; margin: 0 auto; }
+
+.r-eye {
+  font-size: .62rem; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--sage); margin-bottom: 12px;
+}
+.r-profile {
+  font-family: var(--display);
+  font-size: clamp(1.6rem, 4.5vw, 2.4rem);
+  font-weight: 500; color: var(--warm);
+  margin-bottom: 10px; line-height: 1.18;
+}
+.r-tag {
+  font-size: .9rem; color: rgba(247,246,243,.54);
+  line-height: 1.78; max-width: 400px;
+  margin: 0 auto 32px;
+  font-family: var(--display); font-style: italic;
+}
+
+/* Score ring */
+.score-wrap {
+  display: flex; align-items: center;
+  justify-content: center; gap: 28px;
+  margin: 0 0 28px;
+}
+.score-ring { position: relative; width: 108px; height: 108px; flex-shrink: 0; }
+.score-ring svg { transform: rotate(-90deg); }
+.ring-bg   { fill: none; stroke: rgba(255,255,255,.08); stroke-width: 7; }
+.ring-fill { fill: none; stroke-width: 7; stroke-linecap: round; transition: stroke-dashoffset 1.6s cubic-bezier(.22,1,.36,1); }
+.score-num {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--display);
+  font-size: 1.65rem; font-weight: 500; color: var(--warm);
+}
+.score-side { text-align: left; }
+.score-label {
+  font-size: .62rem; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: rgba(247,246,243,.35); margin-bottom: 8px;
+}
+.score-desc {
+  font-size: .84rem; color: rgba(247,246,243,.65);
+  line-height: 1.65; max-width: 200px;
+  font-family: var(--display); font-style: italic;
+}
+
+/* Domain mini-bars */
+.domain-bars {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; margin-top: 8px;
+  max-width: 480px; margin-left: auto; margin-right: auto;
+  text-align: left;
+}
+.dbar-top {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 6px;
+}
+.dbar-name {
+  font-size: .62rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: rgba(247,246,243,.48);
+}
+.dbar-pct { font-size: .68rem; font-weight: 700; color: rgba(247,246,243,.65); }
+.dbar-bg  { height: 4px; background: rgba(255,255,255,.08); border-radius: 4px; overflow: hidden; }
+.dbar-fill { height: 100%; border-radius: 4px; transition: width 1.2s cubic-bezier(.22,1,.36,1) .3s; }
+.fill-material   { background: var(--material); }
+.fill-inner      { background: var(--inner); }
+.fill-liveliness { background: var(--sage); }
+.fill-connection { background: var(--connect); }
+
+/* Results body */
+.rb {
+  max-width: 640px; margin: 0 auto;
+  padding: 48px 24px 72px;
+}
+
+.rs-title {
+  font-size: .62rem; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--sage); margin-bottom: 18px;
+}
+
+/* Domain cards */
+.d-cards { display: flex; flex-direction: column; gap: 10px; margin-bottom: 40px; }
+
+.d-card {
+  background: var(--warm);
+  border: 1px solid var(--mist);
+  border-radius: 16px; padding: 20px 24px;
+  transition: box-shadow .2s;
+}
+.d-card:hover { box-shadow: 0 4px 20px rgba(26,29,46,.07); }
+
+.d-card-top {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 12px;
+}
+.d-card-name {
+  font-weight: 600; font-size: .9rem;
+  color: var(--ink); display: flex; align-items: center; gap: 8px;
+}
+.d-badge {
+  font-size: .62rem; font-weight: 700;
+  padding: 4px 11px; border-radius: 100px;
+  letter-spacing: .06em; text-transform: uppercase;
+}
+.badge-critical { background: #FDECEA; color: #C0392B; }
+.badge-high     { background: #FEF3E0; color: #D4820A; }
+.badge-mod      { background: var(--sage-l); color: var(--sage2); }
+.badge-low      { background: #EBF5EB; color: #2E7D32; }
+
+.d-card-bar-bg {
+  height: 4px; background: var(--mist);
+  border-radius: 4px; overflow: hidden; margin-bottom: 14px;
+}
+.d-card-bar-fill { height: 100%; border-radius: 4px; transition: width 1.2s cubic-bezier(.22,1,.36,1) .2s; }
+
+.d-card-insight { font-size: .85rem; color: var(--ink2); line-height: 1.72; }
+
+/* Pattern insight box */
+.insight-box {
+  background: var(--ink);
+  border-radius: 18px; padding: 28px 32px;
+  margin-bottom: 16px;
+}
+.insight-label {
+  font-size: .62rem; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--terra); margin-bottom: 14px;
+}
+.insight-txt {
+  font-family: var(--display);
+  font-size: 1.02rem; color: rgba(247,246,243,.82);
+  line-height: 1.82; font-weight: 400;
+}
+
+/* Wisdom box */
+.wisdom-box {
+  background: var(--sage-l);
+  border: 1px solid rgba(91,140,122,.22);
+  border-left: 3px solid var(--sage);
+  border-radius: 0 14px 14px 0;
+  padding: 20px 24px; margin-bottom: 40px;
+}
+.wisdom-label {
+  font-size: .6rem; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--sage2); margin-bottom: 10px;
+}
+.wisdom-txt {
+  font-family: var(--display);
+  font-size: .92rem; font-style: italic;
+  color: var(--ink2); line-height: 1.8;
+}
+.wisdom-txt strong { font-style: normal; font-weight: 500; color: var(--ink); }
+
+/* One clear move box */
+.next-box {
+  border-radius: 18px; padding: 32px;
+  margin-bottom: 32px; border: 1.5px solid transparent;
+}
+.next-box.material   { background: var(--material-l); border-color: #BDD0E8; }
+.next-box.inner      { background: var(--inner-l);    border-color: #D4B8E4; }
+.next-box.liveliness { background: var(--sage-l);     border-color: rgba(91,140,122,.3); }
+.next-box.connection { background: var(--connect-l);  border-color: #E8C4A8; }
+
+.next-eye {
+  font-size: .62rem; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.next-box.material   .next-eye { color: var(--material); }
+.next-box.inner      .next-eye { color: var(--inner); }
+.next-box.liveliness .next-eye { color: var(--sage2); }
+.next-box.connection .next-eye { color: var(--connect); }
+
+.next-title {
+  font-family: var(--display);
+  font-size: 1.18rem; font-weight: 500;
+  color: var(--ink); margin-bottom: 12px; line-height: 1.32;
+}
+.next-body {
+  font-size: .88rem; color: var(--ink2);
+  line-height: 1.82; margin-bottom: 24px;
+}
+
+/* Email capture within next-step */
+.next-form { display: flex; gap: 8px; margin-bottom: 10px; }
+.next-in {
+  flex: 1; min-width: 0;
+  padding: 13px 16px;
+  border: 1.5px solid var(--mist-d);
+  border-radius: 10px;
+  font-family: var(--body); font-size: .88rem;
+  background: var(--warm); color: var(--ink);
+  outline: none; transition: border-color .2s;
+  min-height: 48px;
+}
+.next-in:focus { border-color: var(--sage); }
+.next-in::placeholder { color: var(--ink3); }
+.next-btn {
+  background: var(--ink); color: var(--cream);
+  border: none; padding: 13px 22px;
+  border-radius: 10px;
+  font-family: var(--body); font-size: .84rem; font-weight: 500;
+  cursor: pointer; white-space: nowrap;
+  transition: background .15s, transform .1s;
+  min-height: 48px; letter-spacing: .03em;
+}
+.next-btn:hover { background: var(--sage2); transform: translateY(-1px); }
+.next-note {
+  font-size: .72rem; color: var(--ink3);
+  line-height: 1.5; font-style: italic;
+}
+
+/* Share row */
+.share-row { text-align: center; padding-top: 4px; }
+.share-row p { font-size: .78rem; color: var(--ink3); margin-bottom: 12px; }
+.share-btn {
+  background: none;
+  border: 1.5px solid var(--mist-d);
+  color: var(--ink3); padding: 10px 20px;
+  border-radius: 100px; font-size: .78rem; font-weight: 500;
+  cursor: pointer; font-family: var(--body);
+  margin: 0 4px; transition: all .15s;
+  min-height: 44px;
+}
+.share-btn:hover { border-color: var(--ink); color: var(--ink); }
+
+.rfooter {
+  text-align: center; padding: 0 24px 40px;
+  font-size: .72rem; color: var(--mist-d);
+  font-family: var(--display); font-style: italic;
+}
+.rfooter a { color: var(--sage); text-decoration: none; }
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  #si { padding: 56px 20px; }
+  .i-h1 { font-size: clamp(1.9rem, 8vw, 2.4rem); }
+  .i-cta { padding: 16px 36px; font-size: .9rem; }
+
+  .qh { padding: 13px 16px; }
+  .qbody { padding: 32px 16px; }
+  .qnav { padding: 13px 16px; }
+  .qopt { padding: 14px 16px; }
+  .qtxt { font-size: clamp(1.1rem, 4.5vw, 1.35rem); margin-bottom: 24px; }
+
+  .rh { padding: 40px 20px 36px; }
+  .score-wrap { flex-direction: column; gap: 16px; }
+  .score-side { text-align: center; }
+  .score-desc { max-width: 100%; }
+  .domain-bars { grid-template-columns: 1fr; gap: 10px; }
+
+  .rb { padding: 36px 16px 60px; }
+  .insight-box { padding: 22px 20px; }
+  .next-box { padding: 24px 20px; }
+  .next-form { flex-direction: column; }
+  .next-btn { width: 100%; padding: 14px; }
 }
 </style>
 </head>
 <body>
 
-<!-- Intro -->
+<!-- ── INTRO ── -->
 <div class="screen active" id="si">
   <div class="ii">
     <div class="i-brand">Velani</div>
@@ -186,7 +610,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);l
   </div>
 </div>
 
-<!-- Questions -->
+<!-- ── QUESTIONS ── -->
 <div class="screen" id="sq">
   <div class="qh">
     <div class="qh-brand">Velani Audit</div>
@@ -203,28 +627,28 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);l
     </div>
   </div>
   <div class="qnav">
-    <button class="btn-back" id="bbk" onclick="prev()" disabled>&#8592; Back</button>
-    <button class="btn-next" id="bnx" onclick="next()">Continue &#8594;</button>
+    <button class="btn-back" id="bbk" onclick="prev()" disabled>← Back</button>
+    <button class="btn-next" id="bnx" onclick="next()">Continue →</button>
   </div>
 </div>
 
-<!-- Loading -->
+<!-- ── LOADING ── -->
 <div class="screen" id="sl">
-  <div style="max-width:380px;margin:auto;text-align:center;">
+  <div class="sl-inner">
     <div class="spin"></div>
-    <div class="l-title">Mapping your load&#8230;</div>
+    <div class="l-title">Reading your load…</div>
     <p class="l-sub">Calculating where responsibility has accumulated and where capacity has quietly disappeared.</p>
     <div class="l-steps">
       <div class="l-step" id="ls1"><div class="l-dot"></div>Analysing Home &amp; Family</div>
       <div class="l-step" id="ls2"><div class="l-dot"></div>Analysing Work &amp; Career</div>
       <div class="l-step" id="ls3"><div class="l-dot"></div>Analysing Energy &amp; Body</div>
       <div class="l-step" id="ls4"><div class="l-dot"></div>Analysing Identity &amp; Joy</div>
-      <div class="l-step" id="ls5"><div class="l-dot"></div>Calculating your Capacity Score</div>
+      <div class="l-step" id="ls5"><div class="l-dot"></div>Finding your pattern</div>
     </div>
   </div>
 </div>
 
-<!-- Results -->
+<!-- ── RESULTS ── -->
 <div class="screen" id="sr">
   <div class="rh">
     <div class="rh-inner">
@@ -233,9 +657,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);l
       <div class="r-tag" id="r-tag"></div>
       <div class="score-wrap">
         <div class="score-ring">
-          <svg width="110" height="110" viewBox="0 0 110 110">
-            <circle class="ring-bg" cx="55" cy="55" r="46"/>
-            <circle class="ring-fill" id="ring-fill" cx="55" cy="55" r="46" stroke-dasharray="289" stroke-dashoffset="289"/>
+          <svg width="108" height="108" viewBox="0 0 108 108">
+            <circle class="ring-bg"   cx="54" cy="54" r="45"/>
+            <circle class="ring-fill" id="ring-fill" cx="54" cy="54" r="45" stroke-dasharray="283" stroke-dashoffset="283"/>
           </svg>
           <div class="score-num" id="score-num">--</div>
         </div>
@@ -247,306 +671,445 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);l
       <div class="domain-bars" id="domain-bars"></div>
     </div>
   </div>
+
   <div class="rb">
     <div class="rs-title">Where your load is heaviest</div>
     <div class="d-cards" id="d-cards"></div>
+
     <div class="insight-box">
-      <div class="insight-label">What your score tells us</div>
+      <div class="insight-label">Your pattern</div>
       <div class="insight-txt" id="insight-txt"></div>
     </div>
+
+    <div class="wisdom-box" id="wisdom-box" style="display:none;">
+      <div class="wisdom-label">A small truth worth sitting with</div>
+      <div class="wisdom-txt" id="wisdom-txt"></div>
+    </div>
+
     <div class="rs-title">Your one clear move</div>
     <div id="next-step-box"></div>
-    <div class="optin">
-      <h3>Get the weekly Velani Letter</h3>
-      <p>Each Sunday — warm, honest writing about carrying less and making room for yourself again. Velani Lite PDF included in your first email.</p>
-      <div class="optin-row">
-        <input class="optin-in" type="email" id="oe" placeholder="your@email.com">
-        <button class="optin-btn" onclick="optin()">Join</button>
-      </div>
-    </div>
+
     <div class="share-row">
       <p>Know someone who needs to see this?</p>
       <button class="share-btn" onclick="doShare()">Share this audit</button>
       <button class="share-btn" onclick="start()">Retake</button>
     </div>
   </div>
+
   <div class="rfooter"><a href="https://velani.app">velani.app</a> · Making room for yourself again</div>
 </div>
 
 <script is:inline>
-var Qs=[
-  {felt:'home',tag:'🏠 Home & Family',cls:'home',velani:'connection',
-   q:"How often are you mentally tracking household and family logistics — appointments, groceries, repairs, coordination — even when you're trying to rest?",
+var Qs = [
+  {felt:'home', tag:'🏠 Home & Family', cls:'home', velani:'connection',
+   q:'How often are you mentally tracking household and family logistics — appointments, groceries, repairs, coordination — even when you’re trying to rest?',
    opts:[
-     {l:"Rarely — home runs without much mental effort from me",s:1},
-     {l:"Sometimes — I notice it but it stays manageable",s:2},
-     {l:"Often — it lives in the background even when I'm at work or with friends",s:3},
-     {l:"Almost always — it's one of the loudest things in my head",s:4}
+     {l:'Rarely — home runs without much mental effort from me', s:1},
+     {l:'Sometimes — I notice it but it stays manageable', s:2},
+     {l:'Often — it lives in the background even when I’m at work or with friends', s:3},
+     {l:'Almost always — it’s one of the loudest things in my head', s:4}
    ]},
-  {felt:'home',tag:'🏠 Home & Family',cls:'home',velani:'connection',
-   q:"Beyond your own needs, how many people's emotional, practical, or logistical needs filter through you on a regular basis?",
+  {felt:'home', tag:'🏠 Home & Family', cls:'home', velani:'connection',
+   q:'Beyond your own needs, how many people’s emotional, practical, or logistical needs filter through you on a regular basis?',
    opts:[
-     {l:"Mostly my own — I'm in a fairly independent season",s:1},
-     {l:"1–2 people — meaningful and manageable",s:2},
-     {l:"3–4 people — children, partner, parents, or others",s:3},
-     {l:"5 or more — I'm the person everyone brings things to",s:4}
+     {l:'Mostly my own — I’m in a fairly independent season', s:1},
+     {l:'1–2 people — meaningful and manageable', s:2},
+     {l:'3–4 people — children, partner, parents, or others', s:3},
+     {l:'5 or more — I’m the person everyone brings things to', s:4}
    ]},
-  {felt:'home',tag:'🏠 Home & Family',cls:'home',velani:'connection',
-   q:"When you think about your relationships and family responsibilities overall, how do they feel?",
+  {felt:'home', tag:'🏠 Home & Family', cls:'home', velani:'connection',
+   q:'When you think about your relationships and family responsibilities overall, how do they feel?',
    opts:[
-     {l:"Nourishing — they give me energy more than they take it",s:1},
-     {l:"Meaningful but tiring — I love them, it's just a lot",s:2},
-     {l:"Heavy — I often feel like I'm keeping everyone else afloat",s:3},
-     {l:"Depleting — there's nothing left after meeting everyone else's needs",s:4}
+     {l:'Nourishing — they give me energy more than they take it', s:1},
+     {l:'Meaningful but tiring — I love them, it’s just a lot', s:2},
+     {l:'Heavy — I often feel like I’m keeping everyone else afloat', s:3},
+     {l:'Depleting — there’s nothing left after meeting everyone else’s needs', s:4}
    ]},
-  {felt:'work',tag:'💼 Work & Career',cls:'work',velani:'material',
-   q:"How much of your mental energy outside work hours is spent thinking about work — open projects, emails, unfinished things?",
+  {felt:'work', tag:'💼 Work & Career', cls:'work', velani:'material',
+   q:'How much of your mental energy outside work hours is spent thinking about work — open projects, emails, unfinished things?',
    opts:[
-     {l:"Very little — I can switch off reasonably well",s:1},
-     {l:"Some — work thoughts appear occasionally outside hours",s:2},
-     {l:"A lot — work follows me into evenings and weekends",s:3},
-     {l:"Constantly — I barely remember what it felt like to not think about work",s:4}
+     {l:'Very little — I can switch off reasonably well', s:1},
+     {l:'Some — work thoughts appear occasionally outside hours', s:2},
+     {l:'A lot — work follows me into evenings and weekends', s:3},
+     {l:'Constantly — I barely remember what it felt like to not think about work', s:4}
    ]},
-  {felt:'work',tag:'💼 Work & Career',cls:'work',velani:'material',
-   q:"Think about unfinished things at work — decisions pending, conversations delayed, tasks half-done. How many open loops are you carrying right now?",
+  {felt:'work', tag:'💼 Work & Career', cls:'work', velani:'material',
+   q:'Think about unfinished things at work — decisions pending, conversations delayed, tasks half-done. How many open loops are you carrying right now?',
    opts:[
-     {l:"A few — nothing that keeps me up at night",s:1},
-     {l:"A moderate amount — I know what they are",s:2},
-     {l:"A lot — more than I can clearly name right now",s:3},
-     {l:"So many I've stopped counting — it's background noise I live with",s:4}
+     {l:'A few — nothing that keeps me up at night', s:1},
+     {l:'A moderate amount — I know what they are', s:2},
+     {l:'A lot — more than I can clearly name right now', s:3},
+     {l:'So many I’ve stopped counting — it’s background noise I live with', s:4}
    ]},
-  {felt:'self-e',tag:'⚡ Energy & Body',cls:'self-e',velani:'liveliness',
-   q:"How would you describe your physical and emotional energy most days?",
+  {felt:'self-e', tag:'⚡ Energy & Body', cls:'self-e', velani:'liveliness',
+   q:'How would you describe your physical and emotional energy most days?',
    opts:[
-     {l:"Generally good — I feel like myself most of the time",s:1},
-     {l:"Variable — some good days, some depleted ones",s:2},
-     {l:"Often low — I'm running on less than I need",s:3},
-     {l:"Persistently depleted — I don't remember what full energy feels like",s:4}
+     {l:'Generally good — I feel like myself most of the time', s:1},
+     {l:'Variable — some good days, some depleted ones', s:2},
+     {l:'Often low — I’m running on less than I need', s:3},
+     {l:'Persistently depleted — I don’t remember what full energy feels like', s:4}
    ]},
-  {felt:'self-e',tag:'⚡ Energy & Body',cls:'self-e',velani:'liveliness',
-   q:"How well are you protecting the basics that restore your energy — sleep, movement, time alone, genuine rest?",
+  {felt:'self-e', tag:'⚡ Energy & Body', cls:'self-e', velani:'liveliness',
+   q:'How well are you protecting the basics that restore your energy — sleep, movement, time alone, genuine rest?',
    opts:[
-     {l:"Well — these feel like non-negotiables I protect",s:1},
-     {l:"Okay — I get most of them most of the time",s:2},
-     {l:"Poorly — they're the first things I cut when life gets full",s:3},
-     {l:"Not at all — I've been running on empty for a long time",s:4}
+     {l:'Well — these feel like non-negotiables I protect', s:1},
+     {l:'Okay — I get most of them most of the time', s:2},
+     {l:'Poorly — they’re the first things I cut when life gets full', s:3},
+     {l:'Not at all — I’ve been running on empty for a long time', s:4}
    ]},
-  {felt:'self-i',tag:'✦ Identity & Joy',cls:'self-i',velani:'inner',
-   q:"When did you last do something that was entirely for you — not productive, not for anyone else, just something that felt like you?",
+  {felt:'self-i', tag:'✦ Identity & Joy', cls:'self-i', velani:'inner',
+   q:'When did you last do something that was entirely for you — not productive, not for anyone else, just something that felt like you?',
    opts:[
-     {l:"Recently — I make time for this fairly regularly",s:1},
-     {l:"A few weeks ago — it happens but not as often as I'd like",s:2},
-     {l:"A while ago — I can't quite remember the last real one",s:3},
-     {l:"I honestly can't remember — it's become very rare",s:4}
+     {l:'Recently — I make time for this fairly regularly', s:1},
+     {l:'A few weeks ago — it happens but not as often as I’d like', s:2},
+     {l:'A while ago — I can’t quite remember the last real one', s:3},
+     {l:'I honestly can’t remember — it’s become very rare', s:4}
    ]},
-  {felt:'self-i',tag:'✦ Identity & Joy',cls:'self-i',velani:'inner',
-   q:"How connected do you feel to the version of yourself that existed before all the responsibility accumulated?",
+  {felt:'self-i', tag:'✦ Identity & Joy', cls:'self-i', velani:'inner',
+   q:'How connected do you feel to the version of yourself that existed before all the responsibility accumulated?',
    opts:[
-     {l:"Pretty connected — she's still here, I hear from her regularly",s:1},
-     {l:"Somewhat — I catch glimpses of her occasionally",s:2},
-     {l:"Barely — I know she's in there somewhere but she's quiet",s:3},
-     {l:"Completely disconnected — I'm not sure I know who she is anymore",s:4}
+     {l:'Pretty connected — she’s still here, I hear from her regularly', s:1},
+     {l:'Somewhat — I catch glimpses of her occasionally', s:2},
+     {l:'Barely — I know she’s in there somewhere but she’s quiet', s:3},
+     {l:'Completely disconnected — I’m not sure I know who she is anymore', s:4}
    ]},
-  {felt:'self-i',tag:'✦ Identity & Joy',cls:'self-i',velani:'inner',
-   q:"Beauty, curiosity, creativity, spontaneity — the parts of life that feel alive rather than productive. How present are these in your daily life?",
+  {felt:'self-i', tag:'✦ Identity & Joy', cls:'self-i', velani:'inner',
+   q:'Beauty, curiosity, creativity, spontaneity — the parts of life that feel alive rather than productive. How present are these in your daily life?',
    opts:[
-     {l:"Present and protected — they're part of how I live",s:1},
-     {l:"Occasional — I catch them in small moments",s:2},
-     {l:"Rare — they feel like luxuries I'll get back to someday",s:3},
-     {l:"Almost absent — life has become mostly maintenance",s:4}
-   ]},
+     {l:'Present and protected — they’re part of how I live', s:1},
+     {l:'Occasional — I catch them in small moments', s:2},
+     {l:'Rare — they feel like luxuries I’ll get back to someday', s:3},
+     {l:'Almost absent — life has become mostly maintenance', s:4}
+   ]}
 ];
 
-var cur=0,ans=new Array(Qs.length).fill(null);
+var cur = 0, ans = new Array(Qs.length).fill(null), lastResult = null;
 
-function show(id){
-  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+function show(id) {
+  var ss = document.querySelectorAll('.screen');
+  for (var i = 0; i < ss.length; i++) ss[i].classList.remove('active');
   document.getElementById(id).classList.add('active');
-  window.scrollTo(0,0);
+  window.scrollTo(0, 0);
 }
 
-function start(){cur=0;ans=new Array(Qs.length).fill(null);render();show('sq');}
+function start() {
+  cur = 0;
+  ans = new Array(Qs.length).fill(null);
+  render();
+  show('sq');
+}
 
-function render(){
-  var q=Qs[cur],tot=Qs.length;
-  document.getElementById('pb').style.width=(cur/tot*100)+'%';
-  document.getElementById('pb-txt').textContent=(cur+1)+' of '+tot;
-  var tag=document.getElementById('dtag');tag.textContent=q.tag;tag.className='dtag '+q.cls;
-  document.getElementById('qtxt').textContent=q.q;
-  var c=document.getElementById('qopts');c.innerHTML='';
-  q.opts.forEach(function(o,i){
-    var b=document.createElement('button');
-    b.className='qopt'+(ans[cur]===i?' sel':'');
-    b.innerHTML='<div class="radio"></div><div class="opt-lbl">'+o.l+'</div>';
-    b.onclick=(function(idx){return function(){pick(idx);};})(i);
-    c.appendChild(b);
-  });
-  document.getElementById('bbk').disabled=cur===0;
+function render() {
+  var q = Qs[cur], tot = Qs.length;
+  document.getElementById('pb').style.width = (cur / tot * 100) + '%';
+  document.getElementById('pb-txt').textContent = (cur + 1) + ' of ' + tot;
+  var tag = document.getElementById('dtag');
+  tag.textContent = q.tag;
+  tag.className = 'dtag ' + q.cls;
+  document.getElementById('qtxt').textContent = q.q;
+  var c = document.getElementById('qopts');
+  c.innerHTML = '';
+  for (var i = 0; i < q.opts.length; i++) {
+    (function(i) {
+      var b = document.createElement('button');
+      b.className = 'qopt' + (ans[cur] === i ? ' sel' : '');
+      b.innerHTML = '<div class="radio"></div><div class="opt-lbl">' + q.opts[i].l + '</div>';
+      b.onclick = function() { pick(i); };
+      c.appendChild(b);
+    })(i);
+  }
+  document.getElementById('bbk').disabled = cur === 0;
   updNext();
 }
 
-function pick(i){
-  ans[cur]=i;
-  document.querySelectorAll('.qopt').forEach(function(el,j){
-    var on=j===i;
-    el.classList.toggle('sel',on);
-    var r=el.querySelector('.radio');
-    r.style.background=on?'var(--sage)':'';
-    r.style.borderColor=on?'var(--sage)':'';
-  });
+function pick(i) {
+  ans[cur] = i;
+  var els = document.querySelectorAll('.qopt');
+  for (var j = 0; j < els.length; j++) {
+    var on = j === i;
+    els[j].classList.toggle('sel', on);
+    var r = els[j].querySelector('.radio');
+    r.style.background   = on ? 'var(--sage)' : '';
+    r.style.borderColor  = on ? 'var(--sage)' : '';
+  }
   updNext();
-  setTimeout(function(){
-    if(ans[cur]!==null&&document.getElementById('bnx').classList.contains('rdy'))next();
-  },550);
+  setTimeout(function() {
+    if (ans[cur] !== null && document.getElementById('bnx').classList.contains('rdy')) next();
+  }, 500);
 }
 
-function updNext(){
-  var b=document.getElementById('bnx');
-  b.textContent=cur===Qs.length-1?'See my Capacity Score →':'Continue →';
-  ans[cur]!==null?b.classList.add('rdy'):b.classList.remove('rdy');
+function updNext() {
+  var b = document.getElementById('bnx');
+  b.textContent = cur === Qs.length - 1 ? 'See my Capacity Score →' : 'Continue →';
+  if (ans[cur] !== null) b.classList.add('rdy');
+  else b.classList.remove('rdy');
 }
 
-function next(){if(ans[cur]===null)return;if(cur<Qs.length-1){cur++;render();}else{loading();}}
-function prev(){if(cur>0){cur--;render();}}
+function next() {
+  if (ans[cur] === null) return;
+  if (cur < Qs.length - 1) { cur++; render(); }
+  else loading();
+}
+function prev() { if (cur > 0) { cur--; render(); } }
 
-function loading(){
+function loading() {
   show('sl');
-  var ids=['ls1','ls2','ls3','ls4','ls5'];
-  ids.forEach(function(id){document.getElementById(id).classList.remove('done');});
-  var i=0;
-  var t=setInterval(function(){
-    if(i<ids.length){document.getElementById(ids[i]).classList.add('done');i++;}
-    else{clearInterval(t);setTimeout(function(){buildResults();show('sr');},350);}
-  },400);
+  var ids = ['ls1','ls2','ls3','ls4','ls5'];
+  for (var k = 0; k < ids.length; k++) document.getElementById(ids[k]).classList.remove('done');
+  var i = 0;
+  var t = setInterval(function() {
+    if (i < ids.length) { document.getElementById(ids[i]).classList.add('done'); i++; }
+    else { clearInterval(t); setTimeout(function() { buildResults(); show('sr'); }, 350); }
+  }, 400);
 }
 
-function buildResults(){
-  var vm={
-    connection:{label:'Connection',emoji:'🤝',score:0,max:0},
-    material:{label:'Material',emoji:'💼',score:0,max:0},
-    liveliness:{label:'Liveliness',emoji:'⚡',score:0,max:0},
-    inner:{label:'Inner',emoji:'✦',score:0,max:0}
+function buildResults() {
+  var vm = {
+    connection: {label:'Connection', emoji:'🤝', score:0, max:0},
+    material:   {label:'Material',   emoji:'💼', score:0, max:0},
+    liveliness: {label:'Liveliness', emoji:'⚡', score:0, max:0},
+    inner:      {label:'Inner',      emoji:'✦',  score:0, max:0}
   };
-  Qs.forEach(function(q,i){var s=ans[i]||0;vm[q.velani].score+=q.opts[s].s;vm[q.velani].max+=4;});
-  var tS=0,tM=0;
-  Object.keys(vm).forEach(function(k){tS+=vm[k].score;tM+=vm[k].max;});
-  var capScore=100-Math.round(tS/tM*100);
-  var prof=profile(capScore);
-  document.getElementById('r-profile').textContent=prof.name;
-  document.getElementById('r-tag').textContent=prof.tag;
-  document.getElementById('score-num').textContent=capScore;
-  document.getElementById('score-desc').textContent=prof.scoreDesc;
-  var fill=document.getElementById('ring-fill');
-  fill.style.stroke=prof.ringColor;
-  setTimeout(function(){fill.style.strokeDashoffset=289-(289*capScore/100);},150);
+  for (var i = 0; i < Qs.length; i++) {
+    var s = ans[i] == null ? 0 : ans[i];
+    vm[Qs[i].velani].score += Qs[i].opts[s].s;
+    vm[Qs[i].velani].max   += 4;
+  }
+  var tS = 0, tM = 0;
+  for (var k in vm) { tS += vm[k].score; tM += vm[k].max; }
+  var capScore = 100 - Math.round(tS / tM * 100);
 
-  var barsEl=document.getElementById('domain-bars');barsEl.innerHTML='';
-  Object.keys(vm).forEach(function(key){
-    var d=vm[key];var dp=Math.round(d.score/d.max*100);
-    barsEl.innerHTML+='<div><div class="dbar-top"><span class="dbar-name">'+d.emoji+' '+d.label+'</span><span class="dbar-pct">'+dp+'%</span></div><div class="dbar-bg"><div class="dbar-fill fill-'+key+'" style="width:0%" data-w="'+dp+'%"></div></div></div>';
-  });
-  setTimeout(function(){document.querySelectorAll('.dbar-fill').forEach(function(el){el.style.width=el.dataset.w;});},200);
+  var dp = {};
+  for (var k in vm) dp[k] = Math.round(vm[k].score / vm[k].max * 100);
 
-  var sorted=Object.keys(vm).map(function(k){var d=vm[k];return {key:k,label:d.label,emoji:d.emoji,score:d.score,max:d.max,pct:Math.round(d.score/d.max*100)};}).sort(function(a,b){return b.pct-a.pct;});
-  var dc=document.getElementById('d-cards');dc.innerHTML='';
-  sorted.forEach(function(d){
-    var lv=level(d.pct);
-    dc.innerHTML+='<div class="d-card"><div class="d-card-top"><div class="d-card-name">'+d.emoji+' '+d.label+'</div><div class="d-badge '+lv.cls+'">'+lv.label+'</div></div><div class="d-card-bar-bg"><div class="d-card-bar-fill fill-'+d.key+'" style="width:0%" data-w="'+d.pct+'%"></div></div><div class="d-card-insight">'+domainInsight(d.key,d.pct)+'</div></div>';
-  });
-  setTimeout(function(){document.querySelectorAll('.d-card-bar-fill').forEach(function(el){el.style.width=el.dataset.w;});},300);
+  var pat = detectPattern(dp, capScore);
+  lastResult = {cap: capScore, pattern: pat.id, name: pat.name};
 
-  document.getElementById('insight-txt').textContent=prof.insight;
-  document.getElementById('next-step-box').innerHTML=nextStep(sorted[0].key);
+  document.getElementById('r-profile').textContent  = pat.name;
+  document.getElementById('r-tag').textContent       = pat.tag;
+  document.getElementById('score-num').textContent   = capScore;
+  document.getElementById('score-desc').textContent  = pat.scoreDesc;
+
+  var fill = document.getElementById('ring-fill');
+  fill.style.stroke = pat.ringColor;
+  setTimeout(function() { fill.style.strokeDashoffset = 283 - (283 * capScore / 100); }, 150);
+
+  // Domain mini-bars
+  var barsEl = document.getElementById('domain-bars');
+  barsEl.innerHTML = '';
+  var order = ['connection','material','liveliness','inner'];
+  for (var b = 0; b < order.length; b++) {
+    var key = order[b], d = vm[key];
+    barsEl.innerHTML += '<div><div class="dbar-top"><span class="dbar-name">' + d.emoji + ' ' + d.label + '</span><span class="dbar-pct">' + dp[key] + '%</span></div><div class="dbar-bg"><div class="dbar-fill fill-' + key + '" style="width:0%" data-w="' + dp[key] + '%"></div></div></div>';
+  }
+  setTimeout(function() {
+    var fs = document.querySelectorAll('.dbar-fill');
+    for (var f = 0; f < fs.length; f++) fs[f].style.width = fs[f].dataset.w;
+  }, 200);
+
+  // Sorted domain cards
+  var sorted = [];
+  for (var k in vm) sorted.push({key:k, label:vm[k].label, emoji:vm[k].emoji, pct:dp[k]});
+  sorted.sort(function(a, b) { return b.pct - a.pct; });
+
+  var dc = document.getElementById('d-cards');
+  dc.innerHTML = '';
+  for (var c = 0; c < sorted.length; c++) {
+    var d = sorted[c], lv = level(d.pct);
+    dc.innerHTML += '<div class="d-card"><div class="d-card-top"><div class="d-card-name">' + d.emoji + ' ' + d.label + '</div><div class="d-badge ' + lv.cls + '">' + lv.label + '</div></div><div class="d-card-bar-bg"><div class="d-card-bar-fill fill-' + d.key + '" style="width:0%" data-w="' + d.pct + '%"></div></div><div class="d-card-insight">' + domainInsight(d.key, d.pct) + '</div></div>';
+  }
+  setTimeout(function() {
+    var fs = document.querySelectorAll('.d-card-bar-fill');
+    for (var f = 0; f < fs.length; f++) fs[f].style.width = fs[f].dataset.w;
+  }, 300);
+
+  document.getElementById('insight-txt').textContent = pat.insight;
+
+  if (pat.wisdom) {
+    document.getElementById('wisdom-box').style.display = 'block';
+    document.getElementById('wisdom-txt').innerHTML = pat.wisdom;
+  } else {
+    document.getElementById('wisdom-box').style.display = 'none';
+  }
+
+  document.getElementById('next-step-box').innerHTML = nextStep(sorted[0].key, pat);
 }
 
-function profile(cap){
-  if(cap<=30)return{
-    name:'Carrying at Capacity',
-    tag:"You're running on very little reserve. The invisible load is significant — and it's time to put some things down.",
-    scoreDesc:"Very little capacity remaining. Rest is not a reward — it's a requirement.",
-    ringColor:'#E57373',
-    insight:"Your score shows that responsibility has accumulated across almost every domain of your life. This is not a discipline problem or a time management problem. It's an accumulation problem — and it's been building for a long time. The most important first move is not to add another system. It's to name what you're carrying and decide what you're willing to stop carrying first."
-  };
-  if(cap<=50)return{
-    name:'High Invisible Load',
-    tag:"You're carrying more than most people see — and it's quietly consuming capacity you could use for yourself.",
-    scoreDesc:"Capacity significantly reduced. You're functioning, but not freely.",
+/* ── Pattern detection ── */
+function detectPattern(dp, cap) {
+  var m = dp.material, c = dp.connection, l = dp.liveliness, n = dp.inner;
+  var HIGH = 60;
+  if (cap >= 70) return PATTERNS.carryingWell;
+  if (m >= HIGH && c >= HIGH && (l >= HIGH || n >= HIGH)) return PATTERNS.runningEmpty;
+  if (m >= HIGH && n >= HIGH && c < HIGH) return PATTERNS.successWithoutSelf;
+  if (m >= HIGH && n >= HIGH) return PATTERNS.successWithoutSelf;
+  if (c >= HIGH && l >= HIGH) return PATTERNS.endlessPour;
+  if (c >= HIGH && c >= m && c >= n) return PATTERNS.endlessPour;
+  if (n >= HIGH && m < HIGH && c < HIGH) return PATTERNS.quietDisappearance;
+  if (n >= HIGH && n >= m && n >= c) return PATTERNS.quietDisappearance;
+  return PATTERNS.holdingTogether;
+}
+
+var PATTERNS = {
+  successWithoutSelf: {
+    id:'success-without-self', name:'Success Without Self',
     ringColor:'#FFB74D',
-    insight:"Your score reveals a significant invisible load across multiple domains. You've found ways to keep things moving, but the cost is real — less energy, less presence, less of you available for what actually matters. The good news: your heaviest domain is clear, and targeted change there creates more relief than trying to fix everything at once."
-  };
-  if(cap<=70)return{
-    name:'Moderate Accumulation',
-    tag:"You're managing — but managing has become the ceiling. There's more space available than you're currently accessing.",
-    scoreDesc:"Moderate capacity remaining. More is possible than you're currently experiencing.",
+    tag:'You’re succeeding at everything — except being yourself.',
+    scoreDesc:'Capacity is going to performance. Little is left for you.',
+    insight:'Here’s the pattern your answers reveal: you’re carrying your career and your responsibilities at a high level — and from the outside, it looks like you’re doing well. But the version of you that exists underneath all that achievement has gone quiet. You’ve been succeeding at everything except being yourself. That’s not a small thing. It’s often the most invisible load of all, because nobody sees it — including, sometimes, you.',
+    wisdom:'Most of us give our sharpest, most present selves to work and to people we barely know — and bring home whatever’s left. <strong>The people closest to you, and you yourself, deserve more than your leftovers.</strong> This is the quiet reordering Velani helps you make.',
+    domain:'inner'
+  },
+  endlessPour: {
+    id:'endless-pour', name:'The Endless Pour',
+    ringColor:'#E57373',
+    tag:'You’re pouring into everyone — and there’s little left for you.',
+    scoreDesc:'You give and give. Your own reserves run low.',
+    insight:'Your answers show a clear pattern: you are holding a great deal for the people in your life — emotionally, practically, logistically — and it’s drawing down the energy you need for yourself. You’re the one who keeps everyone afloat. The cost is that your own body and spirit are running on what’s left after everyone else is taken care of. This is the pattern of a deeply caring woman who has quietly stopped being on her own list.',
+    wisdom:'There’s an order to care that most of us have upside down. We pour our best into acquaintances and the wider world, and give our closest people — partner, children, parents, and ourselves — whatever remains. <strong>You belong on your own list. Not last. On it.</strong>',
+    domain:'liveliness'
+  },
+  runningEmpty: {
+    id:'running-on-empty', name:'Running on Empty',
+    ringColor:'#E57373',
+    tag:'You’re the load-bearing wall of everyone’s life — and you’re exhausted.',
+    scoreDesc:'Very little capacity remains. This is not sustainable.',
+    insight:'Your answers reveal the most demanding pattern of all: you’re carrying work and family at full capacity, while your own body and inner life get almost nothing. You are the load-bearing wall holding up everyone around you — and load-bearing walls don’t get to rest. This isn’t a discipline problem or a time-management problem. You’re carrying more than any one person should, and it has been this way for a while. The first move is not to carry it better. It’s to put something down.',
+    wisdom:'Here’s a truth worth sitting with: we tend to give our best energy outward — to work, to others, to everyone who needs us — and leave ourselves for last. <strong>You cannot be the wall that holds everyone up if no one, including you, is holding you.</strong>',
+    domain:'liveliness'
+  },
+  quietDisappearance: {
+    id:'quiet-disappearance', name:'The Quiet Disappearance',
+    ringColor:'#FFB74D',
+    tag:'On paper, everything is manageable. So why does it feel like you’ve lost yourself?',
+    scoreDesc:'Your practical life works. Your inner life has gone quiet.',
+    insight:'Your answers reveal something subtle and important: your practical life is actually fairly manageable — work isn’t crushing you, your responsibilities are under control. And yet you’ve quietly lost touch with yourself. This is the pattern that’s hardest to explain to anyone, because nothing is visibly wrong. There’s no crisis to point to. Just a slow fade — the curiosity, the spontaneity, the sense of being fully yourself, all gone quiet. You haven’t broken down. You’ve disappeared a little. And that deserves attention precisely because nothing is forcing it to.',
+    wisdom:'Sometimes the most important thing missing isn’t time or energy — it’s <strong>you</strong>. Not the version that performs and provides, but the one underneath. She’s still there. She’s just been waiting to be made room for.',
+    domain:'inner'
+  },
+  holdingTogether: {
+    id:'holding-it-together', name:'Holding It Together',
     ringColor:'#5B8C7A',
-    insight:"You're holding things together well, but the weight of accumulated responsibility is present. There's enough capacity to start making deliberate changes — and your results show exactly where to start. The shift from managing to actually living happens in the domain where your load is heaviest."
-  };
-  return{
-    name:'Carrying Well',
-    tag:"Your load is relatively light right now. This is a good time to protect the space you have — deliberately.",
-    scoreDesc:'Good capacity remaining. The risk now is gradual accumulation, not crisis.',
+    tag:'You’re managing — but managing has quietly become the ceiling.',
+    scoreDesc:'Moderate load across the board. More is possible than you’re living.',
+    insight:'Your answers show a fairly even load — no single domain is in crisis, but the cumulative weight is real. You’re holding it together, and you’re good at it. The risk in your pattern isn’t collapse. It’s that “holding it together” quietly becomes the ceiling of your life — that managing replaces living, and the space for possibility, beauty, and yourself slowly shrinks without anything dramatic ever happening. You have enough capacity to change this. The question is whether you’ll use it deliberately, before the load grows.',
+    wisdom:'The load rarely announces itself. It accumulates quietly — a yes here, a responsibility there — until “fine but tired” becomes normal. <strong>Noticing it now, while you still have room, is the whole advantage.</strong>',
+    domain:null
+  },
+  carryingWell: {
+    id:'carrying-well', name:'Carrying Well',
     ringColor:'#81C784',
-    insight:"You're in a more spacious season than many. What got you here is worth protecting. The most important move now is making the structures that create this space more intentional — so they hold even when life gets fuller, which it will."
-  };
+    tag:'You have room right now. That’s rare — and worth protecting.',
+    scoreDesc:'Good capacity remaining. The work now is keeping it.',
+    insight:'Your answers show something genuinely good: you’re carrying well right now. You have real capacity, your load is relatively light, and the structures in your life are working. This is rarer than you might think, and it’s worth naming honestly — you don’t need rescuing. What’s true, though, is that capacity erodes quietly. Responsibility accumulates when we’re not watching, and the women who stay spacious are the ones who protect it deliberately, before the next busy season fills the room. You’re in a strong place. The work now is simply keeping it that way.',
+    wisdom:null,
+    domain:null
+  }
+};
+
+function level(pct) {
+  if (pct >= 70) return {label:'Critical',   cls:'badge-critical'};
+  if (pct >= 55) return {label:'Heavy',      cls:'badge-high'};
+  if (pct >= 40) return {label:'Moderate',   cls:'badge-mod'};
+  return              {label:'Manageable', cls:'badge-low'};
 }
 
-function level(pct){
-  if(pct>=80)return{label:'Critical',cls:'badge-critical'};
-  if(pct>=60)return{label:'Heavy',cls:'badge-high'};
-  if(pct>=40)return{label:'Moderate',cls:'badge-mod'};
-  return{label:'Manageable',cls:'badge-low'};
-}
-
-function domainInsight(key,pct){
-  var ins={
-    connection:{
-      h:"Your Connection domain is carrying the most weight. You're holding significant emotional, logistical, and relational responsibility for others — and the mental overhead of coordinating everyone else's lives is quietly consuming the energy you need for your own.",
-      m:"Connection responsibility is real and present. The invisible coordination work is there even if it's not yet overwhelming.",
-      l:"Connection feels relatively balanced. You're caring for people without losing yourself in the process."
+function domainInsight(key, pct) {
+  var ins = {
+    connection: {
+      h:'You’re holding significant emotional and logistical responsibility for others. The mental overhead of coordinating everyone else’s lives is consuming energy you need for your own.',
+      m:'Connection responsibility is present. The invisible coordination work is there, even if it’s not yet overwhelming.',
+      l:'Connection feels relatively balanced. You’re caring for people without losing yourself in it.'
     },
-    material:{
-      h:"Your Material domain is significantly consuming your capacity. Work is following you home, and open loops are draining attention even when you're not at your desk.",
-      m:"Career load is present and real. There are likely specific open loops worth closing.",
-      l:"Work isn't your primary source of invisible load right now."
+    material: {
+      h:'Work is following you home. The open loops and career responsibility are draining attention even when you’re not at your desk.',
+      m:'Career load is real but contained. There are likely specific loops worth closing.',
+      l:'Work isn’t your primary source of invisible load right now.'
     },
-    liveliness:{
-      h:"Your Liveliness domain shows significant depletion. The basics that restore energy — sleep, movement, rest — have been consistently deprioritised. This isn't about discipline. It's about what gets cut when everything else fills up.",
-      m:"Energy and body care are present but not well protected. Worth noticing before they deplete further.",
-      l:"You're doing a reasonable job of protecting your physical energy and restoration."
+    liveliness: {
+      h:'The basics that restore you — sleep, movement, rest — have been consistently deprioritised. This is about what gets cut when everything else fills up.',
+      m:'Energy and body care are present but not well protected. Worth noticing before they erode further.',
+      l:'You’re protecting your physical energy reasonably well.'
     },
-    inner:{
-      h:"Your Inner domain shows the most significant depletion. The version of you that existed before all the responsibility accumulated has become quiet. This is often the last thing women notice and the first thing that needs attention.",
-      m:"Your Inner life is present but not consistently nourished. The things that feel like you are occasional rather than woven into daily life.",
-      l:"You have reasonable connection to your own identity and what brings you alive. Worth protecting."
+    inner: {
+      h:'The version of you that exists beyond responsibility has gone quiet. This is often the last thing women notice — and the first thing that needs attention.',
+      m:'Your inner life is present but not consistently nourished. The things that feel like you are occasional rather than woven in.',
+      l:'You have reasonable connection to your own identity and what brings you alive.'
     }
   };
-  var d=ins[key];return pct>=60?d.h:pct>=40?d.m:d.l;
+  var d = ins[key];
+  return pct >= 55 ? d.h : pct >= 40 ? d.m : d.l;
 }
 
-function nextStep(key){
-  var steps={
-    connection:{cls:'connection',eye:'Your heaviest domain: Connection',title:'Make room for yourself inside the relationships that need you most.',body:"The Velani Companion walks you through a guided 30-day experience starting with your Connection domain — helping you see what you're carrying, what can be redistributed, and how to show up fully for others without disappearing in the process.",cta:'Get the Velani Companion →',price:'One-time · <strong>$29</strong> · Instant access'},
-    material:{cls:'material',eye:'Your heaviest domain: Material',title:'Close the loops that are following you home.',body:"The Velani Companion starts where your score is heaviest — your career and the invisible mental load of unfinished work. Over 30 days, it walks you through a daily structure that closes open loops, protects your attention, and creates a cleaner separation between work and the rest of your life.",cta:'Get the Velani Companion →',price:'One-time · <strong>$29</strong> · Instant access'},
-    liveliness:{cls:'liveliness',eye:'Your heaviest domain: Liveliness',title:'Restore the energy that everything else in your life runs on.',body:"The Velani Companion begins with your Liveliness domain — the sleep, movement, rest, and physical care that have been quietly deprioritised. Not with a wellness overhaul. With one clear, sustainable move at a time.",cta:'Get the Velani Companion →',price:'One-time · <strong>$29</strong> · Instant access'},
-    inner:{cls:'inner',eye:'Your heaviest domain: Inner',title:"Find your way back to the version of yourself you've been missing.",body:"Your Inner domain is where the most is missing — and where the most is possible. The Velani Companion helps you make room for the parts of yourself that aren't useful to anyone — which turns out to be the most useful thing you can do.",cta:'Get the Velani Companion →',price:'One-time · <strong>$29</strong> · Instant access'}
-  };
-  var s=steps[key];
-  return '<div class="next-box '+s.cls+'"><div class="next-eye">'+s.eye+'</div><div class="next-title">'+s.title+'</div><div class="next-body">'+s.body+'</div><a class="next-cta" href="/start" target="_blank">'+s.cta+'</a><div class="next-price">'+s.price+'</div></div>';
+function nextStep(heaviestKey, pat) {
+  var domClass = pat.domain || heaviestKey;
+  var copy;
+  if (pat.id === 'carrying-well') {
+    copy = {
+      cls: domClass,
+      eye: 'For where you are right now',
+      title: 'Protect the space you have.',
+      body: 'You don’t need rescuing — and we won’t pretend you do. The Velani Companion isn’t urgent for you. But it’s being built to help women protect their capacity before the next season fills it. If you’d like to be first to know when it’s ready, leave your email.',
+      note: 'We’ll only email you about the Companion. Nothing else.'
+    };
+  } else {
+    var titles = {
+      'success-without-self': 'Find your way back to yourself — without giving up what you’ve built.',
+      'endless-pour':         'Put yourself back on your own list.',
+      'running-on-empty':     'Start putting things down — before you have to.',
+      'quiet-disappearance':  'Make room for the version of you that’s gone quiet.',
+      'holding-it-together':  'Use your capacity deliberately — before the load grows.'
+    };
+    copy = {
+      cls: domClass,
+      eye: 'Your one clear move: the Velani Companion',
+      title: titles[pat.id],
+      body: 'The Velani Companion is a guided experience built around your result — starting exactly where your load is heaviest. It doesn’t add another thing to manage. It helps you decide what you’re finally allowed to put down. It’s launching soon, and your audit shows you’re exactly who it’s for. Leave your email to be first to know when it’s ready.',
+      note: 'We’ll only email you about the Companion. Nothing else.'
+    };
+  }
+  return '<div class="next-box ' + copy.cls + '">'
+    + '<div class="next-eye">' + copy.eye + '</div>'
+    + '<div class="next-title">' + copy.title + '</div>'
+    + '<div class="next-body">' + copy.body + '</div>'
+    + '<div class="next-form">'
+    +   '<input class="next-in" type="email" id="ne" placeholder="your@email.com" autocomplete="email">'
+    +   '<button class="next-btn" onclick="companionOptin()">Notify me</button>'
+    + '</div>'
+    + '<div class="next-note">' + copy.note + '</div>'
+    + '</div>';
 }
 
-function optin(){
-  var e=document.getElementById('oe');
-  if(!e.value||e.value.indexOf('@')===-1){e.style.borderColor='var(--terra)';return;}
-  fetch('https://velani-subscribe.velani-app.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e.value,tags:['audit-complete']})}).catch(function(){});
-  document.querySelector('.optin').innerHTML="<h3>You're in.</h3><p>The Velani Letter arrives Sunday morning. Your first email includes Velani Lite — a simple daily structure to start carrying less.</p>";
+function companionOptin() {
+  var e = document.getElementById('ne');
+  if (!e.value || e.value.indexOf('@') < 0) { e.style.borderColor = 'var(--terra)'; return; }
+  var tags = ['audit-complete', 'companion-interest'];
+  if (lastResult && lastResult.pattern) tags.push('pattern-' + lastResult.pattern);
+  fetch('https://velani-subscribe.velani-app.workers.dev', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({email: e.value, tags: tags})
+  }).catch(function() {});
+  var domClass = (lastResult && lastResult.pattern === 'carrying-well') ? 'liveliness' : 'connection';
+  document.getElementById('next-step-box').innerHTML =
+    '<div class="next-box ' + domClass + '">'
+    + '<div class="next-eye">You’re on the list</div>'
+    + '<div class="next-title">Thank you. You’ll be first to know.</div>'
+    + '<div class="next-body">The Velani Companion is being built right now — shaped around exactly the kind of result you just received. When it’s ready, you’ll be among the first to hear. In the meantime, your Velani Letter will arrive each Sunday.</div>'
+    + '</div>';
 }
 
-function doShare(){
-  var cap=document.getElementById('score-num').textContent;
-  var name=document.getElementById('r-profile').textContent;
-  var txt='I just took the Invisible Load Audit at velani.app — my Capacity Score is '+cap+'/100 ('+name+'). Find out yours:';
-  if(navigator.share){navigator.share({title:'My Invisible Load Audit — Velani',text:txt,url:'https://velani.app/audit'});}
-  else{navigator.clipboard.writeText(txt+' https://velani.app/audit').then(function(){alert('Copied — ready to share.');});}
+function doShare() {
+  var cap  = document.getElementById('score-num').textContent;
+  var name = document.getElementById('r-profile').textContent;
+  var txt  = 'I just took the Invisible Load Audit at velani.app — my Capacity Score is ' + cap + '/100 (' + name + '). Find out yours:';
+  if (navigator.share) {
+    navigator.share({title: 'My Invisible Load Audit — Velani', text: txt, url: 'https://velani.app/audit'});
+  } else {
+    navigator.clipboard.writeText(txt + ' https://velani.app/audit').then(function() {
+      alert('Copied — ready to share.');
+    });
+  }
 }
 </script>
 </body>
