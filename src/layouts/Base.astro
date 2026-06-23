@@ -252,6 +252,12 @@ footer {
 .btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
 .btn-link { font-size: .8rem; color: var(--sage); text-decoration: none; }
 .btn-link:hover { text-decoration: underline; }
+.btn-text {
+  font-family: var(--body); font-size: .82rem;
+  color: var(--ink3); text-decoration: none;
+  transition: color .2s; white-space: nowrap;
+}
+.btn-text:hover { color: var(--ink); }
 
 /* ─────────────────────────────
    INLINE EMAIL FORM
@@ -309,5 +315,11 @@ footer {
   .nav-links { gap: 1.4rem; }
   .inline-form { flex-direction: column; }
   .inline-btn { width: 100%; padding: .85rem; text-align: center; justify-content: center; }
+}
+@media (max-width: 480px) {
+  nav { padding: 1rem 1.2rem; }
+  .nav-links { gap: .75rem; }
+  .nav-link { font-size: .68rem; letter-spacing: .02em; }
+  .nav-brand { font-size: .88rem; }
 }
 </style>

@@ -1,0 +1,1017 @@
+---
+// Standalone full-screen companion — no Base layout
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Velani Companion</title>
+<meta name="description" content="A guided workbook for making room. 5 steps per domain — starting where your load is heaviest.">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:  #F7F6F3;
+  --ink:    #1A1D2E;
+  --ink2:   #3a3d4e;
+  --ink3:   #6E7191;
+  --sage:   #5B8C7A;
+  --sage2:  #3D6B59;
+  --sage-l: #EBF2EF;
+  --terra:  #C4785A;
+  --warm:   #FDFCFA;
+  --mist:   #E8E4DC;
+  --mist-d: #D4CFC5;
+  --material: #6B8FB5;
+  --material-l: #EEF3FA;
+  --inner:  #8E5EA7;
+  --inner-l:#F5EEF8;
+  --connect:#C4785A;
+  --connect-l:#FAF0EB;
+  --display:'Lora', Georgia, serif;
+  --body:   'DM Sans', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: var(--body);
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.7;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  padding-top: 52px;
+}
+
+/* ── Topbar gauge ── */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 52px;
+  background: rgba(26,29,46,.97);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  display: flex; align-items: center;
+  padding: 0 20px; gap: 16px;
+}
+.topbar-brand {
+  font-family: var(--display);
+  font-size: .68rem; letter-spacing: .2em;
+  color: rgba(91,140,122,.7); white-space: nowrap;
+  text-decoration: none;
+}
+.gauge-wrap { flex: 1; position: relative; }
+.gauge-track {
+  height: 3px; background: rgba(255,255,255,.1);
+  border-radius: 3px; overflow: hidden;
+}
+.gauge-fill {
+  height: 100%; background: var(--sage);
+  border-radius: 3px;
+  transition: width .6s cubic-bezier(.22,1,.36,1); width: 0%;
+}
+.gauge-label {
+  position: absolute; right: 0; top: -16px;
+  font-size: .6rem; color: rgba(247,246,243,.3);
+  white-space: nowrap;
+}
+.topbar-home {
+  font-size: .68rem; color: rgba(247,246,243,.3);
+  text-decoration: none; white-space: nowrap;
+  transition: color .2s;
+}
+.topbar-home:hover { color: rgba(247,246,243,.6); }
+
+/* ── Screens ── */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ════════════════════════════════
+   WELCOME — Domain picker
+════════════════════════════════ */
+#s-welcome {
+  max-width: 640px; margin: 0 auto;
+  padding: 56px 24px 80px;
+}
+.w-eyebrow {
+  font-size: .62rem; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--sage); margin-bottom: 16px;
+}
+.w-title {
+  font-family: var(--display);
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 400; color: var(--ink);
+  line-height: 1.25; margin-bottom: 14px;
+  letter-spacing: -.01em;
+}
+.w-title em { font-style: italic; color: var(--terra); }
+.w-sub {
+  font-size: .9rem; color: var(--ink3);
+  line-height: 1.85; margin-bottom: 40px;
+  max-width: 500px;
+}
+
+.w-domains-label {
+  font-size: .62rem; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--ink3); margin-bottom: 16px;
+}
+.w-recommended {
+  font-size: .7rem; color: var(--sage2);
+  font-weight: 600; letter-spacing: .06em;
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.domain-cards {
+  display: flex; flex-direction: column; gap: 10px;
+}
+.domain-card {
+  background: var(--warm);
+  border: 1.5px solid var(--mist);
+  border-radius: 16px;
+  padding: 20px 22px;
+  cursor: pointer;
+  transition: border-color .15s, background .15s, transform .1s;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 16px;
+  min-height: 72px;
+}
+.domain-card:hover {
+  border-color: var(--sage);
+  background: var(--sage-l);
+  transform: translateX(3px);
+}
+.domain-card.recommended {
+  border-color: var(--sage);
+  background: var(--sage-l);
+}
+.dc-left { flex: 1; }
+.dc-name {
+  font-family: var(--display);
+  font-size: 1rem; font-weight: 400; color: var(--ink);
+  margin-bottom: 3px; line-height: 1.3;
+}
+.dc-desc {
+  font-size: .78rem; color: var(--ink3); line-height: 1.5;
+}
+.dc-emoji { font-size: 1.4rem; flex-shrink: 0; }
+.dc-badge {
+  font-size: .58rem; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--sage2); background: rgba(91,140,122,.12);
+  padding: 3px 10px; border-radius: 100px;
+  white-space: nowrap;
+}
+
+/* ════════════════════════════════
+   DOMAIN INTRO
+════════════════════════════════ */
+#s-intro {
+  min-height: calc(100vh - 52px);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 64px 24px;
+  text-align: center;
+}
+.intro-inner { max-width: 480px; }
+.intro-emoji { font-size: 2.8rem; margin-bottom: 24px; }
+.intro-eyebrow {
+  font-size: .6rem; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--sage); margin-bottom: 14px;
+}
+.intro-title {
+  font-family: var(--display);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 400; color: var(--ink);
+  line-height: 1.25; margin-bottom: 18px;
+}
+.intro-body {
+  font-size: .9rem; color: var(--ink3);
+  line-height: 1.85; margin-bottom: 40px;
+}
+.intro-steps {
+  display: flex; justify-content: center;
+  gap: 6px; flex-wrap: wrap; margin-bottom: 40px;
+}
+.intro-step {
+  font-size: .68rem; font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink3); background: rgba(26,29,46,.06);
+  padding: 6px 12px; border-radius: 100px;
+}
+.intro-cta {
+  background: var(--ink); color: var(--cream);
+  border: none; padding: 16px 36px; border-radius: 12px;
+  font-family: var(--body); font-size: .88rem; font-weight: 600;
+  cursor: pointer; letter-spacing: .02em;
+  transition: background .15s, transform .15s; min-height: 52px;
+}
+.intro-cta:hover { background: var(--sage2); transform: translateY(-1px); }
+.intro-back {
+  background: none; border: none; color: var(--ink3);
+  font-family: var(--body); font-size: .8rem;
+  cursor: pointer; margin-top: 16px; padding: 8px;
+  min-height: 44px; display: block; margin-left: auto; margin-right: auto;
+}
+.intro-back:hover { color: var(--ink); }
+
+/* ════════════════════════════════
+   STEP SCREEN
+════════════════════════════════ */
+#s-step {
+  max-width: 600px; margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+.step-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 36px;
+}
+.step-num {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--ink); color: var(--cream);
+  font-family: var(--display); font-size: .8rem;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.step-meta { flex: 1; }
+.step-title {
+  font-family: var(--display);
+  font-size: 1rem; font-weight: 400; color: var(--ink);
+  font-style: italic; line-height: 1.2;
+}
+.step-subtitle {
+  font-size: .72rem; color: var(--ink3);
+  letter-spacing: .04em; margin-top: 2px;
+}
+
+.prompt-label {
+  font-family: var(--display);
+  font-size: 1.12rem; font-weight: 400; color: var(--ink);
+  line-height: 1.45; margin-bottom: 20px;
+}
+.prompt-help {
+  font-size: .78rem; color: var(--ink3);
+  margin-bottom: 16px; font-style: italic;
+}
+.prompt-area {
+  width: 100%; min-height: 140px;
+  padding: 16px; border: 1.5px solid var(--mist-d);
+  border-radius: 12px; font-family: var(--display);
+  font-size: .9rem; line-height: 1.75; color: var(--ink);
+  background: var(--warm); outline: none; resize: vertical;
+  transition: border-color .2s;
+}
+.prompt-area:focus { border-color: var(--sage); }
+.prompt-area::placeholder { color: var(--ink3); font-style: italic; }
+
+/* Sort checklist */
+.sort-items { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+.sort-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 18px;
+  background: var(--warm); border: 1.5px solid var(--mist);
+  border-radius: 12px; cursor: pointer;
+  transition: border-color .15s, background .15s;
+  min-height: 52px;
+}
+.sort-item:hover { border-color: var(--mist-d); }
+.sort-item.checked {
+  border-color: var(--sage); background: var(--sage-l);
+}
+.sort-cb {
+  width: 20px; height: 20px; border-radius: 5px;
+  border: 2px solid var(--mist-d); flex-shrink: 0;
+  margin-top: 1px; transition: all .15s;
+  display: flex; align-items: center; justify-content: center;
+}
+.sort-item.checked .sort-cb {
+  background: var(--sage); border-color: var(--sage);
+}
+.sort-cb-check {
+  width: 10px; height: 8px;
+  border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) translate(1px, -1px);
+  opacity: 0; transition: opacity .15s;
+}
+.sort-item.checked .sort-cb-check { opacity: 1; }
+.sort-txt {
+  font-size: .88rem; color: var(--ink2); line-height: 1.5;
+  padding-top: 1px;
+}
+
+/* Wisdom block */
+.wisdom-block {
+  background: var(--ink); border-radius: 18px;
+  padding: 28px 28px; margin-bottom: 28px;
+}
+.wisdom-block-label {
+  font-size: .58rem; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--terra); margin-bottom: 14px;
+}
+.wisdom-block-title {
+  font-family: var(--display);
+  font-size: 1rem; font-weight: 400; color: rgba(247,246,243,.55);
+  margin-bottom: 14px; font-style: italic;
+}
+.wisdom-block-body {
+  font-family: var(--display);
+  font-size: .92rem; color: rgba(247,246,243,.8);
+  line-height: 1.85;
+}
+
+/* Release decisions */
+.release-intro {
+  font-size: .85rem; color: var(--ink3);
+  line-height: 1.75; margin-bottom: 24px;
+}
+.release-items { display: flex; flex-direction: column; gap: 16px; }
+.release-item {}
+.release-item-txt {
+  font-size: .88rem; color: var(--ink2);
+  margin-bottom: 10px; line-height: 1.5;
+  font-style: italic;
+}
+.decision-btns {
+  display: flex; gap: 7px; flex-wrap: wrap;
+}
+.dec-btn {
+  background: var(--warm); border: 1.5px solid var(--mist);
+  border-radius: 100px; padding: 8px 14px;
+  font-family: var(--body); font-size: .75rem;
+  color: var(--ink2); cursor: pointer;
+  transition: all .15s; white-space: nowrap;
+  min-height: 36px; display: inline-flex; align-items: center; gap: 5px;
+}
+.dec-btn:hover { border-color: var(--mist-d); color: var(--ink); }
+.dec-btn.sel {
+  background: var(--ink); color: var(--cream);
+  border-color: var(--ink);
+}
+
+/* Lighter step */
+.lighter-prompt {
+  font-family: var(--display);
+  font-size: 1.1rem; color: var(--ink);
+  line-height: 1.45; margin-bottom: 8px;
+}
+.lighter-sub {
+  font-size: .8rem; color: var(--ink3);
+  margin-bottom: 24px; font-style: italic;
+}
+.lighter-reflection {
+  font-size: .82rem; color: var(--ink3);
+  margin: 20px 0 10px; font-weight: 600;
+}
+
+/* Step navigation */
+.step-nav {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-top: 36px; gap: 12px;
+}
+.sn-back {
+  background: none; border: 1.5px solid var(--mist-d);
+  color: var(--ink3); padding: 12px 20px; border-radius: 100px;
+  font-family: var(--body); font-size: .82rem;
+  cursor: pointer; min-height: 44px;
+  transition: border-color .15s, color .15s;
+}
+.sn-back:hover { border-color: var(--ink); color: var(--ink); }
+.sn-next {
+  background: var(--ink); color: var(--cream);
+  border: none; padding: 13px 28px; border-radius: 100px;
+  font-family: var(--body); font-size: .84rem; font-weight: 500;
+  cursor: pointer; min-height: 44px; letter-spacing: .03em;
+  transition: background .15s, transform .1s;
+}
+.sn-next:hover { background: var(--sage2); transform: translateY(-1px); }
+
+/* ════════════════════════════════
+   CLOSING SCREEN
+════════════════════════════════ */
+#s-closing {
+  max-width: 600px; margin: 0 auto;
+  padding: 64px 24px 80px;
+}
+.closing-eye {
+  font-size: .6rem; font-weight: 700;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--sage); margin-bottom: 16px;
+}
+.closing-title {
+  font-family: var(--display);
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 400; color: var(--ink);
+  line-height: 1.25; margin-bottom: 14px;
+}
+.closing-sub {
+  font-size: .9rem; color: var(--ink3);
+  line-height: 1.85; margin-bottom: 40px;
+}
+.closing-section { margin-bottom: 32px; }
+.closing-section-label {
+  font-size: .6rem; font-weight: 700;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--ink3); margin-bottom: 14px;
+}
+.closing-items { display: flex; flex-direction: column; gap: 8px; }
+.closing-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 18px;
+  background: var(--warm); border: 1px solid var(--mist);
+  border-radius: 12px;
+}
+.closing-item-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+.closing-item-body { flex: 1; }
+.closing-item-dec {
+  font-size: .68rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink3); margin-bottom: 3px;
+}
+.closing-item-txt {
+  font-size: .85rem; color: var(--ink2); line-height: 1.5;
+}
+
+.closing-reflection {
+  background: var(--sage-l);
+  border-left: 3px solid var(--sage);
+  border-radius: 0 12px 12px 0;
+  padding: 18px 22px; margin-bottom: 40px;
+}
+.closing-reflection-label {
+  font-size: .6rem; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--sage2); margin-bottom: 8px;
+}
+.closing-reflection-txt {
+  font-family: var(--display);
+  font-size: .92rem; color: var(--ink2);
+  line-height: 1.8; font-style: italic;
+}
+
+.closing-cta-wrap { text-align: center; }
+.closing-cta {
+  display: inline-block;
+  background: var(--ink); color: var(--cream);
+  padding: 16px 40px; border-radius: 12px;
+  font-family: var(--body); font-size: .88rem; font-weight: 600;
+  text-decoration: none; letter-spacing: .02em;
+  transition: background .15s, transform .15s; min-height: 52px;
+  display: inline-flex; align-items: center;
+}
+.closing-cta:hover { background: var(--sage2); transform: translateY(-1px); }
+.closing-again {
+  background: none; border: none; color: var(--sage);
+  font-family: var(--body); font-size: .82rem;
+  cursor: pointer; margin-top: 16px; padding: 8px;
+  min-height: 44px; text-decoration: underline;
+}
+.closing-again:hover { color: var(--sage2); }
+
+@media (max-width: 640px) {
+  #s-welcome { padding: 40px 16px 64px; }
+  #s-intro { padding: 48px 16px; }
+  #s-step { padding: 36px 16px 64px; }
+  #s-closing { padding: 48px 16px 64px; }
+  .decision-btns { gap: 6px; }
+  .dec-btn { padding: 8px 12px; font-size: .72rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── Sticky topbar ── -->
+<div class="topbar">
+  <a class="topbar-brand" href="/">VELANI</a>
+  <div class="gauge-wrap">
+    <div class="gauge-label" id="gauge-label">Room made</div>
+    <div class="gauge-track">
+      <div class="gauge-fill" id="gauge-fill"></div>
+    </div>
+  </div>
+  <a class="topbar-home" href="/audit">&#8592; Audit</a>
+</div>
+
+<!-- ════════════════════════════════
+     WELCOME — Choose your domain
+════════════════════════════════ -->
+<div class="screen active" id="s-welcome">
+  <div class="w-eyebrow">The Velani Companion</div>
+  <h1 class="w-title">Where would you like<br>to make <em>room</em> first?</h1>
+  <p class="w-sub">Choose the domain that feels heaviest right now. You'll work through 5 steps — reflecting, sorting, and deciding what to put down. You can always come back to the others.</p>
+
+  <div class="w-domains-label">Choose a domain</div>
+  <div class="domain-cards" id="domain-cards"></div>
+</div>
+
+<!-- ════════════════════════════════
+     DOMAIN INTRO
+════════════════════════════════ -->
+<div class="screen" id="s-intro">
+  <div class="intro-inner">
+    <div class="intro-emoji" id="intro-emoji"></div>
+    <div class="intro-eyebrow" id="intro-eyebrow">The Velani Companion</div>
+    <div class="intro-title" id="intro-title"></div>
+    <div class="intro-body" id="intro-body"></div>
+    <div class="intro-steps">
+      <div class="intro-step">Mirror</div>
+      <div class="intro-step">Sort</div>
+      <div class="intro-step">Order of Care</div>
+      <div class="intro-step">Release</div>
+      <div class="intro-step">Lighter</div>
+    </div>
+    <button class="intro-cta" onclick="startSteps()">Begin &#8594;</button>
+    <button class="intro-back" onclick="goWelcome()">&#8592; Choose another domain</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     STEP
+════════════════════════════════ -->
+<div class="screen" id="s-step">
+  <div class="step-header">
+    <div class="step-num" id="step-num">1</div>
+    <div class="step-meta">
+      <div class="step-title" id="step-title"></div>
+      <div class="step-subtitle" id="step-subtitle"></div>
+    </div>
+  </div>
+  <div id="step-content"></div>
+  <div class="step-nav">
+    <button class="sn-back" onclick="stepBack()">&#8592; Back</button>
+    <button class="sn-next" onclick="stepNext()">Continue &#8594;</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     CLOSING
+════════════════════════════════ -->
+<div class="screen" id="s-closing">
+  <div class="closing-eye">You made some room</div>
+  <div class="closing-title" id="closing-title">Here's what you decided.</div>
+  <div class="closing-sub">These aren't promises. They're intentions — clearer now than they were before you started.</div>
+  <div id="closing-body"></div>
+  <div class="closing-cta-wrap">
+    <a class="closing-cta" href="/start">Start your daily practice &#8594;</a>
+    <div><button class="closing-again" onclick="goWelcome()">Work another domain</button></div>
+  </div>
+</div>
+
+<script is:inline>
+var chosen = null;
+var stepIndex = 0;
+var steps = [];
+var responses = {};
+var STORE_KEY = 'velani_companion_v1';
+
+var DOMAINS = {
+  connection: {
+    key: 'connection',
+    name: 'Relationships & Emotional Presence',
+    emoji: '🤝',
+    desc: 'The emotional labour you carry for others — and what it costs you.',
+    color: '#C4785A',
+    colorL: '#FAF0EB',
+    mirror_q: 'In your relationships and emotional life right now — what are you carrying that feels heaviest?',
+    sort_items: [
+      'I manage other people\'s emotions so they don\'t have to',
+      'I suppress my own feelings to keep the peace',
+      'I feel responsible for everyone\'s happiness',
+      'There\'s a difficult conversation I\'ve been avoiding',
+      'I consistently give more than I receive'
+    ],
+    release_intro: 'For each thing you\'re carrying, decide what you want to do with it.',
+    lighter_q: 'If this area were just a little lighter, what would you notice first?',
+    lighter_reflection: 'What you\'d like to protect in this domain:'
+  },
+  material: {
+    key: 'material',
+    name: 'Home & Practical Life',
+    emoji: '🏠',
+    desc: 'The invisible management that keeps everything running — and runs through you.',
+    color: '#6B8FB5',
+    colorL: '#EEF3FA',
+    mirror_q: 'In your home and practical responsibilities — what are you carrying that nobody else sees?',
+    sort_items: [
+      'I\'m the default manager of the household',
+      'I hold mental lists that others don\'t track',
+      'I research and make most family logistics decisions',
+      'There are systems that would collapse without me',
+      'The household runs through me, not alongside me'
+    ],
+    release_intro: 'For each thing you\'re managing, choose a direction.',
+    lighter_q: 'If the household ran a little more without you at the centre — what would you do with that space?',
+    lighter_reflection: 'Something you\'d like to hand over:'
+  },
+  liveliness: {
+    key: 'liveliness',
+    name: 'Energy, Rest & Body',
+    emoji: '⚡',
+    desc: 'The basics that restore you — sleep, movement, rest — that keep getting cut.',
+    color: '#5B8C7A',
+    colorL: '#EBF2EF',
+    mirror_q: 'When it comes to your energy and the basics that restore you — what are you not giving yourself right now?',
+    sort_items: [
+      'I regularly sacrifice sleep',
+      'Movement or exercise has mostly disappeared',
+      'I eat well for everyone else and badly for myself',
+      'I don\'t have real downtime — rest is either sleep or scrolling',
+      'My body has been sending signals I\'ve been ignoring'
+    ],
+    release_intro: 'For each thing you\'re not giving yourself, choose what you\'d like to change.',
+    lighter_q: 'If you woke up feeling genuinely rested — what would you do differently that day?',
+    lighter_reflection: 'The one thing your body most needs from you right now:'
+  },
+  inner: {
+    key: 'inner',
+    name: 'Identity & What\'s Yours',
+    emoji: '✶',
+    desc: 'The version of you that existed before all the responsibility — she\'s still in there.',
+    color: '#8E5EA7',
+    colorL: '#F5EEF8',
+    mirror_q: 'When you think about the parts of yourself that have gone quiet — what do you miss most?',
+    sort_items: [
+      'I can\'t remember the last time I did something purely for myself',
+      'My interests and curiosity have faded',
+      'I\'ve lost touch with who I was before all this responsibility',
+      'I perform a version of myself that doesn\'t feel entirely real',
+      'I keep postponing things I care about until conditions are better'
+    ],
+    release_intro: 'For each thing you\'ve been holding about yourself, choose a direction.',
+    lighter_q: 'If you made a little more room for yourself — what\'s the first thing you\'d bring back?',
+    lighter_reflection: 'Something you want to remember about who you are:'
+  }
+};
+
+var ORDER_OF_CARE = {
+  connection: 'Here\'s what nobody tells you about being a caring person: the order in which we give usually gets it backwards. We pour into everyone around us first — acquaintances, obligations, anyone who makes demands — and give ourselves whatever\'s left. But care works better in a different order. You first, then the people closest to you, then the wider world. Not because you matter more. Because you can\'t keep pouring from empty, and you\'ve been proving that long enough.',
+  material: 'Most women become the invisible infrastructure of their homes — holding the plans, tracking the needs, managing the flow — while everyone else just benefits from it. This is real work. It takes real capacity. And it doesn\'t become lighter by managing it better; it becomes lighter when it\'s shared, delegated, or eliminated. You didn\'t end up at the centre by accident. But you can choose to step back from the centre deliberately.',
+  liveliness: 'The basics that restore you — sleep, movement, rest, nourishment — are not luxuries. They\'re the foundation. When they collapse, everything else gets harder. And yet they\'re always the first thing cut when life gets full. Here\'s a truth worth sitting with: the people who need you most need a you who has something left. Protecting your energy is not indulgence. It\'s the most responsible thing you can do.',
+  inner: 'There\'s a version of you that existed before the responsibility accumulated — that had curiosity, opinions, desires, a sense of what felt unmistakably like her. She didn\'t disappear. She went quiet, because there wasn\'t room. The things that make you feel like yourself are not extras to get back to when conditions are better. They\'re what keeps the version of you that everyone relies on alive. Making room for her isn\'t selfish. It\'s structural.'
+};
+
+var DECISIONS = [
+  {val:'keep',     label:'Keep it, consciously', icon:'🤝'},
+  {val:'delegate', label:'Find someone else to hold it', icon:'💼'},
+  {val:'simplify', label:'Reduce how much space it takes', icon:'✂️'},
+  {val:'release',  label:'Let it go', icon:'🍃'}
+];
+
+function buildSteps(d) {
+  return [
+    {
+      id: 'mirror', num: 1,
+      title: 'Mirror',
+      subtitle: 'What are you actually carrying?',
+      type: 'textarea',
+      prompt: d.mirror_q,
+      help: 'Write whatever comes. No editing. Just what\'s true right now.',
+      placeholder: 'Start writing...',
+      key: d.key + '-mirror'
+    },
+    {
+      id: 'sort', num: 2,
+      title: 'Sort',
+      subtitle: 'Which of these are yours?',
+      type: 'checklist',
+      prompt: 'Check everything that\'s present in your life right now.',
+      items: d.sort_items,
+      key: d.key + '-sort'
+    },
+    {
+      id: 'wisdom', num: 3,
+      title: 'Order of Care',
+      subtitle: 'A truth worth sitting with.',
+      type: 'wisdom',
+      wisdom: ORDER_OF_CARE[d.key],
+      prompt: 'What lands for you in this?',
+      help: 'Optional — write or simply sit with it.',
+      placeholder: 'What shifts when you read this...',
+      key: d.key + '-wisdom'
+    },
+    {
+      id: 'release', num: 4,
+      title: 'Release',
+      subtitle: 'What do you want to do with each thing?',
+      type: 'release',
+      prompt: d.release_intro,
+      key: d.key + '-release'
+    },
+    {
+      id: 'lighter', num: 5,
+      title: 'Lighter',
+      subtitle: 'What this space is for.',
+      type: 'lighter',
+      prompt: d.lighter_q,
+      reflection: d.lighter_reflection,
+      key: d.key + '-lighter'
+    }
+  ];
+}
+
+function getRecommendedDomain() {
+  var p = new URLSearchParams(window.location.search);
+  var dom = p.get('domain');
+  if (dom && DOMAINS[dom]) return dom;
+  var pat = p.get('pattern') || '';
+  if (!pat) { try { pat = sessionStorage.getItem('velani_pattern') || ''; } catch(e) {} }
+  var map = {
+    'endless-pour': 'connection',
+    'holding-it-together': 'connection',
+    'running-on-empty': 'liveliness',
+    'success-without-self': 'inner',
+    'quiet-disappearance': 'inner'
+  };
+  return map[pat] || null;
+}
+
+function buildWelcome() {
+  var rec = getRecommendedDomain();
+  var c = document.getElementById('domain-cards');
+  c.innerHTML = '';
+  var order = ['connection','material','liveliness','inner'];
+  if (rec) {
+    var recLabel = document.createElement('div');
+    recLabel.className = 'w-recommended';
+    recLabel.textContent = 'Recommended based on your audit';
+    c.appendChild(recLabel);
+    var recCard = makeDomainCard(DOMAINS[rec], true);
+    c.appendChild(recCard);
+    var otherLabel = document.createElement('div');
+    otherLabel.style.cssText = 'font-size:.62rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin:20px 0 10px;';
+    otherLabel.textContent = 'Or choose another';
+    c.appendChild(otherLabel);
+    for (var i = 0; i < order.length; i++) {
+      if (order[i] !== rec) c.appendChild(makeDomainCard(DOMAINS[order[i]], false));
+    }
+  } else {
+    for (var i = 0; i < order.length; i++) {
+      c.appendChild(makeDomainCard(DOMAINS[order[i]], false));
+    }
+  }
+}
+
+function makeDomainCard(d, isRec) {
+  var el = document.createElement('div');
+  el.className = 'domain-card' + (isRec ? ' recommended' : '');
+  el.innerHTML =
+    '<div class="dc-left">'
+    + '<div class="dc-name">' + d.name + '</div>'
+    + '<div class="dc-desc">' + d.desc + '</div>'
+    + '</div>'
+    + '<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">'
+    + '<div class="dc-emoji">' + d.emoji + '</div>'
+    + (isRec ? '<div class="dc-badge">Start here</div>' : '')
+    + '</div>';
+  el.onclick = function() { chooseDomain(d.key); };
+  return el;
+}
+
+function chooseDomain(key) {
+  chosen = DOMAINS[key];
+  steps = buildSteps(chosen);
+  stepIndex = 0;
+  // Show intro
+  document.getElementById('intro-emoji').textContent = chosen.emoji;
+  document.getElementById('intro-title').textContent = chosen.name;
+  document.getElementById('intro-body').textContent = 'You\'ll move through 5 steps — mirroring what you\'re carrying, sorting what\'s yours, receiving a truth, deciding what to release, and noticing how it feels to have made some room. Take your time. There\'s no rush here.';
+  showScreen('s-intro');
+}
+
+function startSteps() {
+  showScreen('s-step');
+  renderStep();
+}
+
+function renderStep() {
+  var s = steps[stepIndex];
+  document.getElementById('step-num').textContent = s.num;
+  document.getElementById('step-title').textContent = s.title;
+  document.getElementById('step-subtitle').textContent = s.subtitle;
+
+  var content = document.getElementById('step-content');
+  content.innerHTML = '';
+
+  if (s.type === 'textarea') {
+    content.innerHTML =
+      '<div class="prompt-label">' + s.prompt + '</div>'
+      + '<div class="prompt-help">' + s.help + '</div>'
+      + '<textarea class="prompt-area" id="resp" placeholder="' + s.placeholder + '">'
+      + (responses[s.key] || '') + '</textarea>';
+
+  } else if (s.type === 'checklist') {
+    var html = '<div class="prompt-label">' + s.prompt + '</div><div class="sort-items">';
+    for (var i = 0; i < s.items.length; i++) {
+      var checked = responses[s.key + '-' + i] ? ' checked' : '';
+      html += '<div class="sort-item' + checked + '" onclick="toggleSort(this,' + i + ',\'' + s.key + '\')">'
+        + '<div class="sort-cb"><div class="sort-cb-check"></div></div>'
+        + '<div class="sort-txt">' + s.items[i] + '</div>'
+        + '</div>';
+    }
+    html += '</div>';
+    content.innerHTML = html;
+
+  } else if (s.type === 'wisdom') {
+    content.innerHTML =
+      '<div class="wisdom-block">'
+      + '<div class="wisdom-block-label">Order of Care</div>'
+      + '<div class="wisdom-block-body">' + s.wisdom + '</div>'
+      + '</div>'
+      + '<div class="prompt-label" style="margin-top:8px;">' + s.prompt + '</div>'
+      + '<div class="prompt-help">' + s.help + '</div>'
+      + '<textarea class="prompt-area" id="resp" placeholder="' + s.placeholder + '">'
+      + (responses[s.key] || '') + '</textarea>';
+
+  } else if (s.type === 'release') {
+    var checkedItems = [];
+    var sortStep = steps[1];
+    for (var i = 0; i < sortStep.items.length; i++) {
+      if (responses[sortStep.key + '-' + i]) checkedItems.push({idx: i, txt: sortStep.items[i]});
+    }
+    var html = '<div class="release-intro">' + s.prompt + '</div>';
+    if (checkedItems.length > 0) {
+      html += '<div class="release-items">';
+      for (var j = 0; j < checkedItems.length; j++) {
+        var item = checkedItems[j];
+        var curDec = responses[s.key + '-' + item.idx] || '';
+        html += '<div class="release-item">'
+          + '<div class="release-item-txt">&ldquo;' + item.txt + '&rdquo;</div>'
+          + '<div class="decision-btns">';
+        for (var d = 0; d < DECISIONS.length; d++) {
+          var dec = DECISIONS[d];
+          html += '<button class="dec-btn' + (curDec === dec.val ? ' sel' : '') + '" '
+            + 'onclick="setDecision(' + item.idx + ',\'' + dec.val + '\',this,\'' + s.key + '\')">'
+            + dec.icon + ' ' + dec.label + '</button>';
+        }
+        html += '</div></div>';
+      }
+      html += '</div>';
+    } else {
+      html += '<div class="prompt-label">Nothing checked — what is one thing you\'d like to address?</div>'
+        + '<textarea class="prompt-area" id="resp" placeholder="Write it here..." style="min-height:100px;">'
+        + (responses[s.key + '-manual'] || '') + '</textarea>';
+    }
+    content.innerHTML = html;
+
+  } else if (s.type === 'lighter') {
+    content.innerHTML =
+      '<div class="lighter-prompt">' + s.prompt + '</div>'
+      + '<div class="lighter-sub">Take a moment before you write. Let the question settle.</div>'
+      + '<textarea class="prompt-area" id="resp" placeholder="Notice what comes up..." style="min-height:120px;">'
+      + (responses[s.key + '-lighter'] || '') + '</textarea>'
+      + '<div class="lighter-reflection">' + s.reflection + '</div>'
+      + '<textarea class="prompt-area" id="resp2" placeholder="Write a few words..." style="min-height:80px;">'
+      + (responses[s.key + '-reflection'] || '') + '</textarea>';
+  }
+
+  updateGauge();
+  window.scrollTo(0, 0);
+}
+
+function toggleSort(el, idx, baseKey) {
+  el.classList.toggle('checked');
+  responses[baseKey + '-' + idx] = el.classList.contains('checked');
+  saveState();
+}
+
+function setDecision(idx, val, btn, baseKey) {
+  responses[baseKey + '-' + idx] = val;
+  var group = btn.closest('.decision-btns').querySelectorAll('.dec-btn');
+  for (var i = 0; i < group.length; i++) group[i].classList.remove('sel');
+  btn.classList.add('sel');
+  saveState();
+}
+
+function saveCurrentStep() {
+  var s = steps[stepIndex];
+  var r = document.getElementById('resp');
+  if (r) responses[s.key] = r.value;
+  var r2 = document.getElementById('resp2');
+  if (r2 && s.type === 'lighter') {
+    responses[s.key + '-lighter'] = document.getElementById('resp') ? document.getElementById('resp').value : '';
+    responses[s.key + '-reflection'] = r2.value;
+  }
+  if (s.type === 'release') {
+    var manualArea = document.getElementById('resp');
+    if (manualArea) responses[s.key + '-manual'] = manualArea.value;
+  }
+  saveState();
+}
+
+function stepNext() {
+  saveCurrentStep();
+  if (stepIndex < steps.length - 1) {
+    stepIndex++;
+    renderStep();
+  } else {
+    buildClosing();
+    showScreen('s-closing');
+  }
+}
+
+function stepBack() {
+  saveCurrentStep();
+  if (stepIndex > 0) { stepIndex--; renderStep(); }
+  else { showScreen('s-intro'); }
+}
+
+function buildClosing() {
+  if (!chosen) return;
+  var releaseStep = steps[3];
+  var sortStep = steps[1];
+  var lighterStep = steps[4];
+
+  document.getElementById('closing-title').textContent = 'You made some room in ' + chosen.name + '.';
+
+  var html = '';
+  var decisions = {keep:[], delegate:[], simplify:[], release:[]};
+  var hasDecisions = false;
+
+  for (var i = 0; i < sortStep.items.length; i++) {
+    var dec = responses[releaseStep.key + '-' + i];
+    if (dec && decisions[dec]) {
+      decisions[dec].push(sortStep.items[i]);
+      hasDecisions = true;
+    }
+  }
+
+  if (hasDecisions) {
+    var decLabels = {
+      keep: {label: 'Keeping consciously', icon: '🤝'},
+      delegate: {label: 'Finding someone else to hold', icon: '💼'},
+      simplify: {label: 'Reducing how much space it takes', icon: '✂️'},
+      release: {label: 'Letting go', icon: '🍃'}
+    };
+    var order = ['release','delegate','simplify','keep'];
+    for (var d = 0; d < order.length; d++) {
+      var dk = order[d];
+      if (decisions[dk].length > 0) {
+        html += '<div class="closing-section">'
+          + '<div class="closing-section-label">' + decLabels[dk].icon + ' ' + decLabels[dk].label + '</div>'
+          + '<div class="closing-items">';
+        for (var j = 0; j < decisions[dk].length; j++) {
+          html += '<div class="closing-item">'
+            + '<div class="closing-item-icon">' + decLabels[dk].icon + '</div>'
+            + '<div class="closing-item-body"><div class="closing-item-txt">' + decisions[dk][j] + '</div></div>'
+            + '</div>';
+        }
+        html += '</div></div>';
+      }
+    }
+  }
+
+  var lighterVal = responses[lighterStep.key + '-lighter'] || responses[lighterStep.key] || '';
+  var reflectionVal = responses[lighterStep.key + '-reflection'] || '';
+  if (lighterVal || reflectionVal) {
+    html += '<div class="closing-reflection">'
+      + '<div class="closing-reflection-label">You said:</div>'
+      + (lighterVal ? '<div class="closing-reflection-txt">' + lighterVal + '</div>' : '')
+      + (reflectionVal ? '<div class="closing-reflection-txt" style="margin-top:12px;">' + reflectionVal + '</div>' : '')
+      + '</div>';
+  }
+
+  document.getElementById('closing-body').innerHTML = html;
+  updateGauge();
+}
+
+function updateGauge() {
+  var count = 0;
+  for (var k in responses) {
+    if (responses[k] && responses[k] !== false) count++;
+  }
+  var pct = Math.min(100, Math.round(count / 14 * 100));
+  document.getElementById('gauge-fill').style.width = pct + '%';
+}
+
+function showScreen(id) {
+  var ss = document.querySelectorAll('.screen');
+  for (var i = 0; i < ss.length; i++) ss[i].classList.remove('active');
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function goWelcome() {
+  chosen = null; steps = []; stepIndex = 0;
+  buildWelcome();
+  showScreen('s-welcome');
+}
+
+function saveState() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(responses)); } catch(e) {}
+}
+
+function loadState() {
+  try {
+    var saved = localStorage.getItem(STORE_KEY);
+    if (saved) responses = JSON.parse(saved) || {};
+  } catch(e) {}
+}
+
+// Init
+loadState();
+buildWelcome();
+updateGauge();
+</script>
+</body>
+</html>
