@@ -1,5 +1,5 @@
 ---
-// Standalone full-screen audit — no Base layout
+// src/pages/audit/index.astro — The Invisible Load Audit v4
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -7,1086 +7,529 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Invisible Load Audit — Velani</title>
-<meta name="description" content="Discover your Capacity Score. Find out exactly where your energy is going and what's quietly consuming your capacity to feel like yourself.">
+<meta name="description" content="Discover your Capacity Score in 4 minutes. See exactly where your energy is going and what's quietly consuming your capacity to feel like yourself.">
 <meta property="og:title" content="The Invisible Load Audit — Velani">
-<meta property="og:description" content="10 questions. 4 minutes. Instant Capacity Score across your 4 life domains.">
+<meta property="og:description" content="4 minutes. Instant Capacity Score across the four domains of your life.">
 <meta property="og:url" content="https://velani.app/audit">
-<meta property="og:type" content="website">
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --cream:  #F7F6F3;
-  --ink:    #1A1D2E;
-  --ink2:   #3a3d4e;
-  --ink3:   #6E7191;
-  --sage:   #5B8C7A;
-  --sage2:  #3D6B59;
-  --sage-l: #EBF2EF;
-  --terra:  #C4785A;
-  --warm:   #FDFCFA;
-  --mist:   #E8E4DC;
-  --mist-d: #D4CFC5;
-  --material: #6B8FB5;
-  --material-l: #EEF3FA;
-  --inner:  #8E5EA7;
-  --inner-l:#F5EEF8;
-  --connect:#C4785A;
-  --connect-l:#FAF0EB;
-  --display:'Lora', Georgia, serif;
-  --body:   'DM Sans', system-ui, sans-serif;
+:root{
+  --cream:#F7F6F3; --ink:#1A1D2E; --ink-deep:#14161F; --sage:#5B8C7A; --terra:#C4785A;
+  --warm:#FDFCFA; --mist:#E8E4DC; --mist-d:#D4CFC5; --ink2:#3a3d4e; --ink3:#6b6e7d;
+  --sage-l:#EBF2EF; --terra-l:#FAF0EB;
+  --material:#6B8FB5; --inner:#8E5EA7; --live:#5B8C7A; --connect:#C4785A;
+  --cream-soft:rgba(247,246,243,.7);
 }
+*{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; scroll-behavior: smooth; }
-body {
-  font-family: var(--body);
-  background: var(--cream);
-  color: var(--ink);
-  line-height: 1.7;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-}
+.screen{display:none;min-height:100vh;min-height:100dvh;}
+.screen.active{display:flex;flex-direction:column;animation:fadeup .45s ease;}
+@keyframes fadeup{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 
-.screen { display: none; min-height: 100vh; }
-.screen.active { display: flex; flex-direction: column; }
+/* ── SHARED DARK ATMOSPHERE ── */
+.atmos{position:relative;overflow:hidden;background:var(--ink);}
+.atmos::before{content:'';position:absolute;width:140vw;height:140vw;max-width:900px;max-height:900px;border-radius:50%;background:radial-gradient(circle,rgba(91,140,122,.14) 0%,transparent 65%);top:-40vh;left:50%;transform:translateX(-50%);pointer-events:none;}
 
-/* ════════════════════════════════
-   INTRO SCREEN
-════════════════════════════════ */
-#si {
-  background: var(--ink);
-  align-items: center;
-  justify-content: center;
-  padding: 72px 24px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-#si::before {
-  content: '';
-  position: absolute;
-  width: 700px; height: 700px;
-  background: radial-gradient(circle, rgba(91,140,122,.14) 0%, transparent 65%);
-  top: -160px; left: 50%;
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-#si::after {
-  content: '';
-  position: absolute;
-  width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(196,120,90,.07) 0%, transparent 65%);
-  bottom: -80px; right: 10%;
-  pointer-events: none;
-}
-.ii { max-width: 500px; position: relative; z-index: 1; }
+/* ── INTRO ── */
+#si{align-items:center;justify-content:center;padding:48px 24px;text-align:center;}
+.ii{max-width:460px;position:relative;z-index:1;width:100%;}
+.i-brand{font-family:'Lora',serif;font-size:.8rem;letter-spacing:.28em;text-transform:uppercase;color:var(--sage);margin-bottom:40px;}
+.i-h1{font-family:'Lora',serif;font-size:clamp(2.1rem,7vw,2.9rem);font-weight:400;color:var(--warm);line-height:1.16;margin-bottom:20px;}
+.i-h1 em{font-style:italic;color:var(--terra);}
+.i-sub{font-size:1rem;color:var(--cream-soft);line-height:1.75;margin-bottom:36px;}
+.i-domains{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:40px;}
+.i-domain{font-size:.72rem;font-weight:600;letter-spacing:.06em;color:rgba(247,246,243,.55);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:8px 14px;border-radius:24px;}
+.i-cta{display:block;width:100%;max-width:340px;margin:0 auto;background:var(--terra);color:#fff;padding:18px 32px;border-radius:14px;font-size:1.05rem;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 20px rgba(196,120,90,.25);}
+.i-cta:active{transform:scale(.98);}
+@media(hover:hover){.i-cta:hover{transform:translateY(-2px);box-shadow:0 6px 26px rgba(196,120,90,.35);}}
+.i-time{font-size:.82rem;color:rgba(247,246,243,.4);margin-top:16px;}
 
-.i-brand {
-  font-family: var(--display);
-  font-size: .72rem; letter-spacing: .26em;
-  text-transform: uppercase; color: rgba(91,140,122,.8);
-  margin-bottom: 44px;
-  display: flex; align-items: center; justify-content: center; gap: .8rem;
-}
-.i-brand::before, .i-brand::after {
-  content: ''; display: block;
-  width: 24px; height: 1px;
-  background: currentColor; opacity: .5;
-}
+/* ── QUESTIONS ── */
+#sq{background:var(--ink);}
+.qh{padding:16px 20px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:10;background:var(--ink-deep);border-bottom:1px solid rgba(255,255,255,.06);}
+.qh-back{background:none;border:none;color:rgba(247,246,243,.5);font-size:1.4rem;cursor:pointer;padding:4px 8px;line-height:1;flex-shrink:0;min-width:36px;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;}
+.qh-back:disabled{opacity:.25;}
+.qh-back:active:not(:disabled){background:rgba(255,255,255,.08);}
+.dots{display:flex;gap:5px;flex:1;align-items:center;}
+.dot{height:4px;flex:1;background:rgba(255,255,255,.12);border-radius:4px;overflow:hidden;}
+.dot.done{background:var(--sage);}
+.dot.cur{background:rgba(255,255,255,.35);}
+.qh-count{font-size:.78rem;font-weight:600;color:rgba(247,246,243,.5);flex-shrink:0;min-width:40px;text-align:right;}
 
-.i-h1 {
-  font-family: var(--display);
-  font-size: clamp(2rem, 5.5vw, 3rem);
-  font-weight: 400; color: #FDFCFA;
-  line-height: 1.18; margin-bottom: 22px;
-  letter-spacing: -.01em;
-}
-.i-h1 em { font-style: italic; color: var(--terra); }
+.qbody{flex:1;display:flex;flex-direction:column;justify-content:center;padding:36px 22px 32px;max-width:560px;margin:0 auto;width:100%;}
+.q-domain{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:20px;display:inline-flex;align-items:center;gap:7px;align-self:flex-start;padding:7px 14px;border-radius:20px;}
+.q-domain.home{background:rgba(107,143,181,.16);color:#9DBBDA;}
+.q-domain.work{background:rgba(91,140,122,.16);color:#86C4AE;}
+.q-domain.self-e{background:rgba(196,120,90,.16);color:#E0A183;}
+.q-domain.self-i{background:rgba(142,94,167,.18);color:#C295D8;}
+.qtxt{font-family:'Lora',serif;font-size:clamp(1.35rem,5vw,1.65rem);font-weight:400;color:var(--warm);line-height:1.36;margin-bottom:28px;}
+.qopts{display:flex;flex-direction:column;gap:10px;}
+.qopt{background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.12);border-radius:14px;padding:18px 20px;cursor:pointer;transition:all .15s;text-align:left;font-family:'DM Sans',sans-serif;width:100%;color:rgba(247,246,243,.82);font-size:.98rem;line-height:1.5;min-height:60px;display:flex;align-items:center;-webkit-tap-highlight-color:transparent;}
+.qopt:active{transform:scale(.99);background:rgba(255,255,255,.08);}
+@media(hover:hover){.qopt:hover{border-color:var(--sage);background:rgba(91,140,122,.12);color:var(--warm);}}
+.qopt.sel{border-color:var(--sage);background:rgba(91,140,122,.18);color:var(--warm);}
 
-.i-sub {
-  font-size: .92rem;
-  color: rgba(247,246,243,.52);
-  line-height: 1.85; margin-bottom: 44px;
-  max-width: 400px; margin-left: auto; margin-right: auto;
-}
+/* ── LOADING ── */
+#sl{align-items:center;justify-content:center;text-align:center;padding:40px 28px;}
+.li{max-width:380px;position:relative;z-index:1;}
+.spin{width:54px;height:54px;border-radius:50%;border:3px solid rgba(91,140,122,.2);border-top-color:var(--sage);margin:0 auto 30px;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.l-title{font-family:'Lora',serif;font-size:1.5rem;color:var(--warm);margin-bottom:12px;}
+.l-sub{font-size:.92rem;color:rgba(247,246,243,.5);line-height:1.7;}
+.l-steps{margin-top:32px;display:flex;flex-direction:column;gap:12px;text-align:left;max-width:280px;margin-left:auto;margin-right:auto;}
+.l-step{display:flex;align-items:center;gap:12px;font-size:.88rem;color:rgba(247,246,243,.35);transition:color .4s;}
+.l-step.done{color:var(--sage);}
+.l-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.15);flex-shrink:0;transition:background .4s;}
+.l-step.done .l-dot{background:var(--sage);}
 
-.i-cta {
-  display: inline-block;
-  background: var(--terra); color: #fff;
-  padding: 18px 44px; border-radius: 12px;
-  font-size: .92rem; font-weight: 600;
-  cursor: pointer; border: none;
-  font-family: var(--body);
-  transition: transform .15s, opacity .15s;
-  letter-spacing: .02em;
-  min-height: 56px;
-}
-.i-cta:hover { transform: translateY(-2px); opacity: .92; }
+/* ── RESULTS ── */
+#sr{background:var(--cream);}
+.rhero{background:var(--ink);padding:44px 24px 52px;text-align:center;position:relative;overflow:hidden;}
+.rhero::before{content:'';position:absolute;width:130vw;height:130vw;max-width:700px;max-height:700px;border-radius:50%;background:radial-gradient(circle,rgba(196,120,90,.13) 0%,transparent 62%);top:-30vh;left:50%;transform:translateX(-50%);pointer-events:none;}
+.rh-in{max-width:520px;margin:0 auto;position:relative;z-index:1;}
+.rh-eye{font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--sage);margin-bottom:14px;}
+.rh-pattern{font-family:'Lora',serif;font-size:clamp(1.9rem,6vw,2.5rem);font-weight:500;color:var(--warm);margin-bottom:12px;line-height:1.18;}
+.rh-tag{font-size:.96rem;color:rgba(247,246,243,.65);line-height:1.7;margin-bottom:30px;}
+.score-block{display:flex;align-items:center;justify-content:center;gap:22px;}
+.ring{position:relative;width:104px;height:104px;flex-shrink:0;}
+.ring svg{transform:rotate(-90deg);}
+.ring-bg{fill:none;stroke:rgba(255,255,255,.1);stroke-width:7;}
+.ring-fl{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset 1.3s cubic-bezier(.22,1,.36,1);}
+.ring-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Lora',serif;font-size:1.7rem;font-weight:500;color:var(--warm);}
+.score-side{text-align:left;}
+.score-lbl{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(247,246,243,.45);margin-bottom:5px;}
+.score-desc{font-size:.86rem;color:rgba(247,246,243,.7);line-height:1.5;max-width:170px;}
 
-.i-time {
-  font-size: .7rem;
-  color: rgba(247,246,243,.25);
-  margin-top: 18px;
-  font-family: var(--display);
-  font-style: italic;
-  letter-spacing: .03em;
-}
+.rbody{max-width:600px;margin:0 auto;padding:0 22px;}
 
-/* ════════════════════════════════
-   QUESTION SCREEN — dark atmosphere
-════════════════════════════════ */
-#sq {
-  background: var(--ink);
-  position: relative;
-}
-#sq::before {
-  content: '';
-  position: fixed; inset: 0; pointer-events: none;
-  background: radial-gradient(ellipse at 60% 0%, rgba(91,140,122,.08) 0%, transparent 60%);
-}
+/* bars card — overlaps hero */
+.bars-card{background:var(--warm);border:1px solid var(--mist);border-radius:18px;padding:24px 22px;margin-top:-26px;position:relative;z-index:2;box-shadow:0 8px 30px rgba(26,29,46,.08);}
+.bars-title{font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin-bottom:16px;}
+.bar-row{margin-bottom:14px;}
+.bar-row:last-child{margin-bottom:0;}
+.bar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.bar-name{font-size:.86rem;font-weight:600;color:var(--ink);}
+.bar-pct{font-size:.8rem;font-weight:700;color:var(--ink3);}
+.bar-track{height:7px;background:var(--mist);border-radius:7px;overflow:hidden;}
+.bar-fl{height:100%;border-radius:7px;width:0;transition:width 1s cubic-bezier(.22,1,.36,1) .3s;}
+.fl-connection{background:var(--connect);}
+.fl-material{background:var(--material);}
+.fl-liveliness{background:var(--live);}
+.fl-inner{background:var(--inner);}
 
-/* Question header */
-.qh {
-  padding: 0 28px;
-  height: 56px;
-  display: flex; align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(255,255,255,.07);
-  background: rgba(26,29,46,.96);
-  backdrop-filter: blur(10px);
-  position: sticky; top: 0; z-index: 10;
-}
-.qh-back {
-  background: none; border: none;
-  color: rgba(247,246,243,.35);
-  font-family: var(--body); font-size: .8rem;
-  cursor: pointer; padding: 8px 0;
-  min-height: 44px; min-width: 44px;
-  transition: color .2s; text-align: left;
-}
-.qh-back:hover:not(:disabled) { color: rgba(247,246,243,.7); }
-.qh-back:disabled { opacity: 0; pointer-events: none; }
+.sec-title{font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin:34px 0 14px;}
+.pattern-read{background:var(--ink);border-radius:18px;padding:26px 24px;}
+.pr-label{font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--terra);margin-bottom:12px;}
+.pr-text{font-family:'Lora',serif;font-size:1.05rem;font-style:italic;color:var(--warm);line-height:1.72;}
 
-.progress-dots {
-  display: flex; gap: 5px; align-items: center;
-}
-.pdot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: rgba(255,255,255,.14);
-  transition: all .3s cubic-bezier(.22,1,.36,1);
-  flex-shrink: 0;
-}
-.pdot.done { background: var(--sage); }
-.pdot.curr {
-  width: 8px; height: 8px;
-  background: var(--warm);
-}
+.wisdom-box{background:var(--sage-l);border:1px solid #C5DDD7;border-radius:16px;padding:22px 24px;margin-top:16px;}
+.wis-l{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin-bottom:9px;}
+.wis-t{font-size:.92rem;color:var(--ink2);line-height:1.75;}
+.wis-t strong{color:var(--ink);}
 
-.qh-brand {
-  font-family: var(--display);
-  font-size: .72rem; color: rgba(91,140,122,.6);
-  letter-spacing: .16em; font-style: italic;
-}
+/* save result card */
+.save-card{background:var(--warm);border:2px solid var(--sage);border-radius:18px;padding:28px 24px;margin-top:34px;text-align:center;}
+.save-icon{font-size:1.4rem;margin-bottom:10px;}
+.save-h{font-family:'Lora',serif;font-size:1.22rem;font-weight:500;color:var(--ink);margin-bottom:8px;line-height:1.32;}
+.save-sub{font-size:.9rem;color:var(--ink2);line-height:1.65;margin-bottom:20px;}
+.save-form{display:flex;flex-direction:column;gap:10px;}
+.save-input{width:100%;padding:16px 18px;border:1.5px solid var(--mist-d);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:1rem;background:var(--cream);color:var(--ink);text-align:center;outline:none;transition:border-color .2s;}
+.save-input:focus{border-color:var(--sage);}
+.save-btn{width:100%;background:var(--ink);color:var(--cream);border:none;padding:16px 24px;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:background .15s;min-height:52px;}
+.save-btn:active{transform:scale(.99);}
+@media(hover:hover){.save-btn:hover{background:var(--sage);}}
+.save-fine{font-size:.74rem;color:var(--ink3);margin-top:12px;line-height:1.5;}
 
-/* Question body */
-.qbody {
-  flex: 1; display: flex;
-  align-items: center; justify-content: center;
-  padding: 52px 24px;
-  position: relative; z-index: 1;
-}
-.qcard { max-width: 560px; width: 100%; }
+/* companion offer */
+.offer{background:var(--ink);border-radius:20px;padding:30px 26px;margin-top:20px;position:relative;overflow:hidden;}
+.offer::before{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(196,120,90,.16) 0%,transparent 65%);top:-120px;right:-80px;pointer-events:none;}
+.offer-in{position:relative;z-index:1;}
+.offer-eye{font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--terra);margin-bottom:12px;}
+.offer-h{font-family:'Lora',serif;font-size:1.45rem;font-weight:500;color:var(--warm);line-height:1.28;margin-bottom:14px;}
+.offer-h em{font-style:italic;color:var(--terra);}
+.offer-body{font-size:.92rem;color:rgba(247,246,243,.72);line-height:1.75;margin-bottom:18px;}
+.offer-list{list-style:none;margin-bottom:22px;}
+.offer-list li{display:flex;gap:11px;align-items:flex-start;font-size:.9rem;color:rgba(247,246,243,.82);line-height:1.55;margin-bottom:11px;}
+.offer-list li::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--terra);flex-shrink:0;margin-top:8px;}
+.offer-price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:20px;}
+.offer-price{font-family:'Lora',serif;font-size:2rem;font-weight:500;color:var(--warm);}
+.offer-price-note{font-size:.82rem;color:rgba(247,246,243,.5);}
+.offer-cta{display:block;width:100%;background:var(--terra);color:#fff;padding:17px 28px;border-radius:13px;font-size:1rem;font-weight:600;text-align:center;text-decoration:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 18px rgba(196,120,90,.3);min-height:54px;display:flex;align-items:center;justify-content:center;}
+.offer-cta:active{transform:scale(.99);}
+@media(hover:hover){.offer-cta:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(196,120,90,.42);}}
+.offer-guarantee{font-size:.8rem;color:rgba(247,246,243,.5);text-align:center;margin-top:14px;line-height:1.55;}
+.offer-founder{display:flex;gap:12px;align-items:flex-start;margin-top:22px;padding-top:20px;border-top:1px solid rgba(255,255,255,.1);}
+.founder-quote{font-size:.86rem;color:rgba(247,246,243,.65);line-height:1.6;font-style:italic;}
+.founder-quote .name{display:block;font-style:normal;font-weight:600;color:rgba(247,246,243,.82);margin-top:6px;font-size:.82rem;}
 
-.dtag {
-  display: inline-flex; align-items: center; gap: 7px;
-  font-size: .62rem; font-weight: 700;
-  letter-spacing: .14em; text-transform: uppercase;
-  padding: 6px 14px; border-radius: 100px;
-  margin-bottom: 28px;
-  background: rgba(255,255,255,.07);
-  color: rgba(247,246,243,.45);
-  border: 1px solid rgba(255,255,255,.1);
-}
+.share-row{text-align:center;padding:34px 0 50px;}
+.share-row p{font-size:.86rem;color:var(--ink3);margin-bottom:14px;}
+.share-btn{background:none;border:1.5px solid var(--mist-d);color:var(--ink2);padding:12px 22px;border-radius:10px;font-size:.86rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin:4px;transition:all .15s;min-height:48px;}
+.share-btn:active{transform:scale(.98);}
+@media(hover:hover){.share-btn:hover{border-color:var(--ink);color:var(--ink);}}
+.rfoot{text-align:center;padding:0 24px 48px;font-size:.76rem;color:var(--mist-d);}
+.rfoot a{color:var(--sage);text-decoration:none;}
 
-.qtxt {
-  font-family: var(--display);
-  font-size: clamp(1.15rem, 3vw, 1.5rem);
-  font-weight: 400; color: rgba(247,246,243,.88);
-  line-height: 1.45; margin-bottom: 32px;
+@media(min-width:560px){
+  .save-form{flex-direction:row;}
+  .save-input{text-align:left;flex:1;}
+  .save-btn{width:auto;white-space:nowrap;flex-shrink:0;}
 }
-
-.qopts { display: flex; flex-direction: column; gap: 10px; }
-
-.qopt {
-  background: rgba(255,255,255,.04);
-  border: 1.5px solid rgba(255,255,255,.09);
-  border-radius: 14px;
-  padding: 16px 20px;
-  cursor: pointer;
-  transition: border-color .15s, background .15s, transform .1s;
-  display: flex; gap: 14px;
-  align-items: flex-start; text-align: left;
-  font-family: var(--body); width: 100%;
-  min-height: 56px;
-}
-.qopt:hover {
-  border-color: rgba(91,140,122,.45);
-  background: rgba(91,140,122,.08);
-  transform: translateX(2px);
-}
-.qopt.sel {
-  border-color: var(--sage);
-  background: rgba(91,140,122,.14);
-}
-.qopt.sel .radio {
-  background: var(--sage);
-  border-color: var(--sage);
-}
-.qopt.sel .radio::after { opacity: 1; }
-
-.radio {
-  width: 20px; height: 20px; border-radius: 50%;
-  border: 2px solid rgba(255,255,255,.2);
-  flex-shrink: 0; margin-top: 2px;
-  transition: all .15s; position: relative;
-}
-.radio::after {
-  content: '';
-  position: absolute;
-  width: 8px; height: 8px;
-  background: #fff; border-radius: 50%;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0; transition: opacity .15s;
-}
-.opt-lbl {
-  font-size: .88rem;
-  color: rgba(247,246,243,.7);
-  line-height: 1.55; font-weight: 400;
-  padding-top: 1px;
-}
-.qopt.sel .opt-lbl { color: rgba(247,246,243,.92); }
-
-/* ════════════════════════════════
-   LOADING SCREEN
-════════════════════════════════ */
-#sl {
-  background: var(--ink);
-  align-items: center; justify-content: center;
-  text-align: center; padding: 64px 24px;
-}
-.sl-inner { max-width: 360px; margin: auto; }
-
-.spin {
-  width: 48px; height: 48px; border-radius: 50%;
-  border: 2.5px solid rgba(91,140,122,.18);
-  border-top-color: var(--sage);
-  margin: 0 auto 32px;
-  animation: spin 1s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.l-title {
-  font-family: var(--display);
-  font-size: 1.25rem; font-weight: 400;
-  color: var(--warm); margin-bottom: 10px;
-  font-style: italic;
-}
-.l-sub {
-  font-size: .8rem; color: rgba(247,246,243,.38);
-  line-height: 1.75; max-width: 300px; margin: 0 auto 36px;
-}
-
-.l-steps { display: flex; flex-direction: column; gap: 12px; }
-.l-step {
-  display: flex; align-items: center; gap: 12px;
-  font-size: .78rem; color: rgba(247,246,243,.24);
-  transition: color .4s; text-align: left;
-}
-.l-step.done { color: var(--sage); }
-.l-dot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: rgba(255,255,255,.1); flex-shrink: 0;
-  transition: background .4s;
-}
-.l-step.done .l-dot { background: var(--sage); }
-
-/* ════════════════════════════════
-   RESULTS SCREEN
-════════════════════════════════ */
-#sr { background: var(--cream); }
-
-/* Hero — dark */
-.rh {
-  background: var(--ink);
-  padding: 56px 32px 72px;
-  text-align: center;
-  position: relative; overflow: hidden;
-}
-.rh::before {
-  content: '';
-  position: absolute;
-  width: 600px; height: 600px;
-  background: radial-gradient(circle, rgba(91,140,122,.1) 0%, transparent 65%);
-  top: -100px; left: 50%; transform: translateX(-50%);
-  pointer-events: none;
-}
-.rh-inner { max-width: 520px; margin: 0 auto; position: relative; z-index: 1; }
-
-.r-eye {
-  font-size: .6rem; font-weight: 700;
-  letter-spacing: .2em; text-transform: uppercase;
-  color: rgba(91,140,122,.7); margin-bottom: 14px;
-}
-.r-profile {
-  font-family: var(--display);
-  font-size: clamp(1.65rem, 4.5vw, 2.4rem);
-  font-weight: 400; color: var(--warm);
-  margin-bottom: 10px; line-height: 1.2;
-  font-style: italic;
-}
-.r-tag {
-  font-size: .88rem; color: rgba(247,246,243,.48);
-  line-height: 1.8; max-width: 380px;
-  margin: 0 auto 36px;
-}
-
-/* Score ring */
-.score-wrap {
-  display: flex; align-items: center;
-  justify-content: center; gap: 28px;
-  margin: 0 auto;
-}
-.score-ring { position: relative; width: 104px; height: 104px; flex-shrink: 0; }
-.score-ring svg { transform: rotate(-90deg); }
-.ring-bg   { fill: none; stroke: rgba(255,255,255,.07); stroke-width: 6; }
-.ring-fill { fill: none; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 1.8s cubic-bezier(.22,1,.36,1); }
-.score-num {
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: var(--display);
-  font-size: 1.55rem; font-weight: 400; color: var(--warm);
-}
-.score-side { text-align: left; }
-.score-label {
-  font-size: .58rem; font-weight: 700;
-  letter-spacing: .18em; text-transform: uppercase;
-  color: rgba(247,246,243,.3); margin-bottom: 8px;
-}
-.score-desc {
-  font-size: .82rem; color: rgba(247,246,243,.58);
-  line-height: 1.65; max-width: 180px;
-  font-family: var(--display); font-style: italic;
-}
-
-/* Bars card — overlaps hero */
-.bars-card {
-  background: var(--warm);
-  border: 1px solid var(--mist);
-  border-radius: 18px;
-  padding: 24px 28px;
-  max-width: 560px;
-  margin: -32px auto 0;
-  position: relative; z-index: 10;
-  box-shadow: 0 8px 32px rgba(26,29,46,.12);
-}
-.bars-card-label {
-  font-size: .58rem; font-weight: 700;
-  letter-spacing: .18em; text-transform: uppercase;
-  color: var(--ink3); margin-bottom: 18px;
-}
-.domain-bars { display: flex; flex-direction: column; gap: 14px; }
-.dbar-row { display: flex; flex-direction: column; gap: 6px; }
-.dbar-top {
-  display: flex; justify-content: space-between; align-items: center;
-}
-.dbar-name {
-  font-size: .72rem; font-weight: 600;
-  color: var(--ink2);
-}
-.dbar-pct { font-size: .72rem; font-weight: 700; color: var(--ink3); }
-.dbar-bg  { height: 5px; background: var(--mist); border-radius: 5px; overflow: hidden; }
-.dbar-fill { height: 100%; border-radius: 5px; transition: width 1.2s cubic-bezier(.22,1,.36,1) .4s; }
-.fill-material   { background: var(--material); }
-.fill-inner      { background: var(--inner); }
-.fill-liveliness { background: var(--sage); }
-.fill-connection { background: var(--connect); }
-
-/* Results body */
-.rb {
-  max-width: 560px; margin: 0 auto;
-  padding: 40px 24px 80px;
-}
-
-/* Pattern insight */
-.insight-box {
-  background: var(--ink);
-  border-radius: 18px; padding: 28px 28px;
-  margin-bottom: 14px;
-}
-.insight-label {
-  font-size: .58rem; font-weight: 700;
-  letter-spacing: .18em; text-transform: uppercase;
-  color: var(--terra); margin-bottom: 14px;
-}
-.insight-txt {
-  font-family: var(--display);
-  font-size: .96rem; color: rgba(247,246,243,.78);
-  line-height: 1.85; font-weight: 400;
-}
-
-/* Wisdom */
-.wisdom-box {
-  background: var(--sage-l);
-  border: 1px solid rgba(91,140,122,.2);
-  border-left: 3px solid var(--sage);
-  border-radius: 0 14px 14px 0;
-  padding: 20px 24px; margin-bottom: 40px;
-}
-.wisdom-label {
-  font-size: .58rem; font-weight: 700;
-  letter-spacing: .16em; text-transform: uppercase;
-  color: var(--sage2); margin-bottom: 10px;
-}
-.wisdom-txt {
-  font-family: var(--display);
-  font-size: .9rem; font-style: italic;
-  color: var(--ink2); line-height: 1.82;
-}
-.wisdom-txt strong { font-style: normal; font-weight: 500; color: var(--ink); }
-
-/* Save card */
-.save-card {
-  background: var(--warm);
-  border: 1px solid var(--mist);
-  border-radius: 18px;
-  padding: 28px 28px;
-  margin-bottom: 14px;
-}
-.save-eye {
-  font-size: .58rem; font-weight: 700;
-  letter-spacing: .18em; text-transform: uppercase;
-  color: var(--sage2); margin-bottom: 12px;
-}
-.save-hed {
-  font-family: var(--display);
-  font-size: 1.15rem; font-weight: 400;
-  color: var(--ink); margin-bottom: 10px; line-height: 1.35;
-}
-.save-body {
-  font-size: .85rem; color: var(--ink3);
-  line-height: 1.75; margin-bottom: 20px;
-}
-.save-form {
-  display: flex; gap: 8px; margin-bottom: 10px;
-}
-.save-email {
-  flex: 1; min-width: 0;
-  padding: 13px 16px;
-  border: 1.5px solid var(--mist-d);
-  border-radius: 10px;
-  font-family: var(--body); font-size: .88rem;
-  background: var(--cream); color: var(--ink);
-  outline: none; transition: border-color .2s;
-  min-height: 48px;
-}
-.save-email:focus { border-color: var(--sage); }
-.save-email::placeholder { color: var(--ink3); }
-.save-submit {
-  background: var(--ink); color: var(--cream);
-  border: none; padding: 13px 22px;
-  border-radius: 10px;
-  font-family: var(--body); font-size: .82rem; font-weight: 500;
-  cursor: pointer; white-space: nowrap;
-  transition: background .15s, transform .1s;
-  min-height: 48px; letter-spacing: .03em;
-}
-.save-submit:hover { background: var(--sage2); transform: translateY(-1px); }
-.save-note {
-  font-size: .7rem; color: var(--ink3);
-  line-height: 1.5;
-}
-.save-success {
-  display: none;
-  font-family: var(--display); font-style: italic;
-  font-size: .92rem; color: var(--sage2);
-  padding: 12px 0;
-}
-
-/* Companion offer card */
-.offer-card {
-  background: var(--ink);
-  border-radius: 18px;
-  padding: 32px 28px;
-  margin-bottom: 32px;
-  position: relative; overflow: hidden;
-}
-.offer-card::before {
-  content: '';
-  position: absolute;
-  width: 300px; height: 300px;
-  background: radial-gradient(circle, rgba(91,140,122,.1) 0%, transparent 65%);
-  top: -60px; right: -40px; pointer-events: none;
-}
-.offer-eye {
-  font-size: .58rem; font-weight: 700;
-  letter-spacing: .18em; text-transform: uppercase;
-  color: var(--terra); margin-bottom: 14px;
-  position: relative; z-index: 1;
-}
-.offer-title {
-  font-family: var(--display);
-  font-size: 1.35rem; font-weight: 400;
-  color: var(--warm); margin-bottom: 6px; line-height: 1.3;
-  position: relative; z-index: 1;
-}
-.offer-sub {
-  font-size: .82rem; color: rgba(247,246,243,.5);
-  margin-bottom: 18px; font-family: var(--display); font-style: italic;
-  position: relative; z-index: 1;
-}
-.offer-steps {
-  display: flex; flex-direction: column; gap: 8px;
-  margin-bottom: 24px; position: relative; z-index: 1;
-}
-.offer-step {
-  display: flex; align-items: flex-start; gap: 12px;
-  font-size: .82rem; color: rgba(247,246,243,.65);
-  line-height: 1.5;
-}
-.offer-step-dot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--sage); flex-shrink: 0; margin-top: 7px;
-}
-.offer-price-row {
-  display: flex; align-items: center; gap: 12px;
-  margin-bottom: 18px; position: relative; z-index: 1;
-}
-.offer-price {
-  font-family: var(--display);
-  font-size: 1.5rem; font-weight: 400; color: var(--warm);
-}
-.offer-price-note {
-  font-size: .75rem; color: rgba(247,246,243,.38);
-  line-height: 1.4;
-}
-.offer-cta {
-  display: block; text-align: center;
-  background: var(--terra); color: #fff;
-  padding: 16px 28px; border-radius: 12px;
-  font-family: var(--body); font-size: .88rem; font-weight: 600;
-  text-decoration: none; letter-spacing: .02em;
-  transition: opacity .15s, transform .15s;
-  min-height: 52px; display: flex; align-items: center; justify-content: center;
-  position: relative; z-index: 1;
-}
-.offer-cta:hover { opacity: .9; transform: translateY(-1px); }
-
-/* Share row */
-.share-row { text-align: center; }
-.share-row p {
-  font-size: .76rem; color: var(--ink3);
-  margin-bottom: 12px;
-}
-.share-btn {
-  background: none;
-  border: 1.5px solid var(--mist-d);
-  color: var(--ink3); padding: 10px 20px;
-  border-radius: 100px; font-size: .76rem; font-weight: 500;
-  cursor: pointer; font-family: var(--body);
-  margin: 0 4px 8px; transition: all .15s;
-  min-height: 44px;
-}
-.share-btn:hover { border-color: var(--ink); color: var(--ink); }
-
-.rfooter {
-  text-align: center; padding: 32px 24px 48px;
-  font-size: .7rem; color: var(--mist-d);
-  font-family: var(--display); font-style: italic;
-}
-.rfooter a { color: var(--sage); text-decoration: none; }
-
-/* ── Responsive ── */
-@media (max-width: 640px) {
-  #si { padding: 56px 20px; }
-  .i-h1 { font-size: clamp(1.8rem, 7vw, 2.4rem); }
-  .i-cta { padding: 16px 36px; font-size: .9rem; }
-
-  .qh { padding: 0 16px; }
-  .qbody { padding: 36px 16px; }
-  .qtxt { font-size: clamp(1.05rem, 4.5vw, 1.3rem); margin-bottom: 24px; }
-  .qopt { padding: 14px 16px; gap: 12px; }
-
-  .rh { padding: 44px 20px 64px; }
-  .score-wrap { flex-direction: column; gap: 16px; }
-  .score-side { text-align: center; }
-  .score-desc { max-width: 100%; }
-
-  .bars-card { margin: -28px 16px 0; padding: 20px 20px; }
-  .rb { padding: 32px 16px 64px; }
-  .insight-box { padding: 22px 20px; }
-  .save-card { padding: 24px 20px; }
-  .save-form { flex-direction: column; }
-  .save-submit { width: 100%; padding: 14px; text-align: center; justify-content: center; }
-  .offer-card { padding: 24px 20px; }
+@media(max-width:420px){
+  .qopt{font-size:.92rem;padding:16px 16px;}
+  .qtxt{font-size:1.28rem;}
 }
 </style>
 </head>
 <body>
 
-<!-- ── INTRO ── -->
-<div class="screen active" id="si">
+<!-- INTRO -->
+<div class="screen active atmos" id="si">
   <div class="ii">
     <div class="i-brand">Velani</div>
-    <h1 class="i-h1">What are you carrying<br>that you <em>can't see?</em></h1>
-    <p class="i-sub">There's a kind of exhaustion that sleep doesn't fix. This audit shows you exactly where your energy is going — and what's quietly consuming your capacity to feel like yourself.</p>
-    <button class="i-cta" onclick="start()">Begin the audit</button>
-    <p class="i-time">10 questions &middot; 4 minutes &middot; instant Capacity Score</p>
+    <h1 class="i-h1">What are you<br><em>carrying</em><br>that you can't see?</h1>
+    <p class="i-sub">There's a kind of tired that sleep doesn't fix. In four minutes, see exactly where your energy is going — and what's quietly draining your capacity to feel like yourself.</p>
+    <div class="i-domains">
+      <span class="i-domain">Home &amp; Family</span>
+      <span class="i-domain">Work &amp; Career</span>
+      <span class="i-domain">Energy &amp; Body</span>
+      <span class="i-domain">Identity &amp; Joy</span>
+    </div>
+    <button class="i-cta" onclick="start()">Discover your Capacity Score</button>
+    <p class="i-time">10 questions &middot; 4 minutes &middot; free</p>
   </div>
 </div>
 
-<!-- ── QUESTIONS ── -->
-<div class="screen" id="sq">
+<!-- QUESTIONS -->
+<div class="screen atmos" id="sq">
   <div class="qh">
-    <button class="qh-back" id="qh-back" onclick="prev()" disabled>&#8592; Back</button>
-    <div class="progress-dots" id="progress-dots"></div>
-    <div class="qh-brand">velani</div>
+    <button class="qh-back" id="bbk" onclick="prev()" disabled>&#8249;</button>
+    <div class="dots" id="dots"></div>
+    <div class="qh-count" id="qcount">1/10</div>
   </div>
   <div class="qbody">
-    <div class="qcard">
-      <div class="dtag" id="dtag"></div>
-      <div class="qtxt" id="qtxt"></div>
-      <div class="qopts" id="qopts"></div>
-    </div>
+    <div class="q-domain" id="qdom"></div>
+    <div class="qtxt" id="qtxt"></div>
+    <div class="qopts" id="qopts"></div>
   </div>
 </div>
 
-<!-- ── LOADING ── -->
-<div class="screen" id="sl">
-  <div class="sl-inner">
+<!-- LOADING -->
+<div class="screen atmos" id="sl">
+  <div class="li">
     <div class="spin"></div>
     <div class="l-title">Reading your load&hellip;</div>
-    <p class="l-sub">Calculating where responsibility has accumulated and where capacity has quietly disappeared.</p>
+    <p class="l-sub">Finding where responsibility has gathered — and where your capacity has quietly slipped away.</p>
     <div class="l-steps">
-      <div class="l-step" id="ls1"><div class="l-dot"></div>Analysing Relationships &amp; Connection</div>
-      <div class="l-step" id="ls2"><div class="l-dot"></div>Analysing Work &amp; Material Load</div>
-      <div class="l-step" id="ls3"><div class="l-dot"></div>Analysing Energy &amp; Body</div>
-      <div class="l-step" id="ls4"><div class="l-dot"></div>Analysing Identity &amp; Inner Life</div>
+      <div class="l-step" id="ls1"><div class="l-dot"></div>Home &amp; Family</div>
+      <div class="l-step" id="ls2"><div class="l-dot"></div>Work &amp; Career</div>
+      <div class="l-step" id="ls3"><div class="l-dot"></div>Energy &amp; Body</div>
+      <div class="l-step" id="ls4"><div class="l-dot"></div>Identity &amp; Joy</div>
       <div class="l-step" id="ls5"><div class="l-dot"></div>Finding your pattern</div>
     </div>
   </div>
 </div>
 
-<!-- ── RESULTS ── -->
+<!-- RESULTS -->
 <div class="screen" id="sr">
-  <div class="rh">
-    <div class="rh-inner">
-      <div class="r-eye">Your Invisible Load Audit &middot; Velani</div>
-      <div class="r-profile" id="r-profile"></div>
-      <div class="r-tag" id="r-tag"></div>
-      <div class="score-wrap">
-        <div class="score-ring">
+  <div class="rhero">
+    <div class="rh-in">
+      <div class="rh-eye">Your result</div>
+      <div class="rh-pattern" id="r-pattern"></div>
+      <div class="rh-tag" id="r-tag"></div>
+      <div class="score-block">
+        <div class="ring">
           <svg width="104" height="104" viewBox="0 0 104 104">
-            <circle class="ring-bg"   cx="52" cy="52" r="44"/>
-            <circle class="ring-fill" id="ring-fill" cx="52" cy="52" r="44" stroke-dasharray="276" stroke-dashoffset="276"/>
+            <circle class="ring-bg" cx="52" cy="52" r="44"/>
+            <circle class="ring-fl" id="ring-fl" cx="52" cy="52" r="44" stroke-dasharray="276" stroke-dashoffset="276"/>
           </svg>
-          <div class="score-num" id="score-num">--</div>
+          <div class="ring-num" id="ring-num">--</div>
         </div>
         <div class="score-side">
-          <div class="score-label">Capacity Score</div>
+          <div class="score-lbl">Capacity Score</div>
           <div class="score-desc" id="score-desc"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="bars-card" id="bars-card">
-    <div class="bars-card-label">Where your load is heaviest</div>
-    <div class="domain-bars" id="domain-bars"></div>
-  </div>
+  <div class="rbody">
+    <div class="bars-card">
+      <div class="bars-title">Where your load sits</div>
+      <div id="bars"></div>
+    </div>
 
-  <div class="rb">
-    <div class="insight-box">
-      <div class="insight-label">Your pattern</div>
-      <div class="insight-txt" id="insight-txt"></div>
+    <div class="sec-title">What your result means</div>
+    <div class="pattern-read">
+      <div class="pr-label">Your pattern</div>
+      <div class="pr-text" id="pr-text"></div>
     </div>
 
     <div class="wisdom-box" id="wisdom-box" style="display:none;">
-      <div class="wisdom-label">A small truth worth sitting with</div>
-      <div class="wisdom-txt" id="wisdom-txt"></div>
+      <div class="wis-l">A truth worth sitting with</div>
+      <div class="wis-t" id="wis-t"></div>
     </div>
 
-    <!-- Save result -->
-    <div class="save-card">
-      <div class="save-eye">Save your result</div>
-      <div class="save-hed">Know what to work on first.</div>
-      <div class="save-body">Your Capacity Score and pattern — plus a quiet weekly letter from Velani, written for women carrying too much.</div>
+    <!-- SAVE RESULT -->
+    <div class="save-card" id="save-card">
+      <div class="save-icon">&#9830;</div>
+      <div class="save-h">Save your result &amp; get your free starting guide</div>
+      <div class="save-sub">We'll send your Capacity Score and Velani Lite — a simple daily practice to start carrying less, free. Plus a weekly letter for women making room for themselves again.</div>
       <div class="save-form" id="save-form">
-        <input class="save-email" type="email" id="email" placeholder="your@email.com" autocomplete="email">
-        <button class="save-submit" onclick="saveResult()">Send it to me</button>
+        <input class="save-input" type="email" id="email" placeholder="your@email.com" autocomplete="email" inputmode="email">
+        <button class="save-btn" onclick="saveResult()">Send it to me</button>
       </div>
-      <div class="save-success" id="save-success">Your result is on its way. Check your inbox.</div>
-      <div class="save-note">No noise. Unsubscribe any time.</div>
+      <div class="save-fine">No spam, ever. Unsubscribe anytime.</div>
     </div>
 
-    <!-- Companion offer -->
-    <div class="offer-card" id="offer-card">
-      <div class="offer-eye">Next step</div>
-      <div class="offer-title">The Velani Companion</div>
-      <div class="offer-sub">A guided workbook built around your result.</div>
-      <div class="offer-steps">
-        <div class="offer-step"><div class="offer-step-dot"></div>5 steps per domain — starting where your load is heaviest</div>
-        <div class="offer-step"><div class="offer-step-dot"></div>Mirror what you carry. Sort it. Decide what to put down.</div>
-        <div class="offer-step"><div class="offer-step-dot"></div>Guided by the Order of Care philosophy</div>
+    <!-- COMPANION OFFER -->
+    <div class="sec-title">Your one clear next step</div>
+    <div class="offer">
+      <div class="offer-in">
+        <div class="offer-eye">The Velani Companion</div>
+        <div class="offer-h" id="offer-h">Turn your result into <em>real change.</em></div>
+        <div class="offer-body" id="offer-body">A guided experience built around your result — starting exactly where your load is heaviest. Not another thing to manage. A quiet, beautiful space to decide what you're finally allowed to put down, and what you'll grow toward instead.</div>
+        <ul class="offer-list">
+          <li>Personalised to your heaviest domain</li>
+          <li>Uncover what drains you — reclaim what makes you strong</li>
+          <li>Yours forever, to return to each season of life</li>
+          <li>A printable workbook + guided online version</li>
+        </ul>
+        <div class="offer-price-row">
+          <div class="offer-price">$39</div>
+          <div class="offer-price-note">one-time &middot; instant access</div>
+        </div>
+        <a class="offer-cta" id="offer-cta" href="https://buy.stripe.com/9B69AM3pRcSC8MJ4OR8N202" onclick="trackCompanion()">Begin the Companion &rarr;</a>
+        <div class="offer-guarantee">If it doesn't help you make room, reply to any email and I'll refund you. No forms, no questions.</div>
+        <div class="offer-founder">
+          <div class="founder-quote">"I built this because I needed it myself — a senior role, a new baby, carrying everything. This is the tool I wish I'd had."<span class="name">— Meagan, founder of Velani</span></div>
+        </div>
       </div>
-      <div class="offer-price-row">
-        <div class="offer-price">$39</div>
-        <div class="offer-price-note">One-time access.<br>Works at your own pace.</div>
-      </div>
-      <a class="offer-cta" id="offer-cta" href="https://buy.stripe.com/28E3cof8z05Q1kh3KN8N201" onclick="trackCompanion()">Begin the Companion &rarr;</a>
     </div>
 
     <div class="share-row">
-      <p>Know someone who needs to see this?</p>
-      <button class="share-btn" onclick="doShare()">Share this audit</button>
+      <p>Know someone carrying too much?</p>
+      <button class="share-btn" onclick="doShare()">Share the audit</button>
       <button class="share-btn" onclick="start()">Retake</button>
     </div>
   </div>
-
-  <div class="rfooter"><a href="https://velani.app">velani.app</a> &middot; Making room for yourself again</div>
+  <div class="rfoot"><a href="https://velani.app">velani.app</a> &middot; Making room for yourself again</div>
 </div>
 
 <script is:inline>
-var Qs = [
-  {tag:'Relationships', velani:'connection',
-   q:'How often are you mentally tracking household and family logistics — appointments, groceries, repairs, coordination — even when you’re trying to rest?',
-   opts:[
-     'Rarely — home runs without much mental effort from me',
-     'Sometimes — I notice it but it stays manageable',
-     'Often — it lives in the background even when I’m at work or with friends',
-     'Almost always — it’s one of the loudest things in my head'
-   ]},
-  {tag:'Relationships', velani:'connection',
-   q:'Beyond your own needs, how many people’s emotional, practical, or logistical needs filter through you on a regular basis?',
-   opts:[
-     'Mostly my own — I’m in a fairly independent season',
-     '1–2 people — meaningful and manageable',
-     '3–4 people — children, partner, parents, or others',
-     '5 or more — I’m the person everyone brings things to'
-   ]},
-  {tag:'Relationships', velani:'connection',
-   q:'When you think about your relationships and family responsibilities overall, how do they feel?',
-   opts:[
-     'Nourishing — they give me energy more than they take it',
-     'Meaningful but tiring — I love them, it’s just a lot',
-     'Heavy — I often feel like I’m keeping everyone else afloat',
-     'Depleting — there’s nothing left after meeting everyone else’s needs'
-   ]},
-  {tag:'Work & Material', velani:'material',
-   q:'How much of your mental energy outside work hours is spent thinking about work — open projects, emails, unfinished things?',
-   opts:[
-     'Very little — I can switch off reasonably well',
-     'Some — work thoughts appear occasionally outside hours',
-     'A lot — work follows me into evenings and weekends',
-     'Constantly — I barely remember what it felt like to not think about work'
-   ]},
-  {tag:'Work & Material', velani:'material',
-   q:'Think about unfinished things at work — decisions pending, conversations delayed, tasks half-done. How many open loops are you carrying right now?',
-   opts:[
-     'A few — nothing that keeps me up at night',
-     'A moderate amount — I know what they are',
-     'A lot — more than I can clearly name right now',
-     'So many I’ve stopped counting — it’s background noise I live with'
-   ]},
-  {tag:'Energy & Body', velani:'liveliness',
+var Qs=[
+  {tag:'Home &amp; Family',cls:'home',velani:'connection',
+   q:'How often are you mentally tracking household and family logistics — even when you’re trying to rest?',
+   opts:['Rarely — home runs without much mental effort from me','Sometimes — I notice it but it stays manageable','Often — it’s there even when I’m at work or with friends','Almost always — it’s one of the loudest things in my head']},
+  {tag:'Home &amp; Family',cls:'home',velani:'connection',
+   q:'How many people’s emotional or practical needs filter through you on a regular basis?',
+   opts:['Mostly my own — I’m in an independent season','One or two people — manageable','Three or four — children, partner, parents, others','Five or more — I’m the one everyone comes to']},
+  {tag:'Home &amp; Family',cls:'home',velani:'connection',
+   q:'When you think about your relationships and family responsibilities, how do they feel?',
+   opts:['Nourishing — they give me energy','Meaningful but tiring — I love them, it’s just a lot','Heavy — I feel like I keep everyone afloat','Depleting — there’s nothing left after everyone else']},
+  {tag:'Work &amp; Career',cls:'work',velani:'material',
+   q:'How much of your mind is on work outside work hours — open projects, emails, unfinished things?',
+   opts:['Very little — I switch off well','Some — it surfaces occasionally','A lot — it follows me into evenings and weekends','Constantly — I can’t remember not thinking about it']},
+  {tag:'Work &amp; Career',cls:'work',velani:'material',
+   q:'How many unfinished work loops are you carrying right now — decisions, conversations, tasks left open?',
+   opts:['A few — nothing that keeps me up','A moderate amount — I know what they are','A lot — more than I can clearly name','So many I’ve stopped counting']},
+  {tag:'Energy &amp; Body',cls:'self-e',velani:'liveliness',
    q:'How would you describe your physical and emotional energy most days?',
-   opts:[
-     'Generally good — I feel like myself most of the time',
-     'Variable — some good days, some depleted ones',
-     'Often low — I’m running on less than I need',
-     'Persistently depleted — I don’t remember what full energy feels like'
-   ]},
-  {tag:'Energy & Body', velani:'liveliness',
-   q:'How well are you protecting the basics that restore your energy — sleep, movement, time alone, genuine rest?',
-   opts:[
-     'Well — these feel like non-negotiables I protect',
-     'Okay — I get most of them most of the time',
-     'Poorly — they’re the first things I cut when life gets full',
-     'Not at all — I’ve been running on empty for a long time'
-   ]},
-  {tag:'Identity & Inner', velani:'inner',
-   q:'When did you last do something that was entirely for you — not productive, not for anyone else, just something that felt like you?',
-   opts:[
-     'Recently — I make time for this fairly regularly',
-     'A few weeks ago — it happens but not as often as I’d like',
-     'A while ago — I can’t quite remember the last real one',
-     'I honestly can’t remember — it’s become very rare'
-   ]},
-  {tag:'Identity & Inner', velani:'inner',
-   q:'How connected do you feel to the version of yourself that existed before all the responsibility accumulated?',
-   opts:[
-     'Pretty connected — she’s still here, I hear from her regularly',
-     'Somewhat — I catch glimpses of her occasionally',
-     'Barely — I know she’s in there somewhere but she’s quiet',
-     'Completely disconnected — I’m not sure I know who she is anymore'
-   ]},
-  {tag:'Identity & Inner', velani:'inner',
-   q:'Beauty, curiosity, creativity, spontaneity — the parts of life that feel alive rather than productive. How present are these in your daily life?',
-   opts:[
-     'Present and protected — they’re part of how I live',
-     'Occasional — I catch them in small moments',
-     'Rare — they feel like luxuries I’ll get back to someday',
-     'Almost absent — life has become mostly maintenance'
-   ]}
+   opts:['Generally good — I feel like myself','Variable — some good days, some empty ones','Often low — I’m running on less than I need','Persistently depleted — I forget what full feels like']},
+  {tag:'Energy &amp; Body',cls:'self-e',velani:'liveliness',
+   q:'How well are you protecting the basics that restore you — sleep, movement, real rest?',
+   opts:['Well — these are non-negotiables I protect','Okay — I get most of them most of the time','Poorly — they’re the first thing I cut','Not at all — I’ve been running on empty a long time']},
+  {tag:'Identity &amp; Joy',cls:'self-i',velani:'inner',
+   q:'When did you last do something entirely for you — not productive, just yours?',
+   opts:['Recently — I make time for this','A few weeks ago — not as often as I’d like','A while ago — I can’t quite remember','I honestly can’t remember — it’s rare now']},
+  {tag:'Identity &amp; Joy',cls:'self-i',velani:'inner',
+   q:'How connected do you feel to the version of yourself from before all the responsibility?',
+   opts:['Connected — she’s still here','Somewhat — I catch glimpses of her','Barely — she’s in there but quiet','Disconnected — I’m not sure I know her anymore']},
+  {tag:'Identity &amp; Joy',cls:'self-i',velani:'inner',
+   q:'Beauty, curiosity, creativity — the things that feel alive rather than useful. How present are they?',
+   opts:['Present and protected — part of how I live','Occasional — in small moments','Rare — luxuries I’ll get back to someday','Almost absent — life is mostly maintenance']}
 ];
 
-var cur = 0, ans = new Array(Qs.length).fill(null), lastResult = null;
-var TOTAL = Qs.length;
+var cur=0,ans=new Array(Qs.length).fill(null),lastResult=null;
 
-function show(id) {
-  var ss = document.querySelectorAll('.screen');
-  for (var i = 0; i < ss.length; i++) ss[i].classList.remove('active');
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0, 0);
+function show(id){var s=document.querySelectorAll('.screen');for(var i=0;i<s.length;i++)s[i].classList.remove('active');document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+function start(){cur=0;ans=new Array(Qs.length).fill(null);buildDots();render();show('sq');}
+
+function buildDots(){
+  var d=document.getElementById('dots');d.innerHTML='';
+  for(var i=0;i<Qs.length;i++)d.innerHTML+='<div class="dot" id="dot'+i+'"></div>';
 }
 
-function start() {
-  cur = 0;
-  ans = new Array(TOTAL).fill(null);
-  render();
-  show('sq');
-}
-
-function renderDots() {
-  var c = document.getElementById('progress-dots');
-  c.innerHTML = '';
-  for (var i = 0; i < TOTAL; i++) {
-    var d = document.createElement('div');
-    d.className = 'pdot' + (i < cur ? ' done' : (i === cur ? ' curr' : ''));
-    c.appendChild(d);
+function render(){
+  var q=Qs[cur];
+  for(var i=0;i<Qs.length;i++){
+    var el=document.getElementById('dot'+i);
+    el.className='dot'+(i<cur?' done':i===cur?' cur':'');
   }
-}
-
-function render() {
-  var q = Qs[cur];
-  renderDots();
-  var dtag = document.getElementById('dtag');
-  dtag.textContent = q.tag;
-  document.getElementById('qtxt').textContent = q.q;
-  var c = document.getElementById('qopts');
-  c.innerHTML = '';
-  for (var i = 0; i < q.opts.length; i++) {
-    (function(idx) {
-      var b = document.createElement('button');
-      b.className = 'qopt' + (ans[cur] === idx ? ' sel' : '');
-      b.innerHTML = '<div class="radio"></div><div class="opt-lbl">' + q.opts[idx] + '</div>';
-      b.onclick = function() { pick(idx); };
+  document.getElementById('qcount').textContent=(cur+1)+'/'+Qs.length;
+  var dom=document.getElementById('qdom');
+  dom.innerHTML=q.tag;dom.className='q-domain '+q.cls;
+  document.getElementById('qtxt').textContent=q.q;
+  var c=document.getElementById('qopts');c.innerHTML='';
+  for(var i=0;i<q.opts.length;i++){
+    (function(i){
+      var b=document.createElement('button');
+      b.className='qopt'+(ans[cur]===i?' sel':'');
+      b.textContent=q.opts[i];
+      b.onclick=function(){pick(i);};
       c.appendChild(b);
     })(i);
   }
-  document.getElementById('qh-back').disabled = cur === 0;
+  document.getElementById('bbk').disabled=cur===0;
 }
 
-function pick(i) {
-  ans[cur] = i;
-  var els = document.querySelectorAll('.qopt');
-  for (var j = 0; j < els.length; j++) {
-    var on = j === i;
-    els[j].classList.toggle('sel', on);
-    var r = els[j].querySelector('.radio');
-    if (on) { r.style.background = 'var(--sage)'; r.style.borderColor = 'var(--sage)'; }
-    else { r.style.background = ''; r.style.borderColor = ''; }
-    els[j].querySelector('.opt-lbl').style.color = on ? 'rgba(247,246,243,.92)' : '';
-  }
-  setTimeout(function() { next(); }, 280);
+function pick(i){
+  ans[cur]=i;
+  var els=document.querySelectorAll('.qopt');
+  for(var j=0;j<els.length;j++)els[j].classList.toggle('sel',j===i);
+  setTimeout(function(){if(cur<Qs.length-1){cur++;render();}else loading();},280);
 }
 
-function next() {
-  if (ans[cur] === null) return;
-  if (cur < TOTAL - 1) { cur++; render(); }
-  else loading();
-}
-function prev() { if (cur > 0) { cur--; render(); } }
+function prev(){if(cur>0){cur--;render();}}
 
-function loading() {
+function loading(){
   show('sl');
-  var ids = ['ls1','ls2','ls3','ls4','ls5'];
-  for (var k = 0; k < ids.length; k++) document.getElementById(ids[k]).classList.remove('done');
-  var i = 0;
-  var t = setInterval(function() {
-    if (i < ids.length) { document.getElementById(ids[i]).classList.add('done'); i++; }
-    else { clearInterval(t); setTimeout(function() { buildResults(); show('sr'); }, 350); }
-  }, 380);
+  var ids=['ls1','ls2','ls3','ls4','ls5'];
+  for(var k=0;k<ids.length;k++)document.getElementById(ids[k]).classList.remove('done');
+  var i=0;
+  var t=setInterval(function(){
+    if(i<ids.length){document.getElementById(ids[i]).classList.add('done');i++;}
+    else{clearInterval(t);setTimeout(function(){buildResults();show('sr');},420);}
+  },360);
 }
 
-function buildResults() {
-  var vm = {
-    connection: {label:'Relationships', score:0, max:0},
-    material:   {label:'Work & Material', score:0, max:0},
-    liveliness: {label:'Energy & Body', score:0, max:0},
-    inner:      {label:'Identity & Inner', score:0, max:0}
+function buildResults(){
+  var vm={
+    connection:{label:'Connection',score:0,max:0},
+    material:{label:'Work & Material',score:0,max:0},
+    liveliness:{label:'Energy & Body',score:0,max:0},
+    inner:{label:'Identity & Inner',score:0,max:0}
   };
-  for (var i = 0; i < TOTAL; i++) {
-    var s = ans[i] == null ? 0 : ans[i];
-    vm[Qs[i].velani].score += (s + 1);
-    vm[Qs[i].velani].max   += 4;
+  for(var i=0;i<Qs.length;i++){
+    var s=ans[i]==null?0:ans[i];
+    vm[Qs[i].velani].score+=(s+1);
+    vm[Qs[i].velani].max+=4;
   }
-  var tS = 0, tM = 0;
-  for (var k in vm) { tS += vm[k].score; tM += vm[k].max; }
-  var capScore = 100 - Math.round(tS / tM * 100);
+  var tS=0,tM=0;
+  for(var k in vm){tS+=vm[k].score;tM+=vm[k].max;}
+  var cap=100-Math.round(tS/tM*100);
+  var dp={};for(var k in vm)dp[k]=Math.round(vm[k].score/vm[k].max*100);
+  var pat=detectPattern(dp,cap);
+  lastResult={cap:cap,pattern:pat.id,name:pat.name};
 
-  var dp = {};
-  for (var k in vm) dp[k] = Math.round(vm[k].score / vm[k].max * 100);
+  document.getElementById('r-pattern').textContent=pat.name;
+  document.getElementById('r-tag').textContent=pat.tag;
+  document.getElementById('ring-num').textContent=cap;
+  document.getElementById('score-desc').textContent=pat.scoreDesc;
+  var fl=document.getElementById('ring-fl');
+  fl.style.stroke=pat.ring;
+  setTimeout(function(){fl.style.strokeDashoffset=276-(276*cap/100);},150);
 
-  var pat = detectPattern(dp, capScore);
-  lastResult = {cap: capScore, pattern: pat.id, name: pat.name};
-
-  document.getElementById('r-profile').textContent  = pat.name;
-  document.getElementById('r-tag').textContent       = pat.tag;
-  document.getElementById('score-num').textContent   = capScore;
-  document.getElementById('score-desc').textContent  = pat.scoreDesc;
-
-  var fill = document.getElementById('ring-fill');
-  fill.style.stroke = pat.ringColor;
-  setTimeout(function() { fill.style.strokeDashoffset = 276 - (276 * capScore / 100); }, 200);
-
-  // Bars card
-  var barsEl = document.getElementById('domain-bars');
-  barsEl.innerHTML = '';
-  var order = ['connection','material','liveliness','inner'];
-  for (var b = 0; b < order.length; b++) {
-    var key = order[b], d = vm[key];
-    barsEl.innerHTML +=
-      '<div class="dbar-row">'
-      + '<div class="dbar-top">'
-      +   '<span class="dbar-name">' + d.label + '</span>'
-      +   '<span class="dbar-pct">' + dp[key] + '%</span>'
-      + '</div>'
-      + '<div class="dbar-bg"><div class="dbar-fill fill-' + key + '" style="width:0%" data-w="' + dp[key] + '%"></div></div>'
-      + '</div>';
+  var order=['connection','material','liveliness','inner'];
+  var bars=document.getElementById('bars');bars.innerHTML='';
+  for(var b=0;b<order.length;b++){
+    var key=order[b],d=vm[key];
+    bars.innerHTML+='<div class="bar-row"><div class="bar-top"><span class="bar-name">'+d.label+'</span><span class="bar-pct">'+dp[key]+'%</span></div><div class="bar-track"><div class="bar-fl fl-'+key+'" data-w="'+dp[key]+'%"></div></div></div>';
   }
-  setTimeout(function() {
-    var fs = document.querySelectorAll('.dbar-fill');
-    for (var f = 0; f < fs.length; f++) fs[f].style.width = fs[f].dataset.w;
-  }, 500);
+  setTimeout(function(){var f=document.querySelectorAll('.bar-fl');for(var i=0;i<f.length;i++)f[i].style.width=f[i].dataset.w;},250);
 
-  document.getElementById('insight-txt').textContent = pat.insight;
-
-  if (pat.wisdom) {
-    document.getElementById('wisdom-box').style.display = 'block';
-    document.getElementById('wisdom-txt').innerHTML = pat.wisdom;
+  document.getElementById('pr-text').textContent=pat.insight;
+  if(pat.wisdom){
+    document.getElementById('wisdom-box').style.display='block';
+    document.getElementById('wis-t').innerHTML=pat.wisdom;
   }
 
-  // Companion offer: update title based on pattern
-  if (pat.id === 'carrying-well') {
-    document.getElementById('offer-card').style.display = 'none';
+  if(pat.id==='carrying-well'){
+    document.getElementById('offer-h').innerHTML='Protect the space <em>you’ve made.</em>';
+    document.getElementById('offer-body').textContent='You’re carrying well right now — and that’s worth keeping. The Companion helps you protect your capacity before the next season fills it, and grow into the room you have.';
   }
 }
 
-function detectPattern(dp, cap) {
-  var m = dp.material, c = dp.connection, l = dp.liveliness, n = dp.inner;
-  var HIGH = 60;
-  if (cap >= 70) return PATTERNS.carryingWell;
-  if (m >= HIGH && c >= HIGH && (l >= HIGH || n >= HIGH)) return PATTERNS.runningEmpty;
-  if (m >= HIGH && n >= HIGH && c < HIGH) return PATTERNS.successWithoutSelf;
-  if (m >= HIGH && n >= HIGH) return PATTERNS.successWithoutSelf;
-  if (c >= HIGH && l >= HIGH) return PATTERNS.endlessPour;
-  if (c >= HIGH && c >= m && c >= n) return PATTERNS.endlessPour;
-  if (n >= HIGH && m < HIGH && c < HIGH) return PATTERNS.quietDisappearance;
-  if (n >= HIGH && n >= m && n >= c) return PATTERNS.quietDisappearance;
-  return PATTERNS.holdingTogether;
+function detectPattern(dp,cap){
+  var m=dp.material,c=dp.connection,l=dp.liveliness,n=dp.inner,H=60;
+  if(cap>=70)return P.carryingWell;
+  if(m>=H&&c>=H&&(l>=H||n>=H))return P.runningEmpty;
+  if(m>=H&&n>=H)return P.successWithoutSelf;
+  if(c>=H&&l>=H)return P.endlessPour;
+  if(c>=H&&c>=m&&c>=n)return P.endlessPour;
+  if(n>=H&&m<H&&c<H)return P.quietDisappearance;
+  if(n>=H&&n>=m&&n>=c)return P.quietDisappearance;
+  return P.holdingTogether;
 }
 
-var PATTERNS = {
-  successWithoutSelf: {
-    id:'success-without-self', name:'Success Without Self',
-    ringColor:'#FFB74D',
+var P={
+  successWithoutSelf:{id:'success-without-self',name:'Success Without Self',ring:'#FFB74D',
     tag:'You’re succeeding at everything — except being yourself.',
-    scoreDesc:'Capacity going to performance. Little left for you.',
-    insight:'Here’s the pattern your answers reveal: you’re carrying your career and your responsibilities at a high level — and from the outside, it looks like you’re doing well. But the version of you that exists underneath all that achievement has gone quiet. You’ve been succeeding at everything except being yourself. That’s not a small thing. It’s often the most invisible load of all, because nobody sees it — including, sometimes, you.',
-    wisdom:'Most of us give our sharpest, most present selves to work and to people we barely know — and bring home whatever’s left. <strong>The people closest to you, and you yourself, deserve more than your leftovers.</strong> This is the quiet reordering Velani helps you make.'
-  },
-  endlessPour: {
-    id:'endless-pour', name:'The Endless Pour',
-    ringColor:'#E57373',
-    tag:'You’re pouring into everyone — and there’s little left for you.',
-    scoreDesc:'You give and give. Your own reserves run low.',
-    insight:'Your answers show a clear pattern: you are holding a great deal for the people in your life — emotionally, practically, logistically — and it’s drawing down the energy you need for yourself. You’re the one who keeps everyone afloat. The cost is that your own body and spirit are running on what’s left after everyone else is taken care of. This is the pattern of a deeply caring woman who has quietly stopped being on her own list.',
-    wisdom:'There’s an order to care that most of us have upside down. We pour our best into the wider world, and give our closest people — and ourselves — whatever remains. <strong>You belong on your own list. Not last. On it.</strong>'
-  },
-  runningEmpty: {
-    id:'running-on-empty', name:'Running on Empty',
-    ringColor:'#EF5350',
-    tag:'You’re the load-bearing wall of everyone’s life — and you’re exhausted.',
-    scoreDesc:'Very little capacity remains. This is not sustainable.',
-    insight:'Your answers reveal the most demanding pattern of all: you’re carrying work and family at full capacity, while your own body and inner life get almost nothing. You are the load-bearing wall holding up everyone around you — and load-bearing walls don’t get to rest. This isn’t a discipline problem or a time-management problem. You’re carrying more than any one person should, and it has been this way for a while. The first move is not to carry it better. It’s to put something down.',
-    wisdom:'Here’s a truth worth sitting with: we tend to give our best energy outward — to work, to others, to everyone who needs us — and leave ourselves for last. <strong>You cannot be the wall that holds everyone up if no one, including you, is holding you.</strong>'
-  },
-  quietDisappearance: {
-    id:'quiet-disappearance', name:'The Quiet Disappearance',
-    ringColor:'#FFB74D',
-    tag:'On paper, everything is manageable. So why does it feel like you’ve lost yourself?',
-    scoreDesc:'Your practical life works. Your inner life has gone quiet.',
-    insight:'Your answers reveal something subtle and important: your practical life is actually fairly manageable — work isn’t crushing you, your responsibilities are under control. And yet you’ve quietly lost touch with yourself. This is the pattern that’s hardest to explain to anyone, because nothing is visibly wrong. There’s no crisis to point to. Just a slow fade — the curiosity, the spontaneity, the sense of being fully yourself, all gone quiet. You haven’t broken down. You’ve disappeared a little. And that deserves attention precisely because nothing is forcing it to.',
-    wisdom:'Sometimes the most important thing missing isn’t time or energy — it’s <strong>you</strong>. Not the version that performs and provides, but the one underneath. She’s still there. She’s just been waiting to be made room for.'
-  },
-  holdingTogether: {
-    id:'holding-it-together', name:'Holding It Together',
-    ringColor:'#5B8C7A',
-    tag:'You’re managing — but managing has quietly become the ceiling.',
-    scoreDesc:'Moderate load across the board. More is possible.',
-    insight:'Your answers show a fairly even load — no single domain is in crisis, but the cumulative weight is real. You’re holding it together, and you’re good at it. The risk in your pattern isn’t collapse. It’s that “holding it together” quietly becomes the ceiling of your life — that managing replaces living, and the space for possibility, beauty, and yourself slowly shrinks without anything dramatic ever happening. You have enough capacity to change this. The question is whether you’ll use it deliberately, before the load grows.',
-    wisdom:'The load rarely announces itself. It accumulates quietly — a yes here, a responsibility there — until “fine but tired” becomes normal. <strong>Noticing it now, while you still have room, is the whole advantage.</strong>'
-  },
-  carryingWell: {
-    id:'carrying-well', name:'Carrying Well',
-    ringColor:'#81C784',
-    tag:'You have room right now. That’s rare — and worth protecting.',
-    scoreDesc:'Good capacity remaining. The work now is keeping it.',
-    insight:'Your answers show something genuinely good: you’re carrying well right now. You have real capacity, your load is relatively light, and the structures in your life are working. This is rarer than you might think, and it’s worth naming honestly. What’s true, though, is that capacity erodes quietly. Responsibility accumulates when we’re not watching, and the women who stay spacious are the ones who protect it deliberately, before the next busy season fills the room. You’re in a strong place. The work now is simply keeping it that way.',
-    wisdom:null
-  }
+    scoreDesc:'Capacity is going to performance.',
+    insight:'You’re carrying your career and responsibilities at a high level, and from the outside it looks like you’re doing well. But the person underneath the achievement has gone quiet. You’ve been succeeding at everything except being yourself — and that’s the most invisible load of all.',
+    wisdom:'Most of us give our sharpest selves to work and to people we barely know, and bring home what’s left. <strong>The people closest to you — and you yourself — deserve more than your leftovers.</strong>'},
+  endlessPour:{id:'endless-pour',name:'The Endless Pour',ring:'#E57373',
+    tag:'You’re pouring into everyone — with little left for you.',
+    scoreDesc:'You give and give. Your reserves run low.',
+    insight:'You’re holding a great deal for the people in your life, and it’s drawing down the energy you need for yourself. You’re the one who keeps everyone afloat — and your own body and spirit are running on whatever’s left at the end of the day.',
+    wisdom:'There’s an order to care most of us have upside down. We pour our best outward and give our closest people — and ourselves — what remains. <strong>You belong on your own list. Not last. On it.</strong>'},
+  runningEmpty:{id:'running-on-empty',name:'Running on Empty',ring:'#E57373',
+    tag:'You’re holding up everyone’s life — and you’re exhausted.',
+    scoreDesc:'Very little capacity remains.',
+    insight:'You’re carrying work and family at full capacity while your own body and inner life get almost nothing. You’re the load-bearing wall holding everyone up — and walls don’t get to rest. This has been the case for a while. The first move isn’t to carry it better. It’s to put something down.',
+    wisdom:'You cannot be the wall that holds everyone up if no one — including you — is holding you. <strong>Putting yourself back into the order of care is how you stay standing.</strong>'},
+  quietDisappearance:{id:'quiet-disappearance',name:'The Quiet Disappearance',ring:'#FFB74D',
+    tag:'On paper, everything’s fine. So why don’t you feel like yourself?',
+    scoreDesc:'Your life works. Your inner life is quiet.',
+    insight:'Your practical life is actually manageable — work isn’t crushing you, your responsibilities are under control. And yet you’ve quietly lost touch with yourself. There’s no crisis to point to, just a slow fade. You haven’t broken down. You’ve disappeared a little — and that deserves attention precisely because nothing is forcing it.',
+    wisdom:'Sometimes the most important thing missing isn’t time or energy — it’s <strong>you</strong>. Not the version that performs and provides, but the one underneath. She’s still there, waiting to be made room for.'},
+  holdingTogether:{id:'holding-it-together',name:'Holding It Together',ring:'#5B8C7A',
+    tag:'You’re managing — but managing has become the ceiling.',
+    scoreDesc:'Moderate load. More is possible.',
+    insight:'No single domain is in crisis, but the cumulative weight is real. You’re holding it together, and you’re good at it. The risk isn’t collapse — it’s that holding it together quietly becomes the ceiling of your life, and the room for possibility and for yourself slowly shrinks. You have the capacity to change that, deliberately, before the load grows.',
+    wisdom:'The load rarely announces itself. It accumulates quietly until “fine but tired” becomes normal. <strong>Noticing it now, while you still have room, is the whole advantage.</strong>'},
+  carryingWell:{id:'carrying-well',name:'Carrying Well',ring:'#81C784',
+    tag:'You have room right now — and that’s worth protecting.',
+    scoreDesc:'Good capacity remaining.',
+    insight:'You’re carrying well right now. You have real capacity, your load is relatively light, and your structures are working. This is rarer than you might think, and you don’t need rescuing. What’s true is that capacity erodes quietly — so the work now is protecting the space you have, deliberately, before the next busy season fills it.',
+    wisdom:null}
 };
 
-function saveResult() {
-  var em = document.getElementById('email');
-  if (!em.value || em.value.indexOf('@') < 0) { em.style.borderColor = 'var(--terra)'; return; }
-  em.style.borderColor = '';
-  var tags = ['audit-complete'];
-  if (lastResult && lastResult.pattern) tags.push('pattern-' + lastResult.pattern);
-  fetch('https://velani-subscribe.velani-app.workers.dev', {
-    method: 'POST', headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({email: em.value, tags: tags})
-  }).catch(function() {});
-  document.getElementById('save-form').style.display = 'none';
-  document.getElementById('save-success').style.display = 'block';
-  try { sessionStorage.setItem('velani_email', em.value); } catch(e) {}
+function saveResult(){
+  var e=document.getElementById('email');
+  if(!e.value||e.value.indexOf('@')<0){e.style.borderColor='var(--terra)';e.focus();return;}
+  e.style.borderColor='';
+  var tags=['audit-complete'];
+  if(lastResult&&lastResult.pattern)tags.push('pattern-'+lastResult.pattern);
+  fetch('https://velani-subscribe.velani-app.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e.value,tags:tags})}).catch(function(){});
+  document.getElementById('save-card').innerHTML='<div class="save-icon">✓</div><div class="save-h">Saved. Check your inbox.</div><div class="save-sub">Your Capacity Score and Velani Lite are on their way. Your first Velani Letter arrives Sunday.</div>';
 }
 
-function trackCompanion() {
-  var tags = ['companion-purchase'];
-  if (lastResult && lastResult.pattern) tags.push('pattern-' + lastResult.pattern);
-  try { sessionStorage.setItem('velani_pattern', lastResult ? lastResult.pattern : ''); } catch(e) {}
-  var em = document.getElementById('email');
-  if (em && em.value && em.value.indexOf('@') > 0) {
-    fetch('https://velani-subscribe.velani-app.workers.dev', {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({email: em.value, tags: tags})
-    }).catch(function() {});
+function trackCompanion(){
+  var tags=['companion-interest'];
+  if(lastResult&&lastResult.pattern)tags.push('pattern-'+lastResult.pattern);
+  var em=document.getElementById('email');
+  if(em&&em.value&&em.value.indexOf('@')>0){
+    fetch('https://velani-subscribe.velani-app.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:em.value,tags:tags})}).catch(function(){});
   }
+  try{
+    if(lastResult){
+      localStorage.setItem('velani_audit_pattern',lastResult.pattern||'');
+      var map={'success-without-self':'inner','endless-pour':'liveliness','running-on-empty':'liveliness','quiet-disappearance':'inner','holding-it-together':'connection','carrying-well':'inner'};
+      localStorage.setItem('velani_audit_domain',map[lastResult.pattern]||'inner');
+    }
+  }catch(e){}
 }
 
-function doShare() {
-  var cap  = document.getElementById('score-num').textContent;
-  var name = document.getElementById('r-profile').textContent;
-  var txt  = 'I just took the Invisible Load Audit at velani.app — my Capacity Score is ' + cap + '/100 (' + name + '). Find out yours:';
-  if (navigator.share) {
-    navigator.share({title: 'My Invisible Load Audit — Velani', text: txt, url: 'https://velani.app/audit'});
-  } else {
-    navigator.clipboard.writeText(txt + ' https://velani.app/audit').then(function() {
-      alert('Copied — ready to share.');
-    });
-  }
+function doShare(){
+  var cap=document.getElementById('ring-num').textContent;
+  var name=document.getElementById('r-pattern').textContent;
+  var txt='I just took the Invisible Load Audit — my Capacity Score is '+cap+'/100 ('+name+'). Find yours:';
+  if(navigator.share){navigator.share({title:'The Invisible Load Audit — Velani',text:txt,url:'https://velani.app/audit'});}
+  else{navigator.clipboard.writeText(txt+' https://velani.app/audit').then(function(){alert('Copied — ready to share.');});}
 }
 </script>
 </body>

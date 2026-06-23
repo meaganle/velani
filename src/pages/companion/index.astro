@@ -1,5 +1,5 @@
 ---
-// Standalone full-screen companion — no Base layout
+// src/pages/companion/index.astro — The Velani Companion
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -7,1011 +7,478 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Velani Companion</title>
-<meta name="description" content="A guided workbook for making room. 5 steps per domain — starting where your load is heaviest.">
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta name="description" content="A guided workbook for the domain that's carrying your heaviest load. Five steps. Real change.">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --cream:  #F7F6F3;
-  --ink:    #1A1D2E;
-  --ink2:   #3a3d4e;
-  --ink3:   #6E7191;
-  --sage:   #5B8C7A;
-  --sage2:  #3D6B59;
-  --sage-l: #EBF2EF;
-  --terra:  #C4785A;
-  --warm:   #FDFCFA;
-  --mist:   #E8E4DC;
-  --mist-d: #D4CFC5;
-  --material: #6B8FB5;
-  --material-l: #EEF3FA;
-  --inner:  #8E5EA7;
-  --inner-l:#F5EEF8;
-  --connect:#C4785A;
-  --connect-l:#FAF0EB;
-  --display:'Lora', Georgia, serif;
-  --body:   'DM Sans', system-ui, sans-serif;
+:root{
+  --cream:#F7F6F3; --ink:#1A1D2E; --sage:#5B8C7A; --terra:#C4785A;
+  --warm:#FDFCFA; --mist:#E8E4DC; --mist-d:#D4CFC5;
+  --ink2:#3a3d4e; --ink3:#6b6e7d; --sage-l:#EBF2EF;
+  --material:#6B8FB5; --inner:#8E5EA7; --live:#5B8C7A; --connect:#C4785A;
 }
+*{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column;}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; scroll-behavior: smooth; }
-body {
-  font-family: var(--body);
-  background: var(--cream);
-  color: var(--ink);
-  line-height: 1.7;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  padding-top: 52px;
-}
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(253,252,250,.96);border-bottom:1px solid var(--mist);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:0 22px;}
+.topbar-in{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:14px;height:56px;}
+.tb-brand{font-family:'Lora',serif;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);text-decoration:none;flex-shrink:0;}
+.tb-gauge{flex:1;height:5px;background:var(--mist);border-radius:5px;overflow:hidden;}
+.tb-fill{height:100%;background:var(--sage);border-radius:5px;transition:width .5s cubic-bezier(.22,1,.36,1);width:0%;}
+.tb-pct{font-size:.72rem;font-weight:700;color:var(--sage);flex-shrink:0;min-width:34px;text-align:right;}
 
-/* ── Topbar gauge ── */
-.topbar {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  height: 52px;
-  background: rgba(26,29,46,.97);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255,255,255,.07);
-  display: flex; align-items: center;
-  padding: 0 20px; gap: 16px;
-}
-.topbar-brand {
-  font-family: var(--display);
-  font-size: .68rem; letter-spacing: .2em;
-  color: rgba(91,140,122,.7); white-space: nowrap;
-  text-decoration: none;
-}
-.gauge-wrap { flex: 1; position: relative; }
-.gauge-track {
-  height: 3px; background: rgba(255,255,255,.1);
-  border-radius: 3px; overflow: hidden;
-}
-.gauge-fill {
-  height: 100%; background: var(--sage);
-  border-radius: 3px;
-  transition: width .6s cubic-bezier(.22,1,.36,1); width: 0%;
-}
-.gauge-label {
-  position: absolute; right: 0; top: -16px;
-  font-size: .6rem; color: rgba(247,246,243,.3);
-  white-space: nowrap;
-}
-.topbar-home {
-  font-size: .68rem; color: rgba(247,246,243,.3);
-  text-decoration: none; white-space: nowrap;
-  transition: color .2s;
-}
-.topbar-home:hover { color: rgba(247,246,243,.6); }
+/* ── SCREENS ── */
+.screen{display:none;}
+.screen.active{display:block;animation:fadeup .4s ease;}
+@keyframes fadeup{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
 
-/* ── Screens ── */
-.screen { display: none; }
-.screen.active { display: block; }
+/* ── WELCOME ── */
+#sc-welcome{padding:44px 22px 60px;}
+.wc-in{max-width:580px;margin:0 auto;}
+.wc-eye{font-size:.68rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--sage);margin-bottom:12px;}
+.wc-h{font-family:'Lora',serif;font-size:clamp(1.9rem,6vw,2.6rem);font-weight:400;color:var(--ink);line-height:1.18;margin-bottom:14px;}
+.wc-h em{font-style:italic;color:var(--terra);}
+.wc-sub{font-size:1rem;color:var(--ink2);line-height:1.75;margin-bottom:36px;max-width:480px;}
+.wc-pick-label{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin-bottom:16px;}
+.domain-pick{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+button.dp-card{
+  background:var(--warm);border:2px solid var(--mist-d);border-radius:16px;
+  padding:20px 18px;text-align:left;cursor:pointer;
+  transition:border-color .18s,box-shadow .18s,transform .12s;
+  font-family:'DM Sans',sans-serif;color:var(--ink);width:100%;
+  -webkit-tap-highlight-color:transparent;
+  min-height:110px;display:flex;flex-direction:column;gap:6px;
+}
+button.dp-card:active{transform:scale(.98);}
+@media(hover:hover){button.dp-card:hover{border-color:var(--sage);box-shadow:0 4px 16px rgba(91,140,122,.14);}}
+button.dp-card.rec{border-color:var(--terra);background:rgba(196,120,90,.04);}
+@media(hover:hover){button.dp-card.rec:hover{border-color:var(--terra);box-shadow:0 4px 16px rgba(196,120,90,.18);}}
+.dp-emoji{font-size:1.5rem;line-height:1;display:block;}
+.dp-name{font-size:.98rem;font-weight:700;color:var(--ink);}
+.dp-desc{font-size:.78rem;color:var(--ink3);line-height:1.4;}
+.dp-rec-tag{font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--terra);margin-top:4px;display:block;}
+@media(max-width:400px){.domain-pick{grid-template-columns:1fr;}}
 
-/* ════════════════════════════════
-   WELCOME — Domain picker
-════════════════════════════════ */
-#s-welcome {
-  max-width: 640px; margin: 0 auto;
-  padding: 56px 24px 80px;
-}
-.w-eyebrow {
-  font-size: .62rem; font-weight: 700;
-  letter-spacing: .2em; text-transform: uppercase;
-  color: var(--sage); margin-bottom: 16px;
-}
-.w-title {
-  font-family: var(--display);
-  font-size: clamp(1.6rem, 4vw, 2.2rem);
-  font-weight: 400; color: var(--ink);
-  line-height: 1.25; margin-bottom: 14px;
-  letter-spacing: -.01em;
-}
-.w-title em { font-style: italic; color: var(--terra); }
-.w-sub {
-  font-size: .9rem; color: var(--ink3);
-  line-height: 1.85; margin-bottom: 40px;
-  max-width: 500px;
-}
+/* ── DOMAIN INTRO ── */
+#sc-dintro{padding:40px 22px 60px;}
+.di-in{max-width:580px;margin:0 auto;}
+.di-top{display:flex;align-items:center;gap:16px;margin-bottom:28px;}
+.di-emoji{font-size:2.2rem;line-height:1;}
+.di-meta{}
+.di-label{font-size:.64rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px;}
+.di-name{font-family:'Lora',serif;font-size:1.6rem;font-weight:500;color:var(--ink);}
+.di-body{font-size:.98rem;color:var(--ink2);line-height:1.8;}
+.di-body p{margin-bottom:1.1em;}
+.di-nav{display:flex;gap:10px;margin-top:32px;flex-wrap:wrap;}
+button.di-back{background:none;border:1.5px solid var(--mist-d);color:var(--ink2);padding:14px 20px;border-radius:12px;font-size:.92rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;min-height:50px;}
+button.di-back:active{transform:scale(.98);}
+@media(hover:hover){button.di-back:hover{border-color:var(--ink);color:var(--ink);}}
+button.di-start{background:var(--ink);color:var(--cream);border:none;padding:14px 28px;border-radius:12px;font-size:.92rem;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;flex:1;min-height:50px;min-width:140px;}
+button.di-start:active{transform:scale(.98);}
+@media(hover:hover){button.di-start:hover{background:var(--sage);}}
 
-.w-domains-label {
-  font-size: .62rem; font-weight: 700;
-  letter-spacing: .16em; text-transform: uppercase;
-  color: var(--ink3); margin-bottom: 16px;
-}
-.w-recommended {
-  font-size: .7rem; color: var(--sage2);
-  font-weight: 600; letter-spacing: .06em;
-  text-transform: uppercase; margin-bottom: 8px;
-}
-.domain-cards {
-  display: flex; flex-direction: column; gap: 10px;
-}
-.domain-card {
-  background: var(--warm);
-  border: 1.5px solid var(--mist);
-  border-radius: 16px;
-  padding: 20px 22px;
-  cursor: pointer;
-  transition: border-color .15s, background .15s, transform .1s;
-  display: flex; align-items: center;
-  justify-content: space-between; gap: 16px;
-  min-height: 72px;
-}
-.domain-card:hover {
-  border-color: var(--sage);
-  background: var(--sage-l);
-  transform: translateX(3px);
-}
-.domain-card.recommended {
-  border-color: var(--sage);
-  background: var(--sage-l);
-}
-.dc-left { flex: 1; }
-.dc-name {
-  font-family: var(--display);
-  font-size: 1rem; font-weight: 400; color: var(--ink);
-  margin-bottom: 3px; line-height: 1.3;
-}
-.dc-desc {
-  font-size: .78rem; color: var(--ink3); line-height: 1.5;
-}
-.dc-emoji { font-size: 1.4rem; flex-shrink: 0; }
-.dc-badge {
-  font-size: .58rem; font-weight: 700;
-  letter-spacing: .12em; text-transform: uppercase;
-  color: var(--sage2); background: rgba(91,140,122,.12);
-  padding: 3px 10px; border-radius: 100px;
-  white-space: nowrap;
-}
+/* ── STEPS ── */
+#sc-step{display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;}
+.step-wrap{flex:1;padding:32px 22px 24px;max-width:640px;margin:0 auto;width:100%;}
+.step-num{font-size:.64rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;}
+.step-title{font-family:'Lora',serif;font-size:clamp(1.4rem,5vw,1.75rem);font-weight:500;color:var(--ink);line-height:1.28;margin-bottom:16px;}
+.step-body{font-size:.96rem;color:var(--ink2);line-height:1.8;margin-bottom:24px;}
+.step-body p{margin-bottom:.9em;}
+.step-body strong{color:var(--ink);}
+.step-nav{background:var(--warm);border-top:1px solid var(--mist);padding:14px 22px;position:sticky;bottom:0;z-index:40;}
+.step-nav-in{max-width:640px;margin:0 auto;width:100%;display:flex;gap:10px;align-items:center;}
+button.sn-back{background:none;border:1.5px solid var(--mist-d);color:var(--ink2);padding:14px 18px;border-radius:12px;font-size:.9rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;min-height:50px;flex-shrink:0;}
+button.sn-back:active{transform:scale(.98);}
+@media(hover:hover){button.sn-back:hover{border-color:var(--ink);color:var(--ink);}}
+button.sn-skip{background:none;border:none;color:var(--ink3);font-size:.86rem;font-family:'DM Sans',sans-serif;cursor:pointer;padding:8px 12px;min-height:50px;transition:color .15s;flex-shrink:0;}
+@media(hover:hover){button.sn-skip:hover{color:var(--ink);}}
+button.sn-next{background:var(--ink);color:var(--cream);border:none;padding:14px 24px;border-radius:12px;font-size:.92rem;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;flex:1;min-height:50px;}
+button.sn-next:active{transform:scale(.98);}
+@media(hover:hover){button.sn-next:hover{background:var(--sage);}}
 
-/* ════════════════════════════════
-   DOMAIN INTRO
-════════════════════════════════ */
-#s-intro {
-  min-height: calc(100vh - 52px);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 64px 24px;
-  text-align: center;
-}
-.intro-inner { max-width: 480px; }
-.intro-emoji { font-size: 2.8rem; margin-bottom: 24px; }
-.intro-eyebrow {
-  font-size: .6rem; font-weight: 700;
-  letter-spacing: .2em; text-transform: uppercase;
-  color: var(--sage); margin-bottom: 14px;
-}
-.intro-title {
-  font-family: var(--display);
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: 400; color: var(--ink);
-  line-height: 1.25; margin-bottom: 18px;
-}
-.intro-body {
-  font-size: .9rem; color: var(--ink3);
-  line-height: 1.85; margin-bottom: 40px;
-}
-.intro-steps {
-  display: flex; justify-content: center;
-  gap: 6px; flex-wrap: wrap; margin-bottom: 40px;
-}
-.intro-step {
-  font-size: .68rem; font-weight: 600;
-  letter-spacing: .08em; text-transform: uppercase;
-  color: var(--ink3); background: rgba(26,29,46,.06);
-  padding: 6px 12px; border-radius: 100px;
-}
-.intro-cta {
-  background: var(--ink); color: var(--cream);
-  border: none; padding: 16px 36px; border-radius: 12px;
-  font-family: var(--body); font-size: .88rem; font-weight: 600;
-  cursor: pointer; letter-spacing: .02em;
-  transition: background .15s, transform .15s; min-height: 52px;
-}
-.intro-cta:hover { background: var(--sage2); transform: translateY(-1px); }
-.intro-back {
-  background: none; border: none; color: var(--ink3);
-  font-family: var(--body); font-size: .8rem;
-  cursor: pointer; margin-top: 16px; padding: 8px;
-  min-height: 44px; display: block; margin-left: auto; margin-right: auto;
-}
-.intro-back:hover { color: var(--ink); }
+/* ── SORT STEP ── */
+.sort-list{display:flex;flex-direction:column;gap:8px;margin:18px 0;}
+.sort-item{display:flex;align-items:center;gap:12px;padding:16px 18px;background:var(--warm);border:1.5px solid var(--mist-d);border-radius:12px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;user-select:none;}
+.sort-item:active{transform:scale(.99);}
+@media(hover:hover){.sort-item:hover{border-color:var(--sage);}}
+.sort-item.checked{border-color:var(--sage);background:var(--sage-l);}
+.sort-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--mist-d);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;}
+.sort-item.checked .sort-check{background:var(--sage);border-color:var(--sage);}
+.sort-item.checked .sort-check::after{content:'\2713';color:#fff;font-size:.72rem;font-weight:700;}
+.sort-label{font-size:.96rem;color:var(--ink2);line-height:1.4;}
+.sort-item.checked .sort-label{color:var(--ink);}
 
-/* ════════════════════════════════
-   STEP SCREEN
-════════════════════════════════ */
-#s-step {
-  max-width: 600px; margin: 0 auto;
-  padding: 48px 24px 80px;
-}
-.step-header {
-  display: flex; align-items: center; gap: 14px;
-  margin-bottom: 36px;
-}
-.step-num {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: var(--ink); color: var(--cream);
-  font-family: var(--display); font-size: .8rem;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.step-meta { flex: 1; }
-.step-title {
-  font-family: var(--display);
-  font-size: 1rem; font-weight: 400; color: var(--ink);
-  font-style: italic; line-height: 1.2;
-}
-.step-subtitle {
-  font-size: .72rem; color: var(--ink3);
-  letter-spacing: .04em; margin-top: 2px;
-}
+/* ── REFLECT STEP ── */
+.reflect-box{margin:18px 0;}
+.reflect-q{font-size:.86rem;color:var(--ink2);margin-bottom:10px;font-style:italic;}
+.reflect-area{width:100%;min-height:130px;padding:16px;border:1.5px solid var(--mist-d);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.96rem;color:var(--ink);background:var(--warm);resize:vertical;outline:none;transition:border-color .2s;line-height:1.65;}
+.reflect-area:focus{border-color:var(--sage);}
 
-.prompt-label {
-  font-family: var(--display);
-  font-size: 1.12rem; font-weight: 400; color: var(--ink);
-  line-height: 1.45; margin-bottom: 20px;
-}
-.prompt-help {
-  font-size: .78rem; color: var(--ink3);
-  margin-bottom: 16px; font-style: italic;
-}
-.prompt-area {
-  width: 100%; min-height: 140px;
-  padding: 16px; border: 1.5px solid var(--mist-d);
-  border-radius: 12px; font-family: var(--display);
-  font-size: .9rem; line-height: 1.75; color: var(--ink);
-  background: var(--warm); outline: none; resize: vertical;
-  transition: border-color .2s;
-}
-.prompt-area:focus { border-color: var(--sage); }
-.prompt-area::placeholder { color: var(--ink3); font-style: italic; }
+/* ── RELEASE STEP ── */
+.dec-group{margin:20px 0;}
+.dec-q{font-size:.92rem;color:var(--ink2);font-style:italic;margin-bottom:12px;}
+.dec-opts{display:flex;gap:8px;flex-wrap:wrap;}
+button.dec-btn{padding:12px 18px;border-radius:10px;font-size:.88rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;border:1.5px solid var(--mist-d);background:var(--warm);color:var(--ink2);min-height:46px;-webkit-tap-highlight-color:transparent;}
+button.dec-btn:active{transform:scale(.98);}
+button.dec-btn.chosen{border-color:var(--sage);background:var(--sage-l);color:var(--ink);font-weight:600;}
 
-/* Sort checklist */
-.sort-items { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
-.sort-item {
-  display: flex; align-items: flex-start; gap: 12px;
-  padding: 14px 18px;
-  background: var(--warm); border: 1.5px solid var(--mist);
-  border-radius: 12px; cursor: pointer;
-  transition: border-color .15s, background .15s;
-  min-height: 52px;
-}
-.sort-item:hover { border-color: var(--mist-d); }
-.sort-item.checked {
-  border-color: var(--sage); background: var(--sage-l);
-}
-.sort-cb {
-  width: 20px; height: 20px; border-radius: 5px;
-  border: 2px solid var(--mist-d); flex-shrink: 0;
-  margin-top: 1px; transition: all .15s;
-  display: flex; align-items: center; justify-content: center;
-}
-.sort-item.checked .sort-cb {
-  background: var(--sage); border-color: var(--sage);
-}
-.sort-cb-check {
-  width: 10px; height: 8px;
-  border-left: 2px solid #fff; border-bottom: 2px solid #fff;
-  transform: rotate(-45deg) translate(1px, -1px);
-  opacity: 0; transition: opacity .15s;
-}
-.sort-item.checked .sort-cb-check { opacity: 1; }
-.sort-txt {
-  font-size: .88rem; color: var(--ink2); line-height: 1.5;
-  padding-top: 1px;
-}
+/* ── WISDOM ── */
+.wisdom-box{background:var(--ink);border-radius:18px;padding:26px 24px;margin:20px 0;}
+.wb-label{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--terra);margin-bottom:11px;}
+.wb-text{font-family:'Lora',serif;font-size:1.02rem;font-style:italic;color:rgba(247,246,243,.88);line-height:1.72;}
+.wb-text strong{font-style:normal;color:var(--warm);}
 
-/* Wisdom block */
-.wisdom-block {
-  background: var(--ink); border-radius: 18px;
-  padding: 28px 28px; margin-bottom: 28px;
-}
-.wisdom-block-label {
-  font-size: .58rem; font-weight: 700;
-  letter-spacing: .18em; text-transform: uppercase;
-  color: var(--terra); margin-bottom: 14px;
-}
-.wisdom-block-title {
-  font-family: var(--display);
-  font-size: 1rem; font-weight: 400; color: rgba(247,246,243,.55);
-  margin-bottom: 14px; font-style: italic;
-}
-.wisdom-block-body {
-  font-family: var(--display);
-  font-size: .92rem; color: rgba(247,246,243,.8);
-  line-height: 1.85;
-}
-
-/* Release decisions */
-.release-intro {
-  font-size: .85rem; color: var(--ink3);
-  line-height: 1.75; margin-bottom: 24px;
-}
-.release-items { display: flex; flex-direction: column; gap: 16px; }
-.release-item {}
-.release-item-txt {
-  font-size: .88rem; color: var(--ink2);
-  margin-bottom: 10px; line-height: 1.5;
-  font-style: italic;
-}
-.decision-btns {
-  display: flex; gap: 7px; flex-wrap: wrap;
-}
-.dec-btn {
-  background: var(--warm); border: 1.5px solid var(--mist);
-  border-radius: 100px; padding: 8px 14px;
-  font-family: var(--body); font-size: .75rem;
-  color: var(--ink2); cursor: pointer;
-  transition: all .15s; white-space: nowrap;
-  min-height: 36px; display: inline-flex; align-items: center; gap: 5px;
-}
-.dec-btn:hover { border-color: var(--mist-d); color: var(--ink); }
-.dec-btn.sel {
-  background: var(--ink); color: var(--cream);
-  border-color: var(--ink);
-}
-
-/* Lighter step */
-.lighter-prompt {
-  font-family: var(--display);
-  font-size: 1.1rem; color: var(--ink);
-  line-height: 1.45; margin-bottom: 8px;
-}
-.lighter-sub {
-  font-size: .8rem; color: var(--ink3);
-  margin-bottom: 24px; font-style: italic;
-}
-.lighter-reflection {
-  font-size: .82rem; color: var(--ink3);
-  margin: 20px 0 10px; font-weight: 600;
-}
-
-/* Step navigation */
-.step-nav {
-  display: flex; justify-content: space-between;
-  align-items: center; margin-top: 36px; gap: 12px;
-}
-.sn-back {
-  background: none; border: 1.5px solid var(--mist-d);
-  color: var(--ink3); padding: 12px 20px; border-radius: 100px;
-  font-family: var(--body); font-size: .82rem;
-  cursor: pointer; min-height: 44px;
-  transition: border-color .15s, color .15s;
-}
-.sn-back:hover { border-color: var(--ink); color: var(--ink); }
-.sn-next {
-  background: var(--ink); color: var(--cream);
-  border: none; padding: 13px 28px; border-radius: 100px;
-  font-family: var(--body); font-size: .84rem; font-weight: 500;
-  cursor: pointer; min-height: 44px; letter-spacing: .03em;
-  transition: background .15s, transform .1s;
-}
-.sn-next:hover { background: var(--sage2); transform: translateY(-1px); }
-
-/* ════════════════════════════════
-   CLOSING SCREEN
-════════════════════════════════ */
-#s-closing {
-  max-width: 600px; margin: 0 auto;
-  padding: 64px 24px 80px;
-}
-.closing-eye {
-  font-size: .6rem; font-weight: 700;
-  letter-spacing: .2em; text-transform: uppercase;
-  color: var(--sage); margin-bottom: 16px;
-}
-.closing-title {
-  font-family: var(--display);
-  font-size: clamp(1.6rem, 4vw, 2.2rem);
-  font-weight: 400; color: var(--ink);
-  line-height: 1.25; margin-bottom: 14px;
-}
-.closing-sub {
-  font-size: .9rem; color: var(--ink3);
-  line-height: 1.85; margin-bottom: 40px;
-}
-.closing-section { margin-bottom: 32px; }
-.closing-section-label {
-  font-size: .6rem; font-weight: 700;
-  letter-spacing: .18em; text-transform: uppercase;
-  color: var(--ink3); margin-bottom: 14px;
-}
-.closing-items { display: flex; flex-direction: column; gap: 8px; }
-.closing-item {
-  display: flex; align-items: flex-start; gap: 12px;
-  padding: 14px 18px;
-  background: var(--warm); border: 1px solid var(--mist);
-  border-radius: 12px;
-}
-.closing-item-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
-.closing-item-body { flex: 1; }
-.closing-item-dec {
-  font-size: .68rem; font-weight: 700;
-  letter-spacing: .1em; text-transform: uppercase;
-  color: var(--ink3); margin-bottom: 3px;
-}
-.closing-item-txt {
-  font-size: .85rem; color: var(--ink2); line-height: 1.5;
-}
-
-.closing-reflection {
-  background: var(--sage-l);
-  border-left: 3px solid var(--sage);
-  border-radius: 0 12px 12px 0;
-  padding: 18px 22px; margin-bottom: 40px;
-}
-.closing-reflection-label {
-  font-size: .6rem; font-weight: 700;
-  letter-spacing: .16em; text-transform: uppercase;
-  color: var(--sage2); margin-bottom: 8px;
-}
-.closing-reflection-txt {
-  font-family: var(--display);
-  font-size: .92rem; color: var(--ink2);
-  line-height: 1.8; font-style: italic;
-}
-
-.closing-cta-wrap { text-align: center; }
-.closing-cta {
-  display: inline-block;
-  background: var(--ink); color: var(--cream);
-  padding: 16px 40px; border-radius: 12px;
-  font-family: var(--body); font-size: .88rem; font-weight: 600;
-  text-decoration: none; letter-spacing: .02em;
-  transition: background .15s, transform .15s; min-height: 52px;
-  display: inline-flex; align-items: center;
-}
-.closing-cta:hover { background: var(--sage2); transform: translateY(-1px); }
-.closing-again {
-  background: none; border: none; color: var(--sage);
-  font-family: var(--body); font-size: .82rem;
-  cursor: pointer; margin-top: 16px; padding: 8px;
-  min-height: 44px; text-decoration: underline;
-}
-.closing-again:hover { color: var(--sage2); }
-
-@media (max-width: 640px) {
-  #s-welcome { padding: 40px 16px 64px; }
-  #s-intro { padding: 48px 16px; }
-  #s-step { padding: 36px 16px 64px; }
-  #s-closing { padding: 48px 16px 64px; }
-  .decision-btns { gap: 6px; }
-  .dec-btn { padding: 8px 12px; font-size: .72rem; }
-}
+/* ── CLOSING ── */
+#sc-closing{padding:44px 22px 80px;}
+.cl-in{max-width:580px;margin:0 auto;}
+.cl-eye{font-size:.66rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--sage);margin-bottom:12px;}
+.cl-h{font-family:'Lora',serif;font-size:clamp(1.7rem,6vw,2.3rem);font-weight:400;color:var(--ink);line-height:1.22;margin-bottom:14px;}
+.cl-sub{font-size:.96rem;color:var(--ink2);line-height:1.75;margin-bottom:36px;}
+.cs-list{display:flex;flex-direction:column;gap:14px;margin-bottom:40px;}
+.cs-item{background:var(--warm);border:1px solid var(--mist);border-radius:14px;padding:20px 18px;}
+.cs-step{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sage);margin-bottom:6px;}
+.cs-dec{font-size:.96rem;color:var(--ink);line-height:1.55;}
+.cl-actions{display:flex;gap:10px;flex-wrap:wrap;}
+button.cl-again{background:var(--ink);color:var(--cream);border:none;padding:16px 28px;border-radius:13px;font-size:.94rem;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;min-height:52px;}
+button.cl-again:active{transform:scale(.98);}
+@media(hover:hover){button.cl-again:hover{background:var(--sage);}}
+button.cl-audit{background:none;border:1.5px solid var(--mist-d);color:var(--ink2);padding:16px 24px;border-radius:13px;font-size:.94rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;min-height:52px;}
+button.cl-audit:active{transform:scale(.98);}
+@media(hover:hover){button.cl-audit:hover{border-color:var(--ink);color:var(--ink);}}
 </style>
 </head>
 <body>
 
-<!-- ── Sticky topbar ── -->
 <div class="topbar">
-  <a class="topbar-brand" href="/">VELANI</a>
-  <div class="gauge-wrap">
-    <div class="gauge-label" id="gauge-label">Room made</div>
-    <div class="gauge-track">
-      <div class="gauge-fill" id="gauge-fill"></div>
-    </div>
-  </div>
-  <a class="topbar-home" href="/audit">&#8592; Audit</a>
-</div>
-
-<!-- ════════════════════════════════
-     WELCOME — Choose your domain
-════════════════════════════════ -->
-<div class="screen active" id="s-welcome">
-  <div class="w-eyebrow">The Velani Companion</div>
-  <h1 class="w-title">Where would you like<br>to make <em>room</em> first?</h1>
-  <p class="w-sub">Choose the domain that feels heaviest right now. You'll work through 5 steps — reflecting, sorting, and deciding what to put down. You can always come back to the others.</p>
-
-  <div class="w-domains-label">Choose a domain</div>
-  <div class="domain-cards" id="domain-cards"></div>
-</div>
-
-<!-- ════════════════════════════════
-     DOMAIN INTRO
-════════════════════════════════ -->
-<div class="screen" id="s-intro">
-  <div class="intro-inner">
-    <div class="intro-emoji" id="intro-emoji"></div>
-    <div class="intro-eyebrow" id="intro-eyebrow">The Velani Companion</div>
-    <div class="intro-title" id="intro-title"></div>
-    <div class="intro-body" id="intro-body"></div>
-    <div class="intro-steps">
-      <div class="intro-step">Mirror</div>
-      <div class="intro-step">Sort</div>
-      <div class="intro-step">Order of Care</div>
-      <div class="intro-step">Release</div>
-      <div class="intro-step">Lighter</div>
-    </div>
-    <button class="intro-cta" onclick="startSteps()">Begin &#8594;</button>
-    <button class="intro-back" onclick="goWelcome()">&#8592; Choose another domain</button>
+  <div class="topbar-in">
+    <a class="tb-brand" href="/">Velani</a>
+    <div class="tb-gauge"><div class="tb-fill" id="gauge-fill"></div></div>
+    <div class="tb-pct" id="gauge-pct">0%</div>
   </div>
 </div>
 
-<!-- ════════════════════════════════
-     STEP
-════════════════════════════════ -->
-<div class="screen" id="s-step">
-  <div class="step-header">
-    <div class="step-num" id="step-num">1</div>
-    <div class="step-meta">
-      <div class="step-title" id="step-title"></div>
-      <div class="step-subtitle" id="step-subtitle"></div>
+<!-- WELCOME -->
+<div class="screen active" id="sc-welcome">
+  <div class="wc-in">
+    <div class="wc-eye">The Velani Companion</div>
+    <h1 class="wc-h">Where do you want to<br>make <em>room?</em></h1>
+    <p class="wc-sub">Choose the domain that's carrying your heaviest load right now. Five guided steps — honest, unhurried, yours.</p>
+    <div class="wc-pick-label">Choose your domain</div>
+    <div class="domain-pick" id="domain-pick"></div>
+  </div>
+</div>
+
+<!-- DOMAIN INTRO -->
+<div class="screen" id="sc-dintro">
+  <div class="di-in">
+    <div class="di-top">
+      <div class="di-emoji" id="di-emoji"></div>
+      <div class="di-meta">
+        <div class="di-label" id="di-num"></div>
+        <div class="di-name" id="di-name"></div>
+      </div>
+    </div>
+    <div class="di-body" id="di-body"></div>
+    <div class="di-nav">
+      <button class="di-back" onclick="goWelcome()">&#8592; Choose another</button>
+      <button class="di-start" onclick="startSteps()">Begin &#8594;</button>
     </div>
   </div>
-  <div id="step-content"></div>
+</div>
+
+<!-- STEPS -->
+<div class="screen" id="sc-step">
+  <div class="step-wrap" id="step-wrap"></div>
   <div class="step-nav">
-    <button class="sn-back" onclick="stepBack()">&#8592; Back</button>
-    <button class="sn-next" onclick="stepNext()">Continue &#8594;</button>
+    <div class="step-nav-in">
+      <button class="sn-back" id="step-back" onclick="prevStep()">&#8592; Back</button>
+      <button class="sn-skip" onclick="skipStep()">Skip this</button>
+      <button class="sn-next" id="step-next" onclick="nextStep()">Continue &#8594;</button>
+    </div>
   </div>
 </div>
 
-<!-- ════════════════════════════════
-     CLOSING
-════════════════════════════════ -->
-<div class="screen" id="s-closing">
-  <div class="closing-eye">You made some room</div>
-  <div class="closing-title" id="closing-title">Here's what you decided.</div>
-  <div class="closing-sub">These aren't promises. They're intentions — clearer now than they were before you started.</div>
-  <div id="closing-body"></div>
-  <div class="closing-cta-wrap">
-    <a class="closing-cta" href="/start">Start your daily practice &#8594;</a>
-    <div><button class="closing-again" onclick="goWelcome()">Work another domain</button></div>
+<!-- CLOSING -->
+<div class="screen" id="sc-closing">
+  <div class="cl-in">
+    <div class="cl-eye">Your session</div>
+    <h2 class="cl-h">What you've decided to carry differently.</h2>
+    <p class="cl-sub">These are the moments of clarity from this session. Return here whenever the weight builds again.</p>
+    <div class="cs-list" id="cs-list"></div>
+    <div class="cl-actions">
+      <button class="cl-again" onclick="goWelcome()">Start another domain</button>
+      <button class="cl-audit" onclick="location.href='/audit'">Retake the audit</button>
+    </div>
   </div>
 </div>
 
 <script is:inline>
-var chosen = null;
-var stepIndex = 0;
-var steps = [];
-var responses = {};
-var STORE_KEY = 'velani_companion_v1';
-
-var DOMAINS = {
-  connection: {
-    key: 'connection',
-    name: 'Relationships & Emotional Presence',
-    emoji: '🤝',
-    desc: 'The emotional labour you carry for others — and what it costs you.',
-    color: '#C4785A',
-    colorL: '#FAF0EB',
-    mirror_q: 'In your relationships and emotional life right now — what are you carrying that feels heaviest?',
-    sort_items: [
-      'I manage other people\'s emotions so they don\'t have to',
-      'I suppress my own feelings to keep the peace',
-      'I feel responsible for everyone\'s happiness',
-      'There\'s a difficult conversation I\'ve been avoiding',
-      'I consistently give more than I receive'
+var DOMAINS={
+  connection:{
+    key:'connection',emoji:'🤝',name:'Connection',color:'#C4785A',
+    num:'Home & Family',
+    desc:'The people you hold, coordinate, and care for',
+    intro:[
+      'Connection is where most of the invisible work lives. Not just the tasks — the tracking, the anticipating, the managing everyone else\'s emotional weather while quietly setting yours aside.',
+      'This domain is often the heaviest because it\'s tied to love, and that makes it harder to name as a burden. But noticing the weight isn\'t a betrayal. It\'s the beginning of carrying it with intention rather than obligation.'
     ],
-    release_intro: 'For each thing you\'re carrying, decide what you want to do with it.',
-    lighter_q: 'If this area were just a little lighter, what would you notice first?',
-    lighter_reflection: 'What you\'d like to protect in this domain:'
+    steps:[
+      {type:'sort',title:'What you\'re actually tracking',body:'Tick everything you\'re quietly carrying for others in your household or family right now.',items:['Appointment scheduling (doctors, school, activities)','Emotional check-ins and support','Conflict mediation or managing moods','Social calendar management','Gift buying and special occasion prep','Household logistics (groceries, repairs, admin)','Homework or school needs','Being the person everyone comes to first']},
+      {type:'reflect',title:'The tax no one sees',body:'<p>Every one of those ticked items has a cost — not just in time, but in the mental bandwidth it takes up. The to-do list is only part of it. The rest is the constant background hum: <em>did I forget anything, is everyone okay, what\'s coming next.</em></p><p>Before you decide what to change, notice what it actually costs you.</p>',q:'If you could hand one item from that list to someone else — or simply stop carrying it — what would it be, and why haven\'t you?'},
+      {type:'wisdom',title:'The order of care',body:'<p>Most of us were taught to care outward first. Children, partners, parents, colleagues — then ourselves, if anything remains.</p><p>The Velani premise is that this order is inverted, and the inversion is what makes the load unsustainable. You cannot be the steady centre of a family or relationship while running on what\'s left.</p>',wisdom:'<strong>You belong on your own list.</strong> Not last. On it. Not because self-care is a trend, but because the people you love most deserve someone who isn\'t depleted.'},
+      {type:'release',title:'One thing to put down',body:'<p>This step isn\'t about doing more. It\'s about choosing, deliberately, what you\'re allowed to stop carrying — or carrying differently.</p>',decisions:[{id:'conn-stop',q:'One thing you\'ll stop doing or hand to someone else:',opts:['Stop doing it entirely','Delegate it properly','Lower my standard for it','Negotiate it openly']},{id:'conn-ask',q:'One ask you\'ve been avoiding:',opts:['I\'ll ask this week','I\'ll write it down first','I need to think more','Not ready yet']}]},
+      {type:'close',title:'What you\'re taking with you',body:'<p>The heaviness in connection rarely disappears at once. But it shifts the moment you name it clearly and make one deliberate choice about how you\'ll carry it.</p><p>You did that here. Come back to this whenever the weight creeps back in.</p>'}
+    ]
   },
-  material: {
-    key: 'material',
-    name: 'Home & Practical Life',
-    emoji: '🏠',
-    desc: 'The invisible management that keeps everything running — and runs through you.',
-    color: '#6B8FB5',
-    colorL: '#EEF3FA',
-    mirror_q: 'In your home and practical responsibilities — what are you carrying that nobody else sees?',
-    sort_items: [
-      'I\'m the default manager of the household',
-      'I hold mental lists that others don\'t track',
-      'I research and make most family logistics decisions',
-      'There are systems that would collapse without me',
-      'The household runs through me, not alongside me'
+  material:{
+    key:'material',emoji:'💼',name:'Material',color:'#6B8FB5',
+    num:'Work & Career',
+    desc:'What you build, earn, and sustain in the world',
+    intro:[
+      'Material is where ambition lives alongside obligation. The career you\'re building, the income you\'re protecting, the projects with your name on them — and the invisible cost of showing up fully at work while life keeps happening everywhere else.',
+      'This domain often hides its weight because productivity is celebrated. But carrying work home — mentally, emotionally — is still carrying.'
     ],
-    release_intro: 'For each thing you\'re managing, choose a direction.',
-    lighter_q: 'If the household ran a little more without you at the centre — what would you do with that space?',
-    lighter_reflection: 'Something you\'d like to hand over:'
+    steps:[
+      {type:'sort',title:'What\'s open in your mind right now',body:'Tick every work loop that\'s running in the background — unfinished things taking up mental space.',items:['Unfinished projects or deliverables','Emails or messages you haven\'t replied to','Decisions pending your input','Difficult conversations you\'re avoiding','Work taking up evenings or weekends','Performance anxiety or visibility pressure','Feeling undervalued or underpaid','Navigating office politics or relationships']},
+      {type:'reflect',title:'The cost of unfinished loops',body:'<p>Every open loop uses working memory even when you\'re not consciously thinking about it. The thing is — most of them <em>feel</em> urgent even when they aren\'t. The inbox, the slack, the next quarter\'s plan.</p><p>Most high-performing women we speak to aren\'t struggling because they\'re not capable. They\'re struggling because they\'re carrying too many loops for too long without resolution.</p>',q:'Which open loop is costing you the most energy right now, and what\'s genuinely stopping you from closing it?'},
+      {type:'wisdom',title:'Performance vs presence',body:'<p>There\'s a version of work where you\'re performing constantly — visible, available, adding value — and losing yourself in the process. And there\'s a version where your work is an expression of what you\'re genuinely good at, within limits you actually believe in.</p><p>Most of us default to the first without realising we chose it.</p>',wisdom:'<strong>You don\'t have to be available for everything to be valuable.</strong> Protecting your attention is not laziness. It\'s how you stay someone who can actually contribute.'},
+      {type:'release',title:'One boundary to set',body:'<p>Boundaries in work are less about dramatic declarations and more about small, repeatable choices — what you respond to after 6pm, what meetings you actually need to be in, what you\'ll take off your plate this week.</p>',decisions:[{id:'mat-limit',q:'One limit you\'ll set this week:',opts:['Stop checking after 6pm','Decline one unnecessary meeting','Close one loop I\'ve been avoiding','Ask for something I need']},{id:'mat-delegate',q:'Something you\'ll stop carrying alone:',opts:['Delegate it this week','Ask for help directly','Remove it from my list','Acknowledge it\'s not mine']}]},
+      {type:'close',title:'What you\'re taking with you',body:'<p>Work will always generate more. The question is what you choose to carry home — in your body, your thoughts, your evenings.</p><p>You made a deliberate choice here. That\'s the whole practice: noticing, then choosing, then returning to choose again.</p>'}
+    ]
   },
-  liveliness: {
-    key: 'liveliness',
-    name: 'Energy, Rest & Body',
-    emoji: '⚡',
-    desc: 'The basics that restore you — sleep, movement, rest — that keep getting cut.',
-    color: '#5B8C7A',
-    colorL: '#EBF2EF',
-    mirror_q: 'When it comes to your energy and the basics that restore you — what are you not giving yourself right now?',
-    sort_items: [
-      'I regularly sacrifice sleep',
-      'Movement or exercise has mostly disappeared',
-      'I eat well for everyone else and badly for myself',
-      'I don\'t have real downtime — rest is either sleep or scrolling',
-      'My body has been sending signals I\'ve been ignoring'
+  liveliness:{
+    key:'liveliness',emoji:'⚡',name:'Liveliness',color:'#5B8C7A',
+    num:'Energy & Body',
+    desc:'Your physical vitality, rest, and what replenishes you',
+    intro:[
+      'Liveliness is where the body keeps score. Sleep, movement, food, real rest — the foundations that make everything else possible. And the domain we most reliably sacrifice when everything else needs carrying.',
+      'This isn\'t about optimisation. It\'s about noticing what\'s gone quiet in your body, and choosing to listen before it stops asking nicely.'
     ],
-    release_intro: 'For each thing you\'re not giving yourself, choose what you\'d like to change.',
-    lighter_q: 'If you woke up feeling genuinely rested — what would you do differently that day?',
-    lighter_reflection: 'The one thing your body most needs from you right now:'
+    steps:[
+      {type:'sort',title:'What\'s actually happening in your body right now',body:'Tick what\'s true for you, even if you\'ve gotten used to it.',items:['Regularly tired no matter how much I sleep','Running on caffeine or adrenaline to function','Not moving my body in ways that feel good','Eating while distracted, quickly, or not enough','No real rest — only stopping between tasks','Body complaints I\'m ignoring (pain, tension, signals)','Rarely alone and quiet without a screen','The word "rest" feels like something for later']},
+      {type:'reflect',title:'What your body has been asking for',body:'<p>Bodies don\'t stop communicating. They adapt — they carry the load, they compensate, they keep going. Until the accommodation breaks down, or something makes you notice.</p><p>Most of us have gotten very good at outrunning our own signals. The tiredness that sleep doesn\'t fix is usually not a sleep problem.</p>',q:'If your body could speak right now, what would it say it needs most — and what have you been telling it instead?'},
+      {type:'wisdom',title:'Rest is not recovery from work. It is the work.',body:'<p>We\'ve been taught that rest is earned — that you rest after the work is done, after the kids are asleep, after the list is smaller. But the list never gets smaller.</p><p>Rest is not a reward. It\'s what makes you a person rather than a function. The energy you spend on everything you care about comes from somewhere. Neglecting the source doesn\'t make the output sustainable — it makes it brittle.</p>',wisdom:'<strong>Protecting your energy is how you stay present for the things and people that matter.</strong> That\'s not selfish. That\'s the whole point.'},
+      {type:'release',title:'One restoration to protect',body:'<p>This isn\'t about adding something to an already full life. It\'s about protecting something small — consistently — that restores you.</p>',decisions:[{id:'live-restore',q:'One thing I\'ll protect this week:',opts:['Sleep — no screens after 9','Movement that feels good, not punishing','One meal eaten slowly, without a screen','Twenty minutes of actual quiet']},{id:'live-stop',q:'One drain I\'ll reduce:',opts:['Late night scrolling','Saying yes when I mean no','Skipping meals to keep going','Carrying worry I can\'t act on']}]},
+      {type:'close',title:'What you\'re taking with you',body:'<p>Your body is not the last thing to tend to. It\'s the only thing that makes everything else possible.</p><p>What you\'ve chosen here is small by design. Small things, protected consistently, change everything over a season.</p>'}
+    ]
   },
-  inner: {
-    key: 'inner',
-    name: 'Identity & What\'s Yours',
-    emoji: '✶',
-    desc: 'The version of you that existed before all the responsibility — she\'s still in there.',
-    color: '#8E5EA7',
-    colorL: '#F5EEF8',
-    mirror_q: 'When you think about the parts of yourself that have gone quiet — what do you miss most?',
-    sort_items: [
-      'I can\'t remember the last time I did something purely for myself',
-      'My interests and curiosity have faded',
-      'I\'ve lost touch with who I was before all this responsibility',
-      'I perform a version of myself that doesn\'t feel entirely real',
-      'I keep postponing things I care about until conditions are better'
+  inner:{
+    key:'inner',emoji:'✦',name:'Inner',color:'#8E5EA7',
+    num:'Identity & Joy',
+    desc:'Who you are beneath the role — and what makes you feel alive',
+    intro:[
+      'Inner is the quietest domain — and often the most neglected. Not because it\'s less important, but because it\'s the one that doesn\'t have urgent deadlines, crying children, or an inbox demanding attention.',
+      'This is the part of you that existed before all the responsibility. The person with curiosity, beauty, a sense of who she was becoming. She\'s still there. She\'s just gone quiet.'
     ],
-    release_intro: 'For each thing you\'ve been holding about yourself, choose a direction.',
-    lighter_q: 'If you made a little more room for yourself — what\'s the first thing you\'d bring back?',
-    lighter_reflection: 'Something you want to remember about who you are:'
+    steps:[
+      {type:'sort',title:'What\'s faded',body:'Tick what\'s true about your inner life right now.',items:['I don\'t know what I enjoy anymore for its own sake','I\'ve stopped making things — writing, cooking, creating','Beauty has become background noise','I feel like an edited version of myself in my relationships','My own opinions have gotten smaller and quieter','I\'ve lost the thread of who I was becoming','Joy feels like a luxury I\'ll get back to someday','I\'m not sure what I\'d do if I had an afternoon to myself']},
+      {type:'reflect',title:'When did she go quiet?',body:'<p>It\'s rarely one moment. It\'s a series of small accommodations: the hobby that stopped because life got busy, the opinion you kept to yourself one too many times, the morning that was yours until it wasn\'t anymore.</p><p>The disappearance of the inner self is quiet, socially acceptable, and genuinely dangerous. Not in a crisis sense — in a <em>you stop being fully alive</em> sense.</p>',q:'Think of a version of yourself who felt most like herself. What was she doing, and what did that version of you believe she was allowed to want?'},
+      {type:'wisdom',title:'You are not just a set of responsibilities',body:'<p>The role is real — mother, daughter, partner, professional. But the role is not the whole person. There\'s a version of you that exists underneath the function: curious, opinionated, creative, alive to beauty.</p><p>That version doesn\'t need permission to take up space. She needs you to make room for her — deliberately, repeatedly, even when it feels small.</p>',wisdom:'<strong>Making room for yourself is not indulgence. It\'s how you stay a full person</strong> — and how the people in your life get to know someone real, not just someone who manages things well.'},
+      {type:'release',title:'One small return to yourself',body:'<p>The return to the inner self doesn\'t have to be dramatic. It\'s often a single repeatable thing — a morning practice, a notebook, a walk without a podcast, a commitment to one creative act a week.</p>',decisions:[{id:'inner-return',q:'One thing I\'ll let back in:',opts:['Make something — anything — this week','Read for pleasure, not information','Spend time in beauty I don\'t explain','Say something true I\'ve been keeping quiet']},{id:'inner-allow',q:'One thing I\'ll allow myself to want:',opts:['Time that\'s genuinely mine','To be known, not just needed','To pursue something without justifying it','To feel like myself again']}]},
+      {type:'close',title:'What you\'re taking with you',body:'<p>She hasn\'t left. She\'s been waiting — in the margins, in the moments before sleep, in the thing you said once that surprised even you.</p><p>What you\'ve done here is make a small promise to her. Keep it. Come back. She\'s worth returning to.</p>'}
+    ]
   }
 };
 
-var ORDER_OF_CARE = {
-  connection: 'Here\'s what nobody tells you about being a caring person: the order in which we give usually gets it backwards. We pour into everyone around us first — acquaintances, obligations, anyone who makes demands — and give ourselves whatever\'s left. But care works better in a different order. You first, then the people closest to you, then the wider world. Not because you matter more. Because you can\'t keep pouring from empty, and you\'ve been proving that long enough.',
-  material: 'Most women become the invisible infrastructure of their homes — holding the plans, tracking the needs, managing the flow — while everyone else just benefits from it. This is real work. It takes real capacity. And it doesn\'t become lighter by managing it better; it becomes lighter when it\'s shared, delegated, or eliminated. You didn\'t end up at the centre by accident. But you can choose to step back from the centre deliberately.',
-  liveliness: 'The basics that restore you — sleep, movement, rest, nourishment — are not luxuries. They\'re the foundation. When they collapse, everything else gets harder. And yet they\'re always the first thing cut when life gets full. Here\'s a truth worth sitting with: the people who need you most need a you who has something left. Protecting your energy is not indulgence. It\'s the most responsible thing you can do.',
-  inner: 'There\'s a version of you that existed before the responsibility accumulated — that had curiosity, opinions, desires, a sense of what felt unmistakably like her. She didn\'t disappear. She went quiet, because there wasn\'t room. The things that make you feel like yourself are not extras to get back to when conditions are better. They\'re what keeps the version of you that everyone relies on alive. Making room for her isn\'t selfish. It\'s structural.'
-};
+var STORE_KEY='velani_companion_v1';
+var currentDomain=null,currentStep=0,responses={},gaugeVal=0;
 
-var DECISIONS = [
-  {val:'keep',     label:'Keep it, consciously', icon:'🤝'},
-  {val:'delegate', label:'Find someone else to hold it', icon:'💼'},
-  {val:'simplify', label:'Reduce how much space it takes', icon:'✂️'},
-  {val:'release',  label:'Let it go', icon:'🍃'}
-];
+function saveState(){try{localStorage.setItem(STORE_KEY,JSON.stringify({responses:responses,gaugeVal:gaugeVal,savedAt:Date.now()}));}catch(e){}}
+function loadState(){try{var raw=localStorage.getItem(STORE_KEY);if(raw){var d=JSON.parse(raw);if(d.responses)responses=d.responses;if(d.gaugeVal)gaugeVal=d.gaugeVal;}}catch(e){}}
 
-function buildSteps(d) {
-  return [
-    {
-      id: 'mirror', num: 1,
-      title: 'Mirror',
-      subtitle: 'What are you actually carrying?',
-      type: 'textarea',
-      prompt: d.mirror_q,
-      help: 'Write whatever comes. No editing. Just what\'s true right now.',
-      placeholder: 'Start writing...',
-      key: d.key + '-mirror'
-    },
-    {
-      id: 'sort', num: 2,
-      title: 'Sort',
-      subtitle: 'Which of these are yours?',
-      type: 'checklist',
-      prompt: 'Check everything that\'s present in your life right now.',
-      items: d.sort_items,
-      key: d.key + '-sort'
-    },
-    {
-      id: 'wisdom', num: 3,
-      title: 'Order of Care',
-      subtitle: 'A truth worth sitting with.',
-      type: 'wisdom',
-      wisdom: ORDER_OF_CARE[d.key],
-      prompt: 'What lands for you in this?',
-      help: 'Optional — write or simply sit with it.',
-      placeholder: 'What shifts when you read this...',
-      key: d.key + '-wisdom'
-    },
-    {
-      id: 'release', num: 4,
-      title: 'Release',
-      subtitle: 'What do you want to do with each thing?',
-      type: 'release',
-      prompt: d.release_intro,
-      key: d.key + '-release'
-    },
-    {
-      id: 'lighter', num: 5,
-      title: 'Lighter',
-      subtitle: 'What this space is for.',
-      type: 'lighter',
-      prompt: d.lighter_q,
-      reflection: d.lighter_reflection,
-      key: d.key + '-lighter'
-    }
-  ];
+function updateGauge(){
+  var el=document.getElementById('gauge-fill'),pe=document.getElementById('gauge-pct');
+  if(el)el.style.width=gaugeVal+'%';
+  if(pe)pe.textContent=Math.round(gaugeVal)+'%';
 }
 
-function getRecommendedDomain() {
-  var p = new URLSearchParams(window.location.search);
-  var dom = p.get('domain');
-  if (dom && DOMAINS[dom]) return dom;
-  var pat = p.get('pattern') || '';
-  if (!pat) { try { pat = sessionStorage.getItem('velani_pattern') || ''; } catch(e) {} }
-  var map = {
-    'endless-pour': 'connection',
-    'holding-it-together': 'connection',
-    'running-on-empty': 'liveliness',
-    'success-without-self': 'inner',
-    'quiet-disappearance': 'inner'
-  };
-  return map[pat] || null;
-}
-
-function buildWelcome() {
-  var rec = getRecommendedDomain();
-  var c = document.getElementById('domain-cards');
-  c.innerHTML = '';
-  var order = ['connection','material','liveliness','inner'];
-  if (rec) {
-    var recLabel = document.createElement('div');
-    recLabel.className = 'w-recommended';
-    recLabel.textContent = 'Recommended based on your audit';
-    c.appendChild(recLabel);
-    var recCard = makeDomainCard(DOMAINS[rec], true);
-    c.appendChild(recCard);
-    var otherLabel = document.createElement('div');
-    otherLabel.style.cssText = 'font-size:.62rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin:20px 0 10px;';
-    otherLabel.textContent = 'Or choose another';
-    c.appendChild(otherLabel);
-    for (var i = 0; i < order.length; i++) {
-      if (order[i] !== rec) c.appendChild(makeDomainCard(DOMAINS[order[i]], false));
-    }
-  } else {
-    for (var i = 0; i < order.length; i++) {
-      c.appendChild(makeDomainCard(DOMAINS[order[i]], false));
-    }
-  }
-}
-
-function makeDomainCard(d, isRec) {
-  var el = document.createElement('div');
-  el.className = 'domain-card' + (isRec ? ' recommended' : '');
-  el.innerHTML =
-    '<div class="dc-left">'
-    + '<div class="dc-name">' + d.name + '</div>'
-    + '<div class="dc-desc">' + d.desc + '</div>'
-    + '</div>'
-    + '<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">'
-    + '<div class="dc-emoji">' + d.emoji + '</div>'
-    + (isRec ? '<div class="dc-badge">Start here</div>' : '')
-    + '</div>';
-  el.onclick = function() { chooseDomain(d.key); };
-  return el;
-}
-
-function chooseDomain(key) {
-  chosen = DOMAINS[key];
-  steps = buildSteps(chosen);
-  stepIndex = 0;
-  // Show intro
-  document.getElementById('intro-emoji').textContent = chosen.emoji;
-  document.getElementById('intro-title').textContent = chosen.name;
-  document.getElementById('intro-body').textContent = 'You\'ll move through 5 steps — mirroring what you\'re carrying, sorting what\'s yours, receiving a truth, deciding what to release, and noticing how it feels to have made some room. Take your time. There\'s no rush here.';
-  showScreen('s-intro');
-}
-
-function startSteps() {
-  showScreen('s-step');
-  renderStep();
-}
-
-function renderStep() {
-  var s = steps[stepIndex];
-  document.getElementById('step-num').textContent = s.num;
-  document.getElementById('step-title').textContent = s.title;
-  document.getElementById('step-subtitle').textContent = s.subtitle;
-
-  var content = document.getElementById('step-content');
-  content.innerHTML = '';
-
-  if (s.type === 'textarea') {
-    content.innerHTML =
-      '<div class="prompt-label">' + s.prompt + '</div>'
-      + '<div class="prompt-help">' + s.help + '</div>'
-      + '<textarea class="prompt-area" id="resp" placeholder="' + s.placeholder + '">'
-      + (responses[s.key] || '') + '</textarea>';
-
-  } else if (s.type === 'checklist') {
-    var html = '<div class="prompt-label">' + s.prompt + '</div><div class="sort-items">';
-    for (var i = 0; i < s.items.length; i++) {
-      var checked = responses[s.key + '-' + i] ? ' checked' : '';
-      html += '<div class="sort-item' + checked + '" onclick="toggleSort(this,' + i + ',\'' + s.key + '\')">'
-        + '<div class="sort-cb"><div class="sort-cb-check"></div></div>'
-        + '<div class="sort-txt">' + s.items[i] + '</div>'
-        + '</div>';
-    }
-    html += '</div>';
-    content.innerHTML = html;
-
-  } else if (s.type === 'wisdom') {
-    content.innerHTML =
-      '<div class="wisdom-block">'
-      + '<div class="wisdom-block-label">Order of Care</div>'
-      + '<div class="wisdom-block-body">' + s.wisdom + '</div>'
-      + '</div>'
-      + '<div class="prompt-label" style="margin-top:8px;">' + s.prompt + '</div>'
-      + '<div class="prompt-help">' + s.help + '</div>'
-      + '<textarea class="prompt-area" id="resp" placeholder="' + s.placeholder + '">'
-      + (responses[s.key] || '') + '</textarea>';
-
-  } else if (s.type === 'release') {
-    var checkedItems = [];
-    var sortStep = steps[1];
-    for (var i = 0; i < sortStep.items.length; i++) {
-      if (responses[sortStep.key + '-' + i]) checkedItems.push({idx: i, txt: sortStep.items[i]});
-    }
-    var html = '<div class="release-intro">' + s.prompt + '</div>';
-    if (checkedItems.length > 0) {
-      html += '<div class="release-items">';
-      for (var j = 0; j < checkedItems.length; j++) {
-        var item = checkedItems[j];
-        var curDec = responses[s.key + '-' + item.idx] || '';
-        html += '<div class="release-item">'
-          + '<div class="release-item-txt">&ldquo;' + item.txt + '&rdquo;</div>'
-          + '<div class="decision-btns">';
-        for (var d = 0; d < DECISIONS.length; d++) {
-          var dec = DECISIONS[d];
-          html += '<button class="dec-btn' + (curDec === dec.val ? ' sel' : '') + '" '
-            + 'onclick="setDecision(' + item.idx + ',\'' + dec.val + '\',this,\'' + s.key + '\')">'
-            + dec.icon + ' ' + dec.label + '</button>';
-        }
-        html += '</div></div>';
-      }
-      html += '</div>';
-    } else {
-      html += '<div class="prompt-label">Nothing checked — what is one thing you\'d like to address?</div>'
-        + '<textarea class="prompt-area" id="resp" placeholder="Write it here..." style="min-height:100px;">'
-        + (responses[s.key + '-manual'] || '') + '</textarea>';
-    }
-    content.innerHTML = html;
-
-  } else if (s.type === 'lighter') {
-    content.innerHTML =
-      '<div class="lighter-prompt">' + s.prompt + '</div>'
-      + '<div class="lighter-sub">Take a moment before you write. Let the question settle.</div>'
-      + '<textarea class="prompt-area" id="resp" placeholder="Notice what comes up..." style="min-height:120px;">'
-      + (responses[s.key + '-lighter'] || '') + '</textarea>'
-      + '<div class="lighter-reflection">' + s.reflection + '</div>'
-      + '<textarea class="prompt-area" id="resp2" placeholder="Write a few words..." style="min-height:80px;">'
-      + (responses[s.key + '-reflection'] || '') + '</textarea>';
-  }
-
-  updateGauge();
-  window.scrollTo(0, 0);
-}
-
-function toggleSort(el, idx, baseKey) {
-  el.classList.toggle('checked');
-  responses[baseKey + '-' + idx] = el.classList.contains('checked');
-  saveState();
-}
-
-function setDecision(idx, val, btn, baseKey) {
-  responses[baseKey + '-' + idx] = val;
-  var group = btn.closest('.decision-btns').querySelectorAll('.dec-btn');
-  for (var i = 0; i < group.length; i++) group[i].classList.remove('sel');
-  btn.classList.add('sel');
-  saveState();
-}
-
-function saveCurrentStep() {
-  var s = steps[stepIndex];
-  var r = document.getElementById('resp');
-  if (r) responses[s.key] = r.value;
-  var r2 = document.getElementById('resp2');
-  if (r2 && s.type === 'lighter') {
-    responses[s.key + '-lighter'] = document.getElementById('resp') ? document.getElementById('resp').value : '';
-    responses[s.key + '-reflection'] = r2.value;
-  }
-  if (s.type === 'release') {
-    var manualArea = document.getElementById('resp');
-    if (manualArea) responses[s.key + '-manual'] = manualArea.value;
-  }
-  saveState();
-}
-
-function stepNext() {
-  saveCurrentStep();
-  if (stepIndex < steps.length - 1) {
-    stepIndex++;
-    renderStep();
-  } else {
-    buildClosing();
-    showScreen('s-closing');
-  }
-}
-
-function stepBack() {
-  saveCurrentStep();
-  if (stepIndex > 0) { stepIndex--; renderStep(); }
-  else { showScreen('s-intro'); }
-}
-
-function buildClosing() {
-  if (!chosen) return;
-  var releaseStep = steps[3];
-  var sortStep = steps[1];
-  var lighterStep = steps[4];
-
-  document.getElementById('closing-title').textContent = 'You made some room in ' + chosen.name + '.';
-
-  var html = '';
-  var decisions = {keep:[], delegate:[], simplify:[], release:[]};
-  var hasDecisions = false;
-
-  for (var i = 0; i < sortStep.items.length; i++) {
-    var dec = responses[releaseStep.key + '-' + i];
-    if (dec && decisions[dec]) {
-      decisions[dec].push(sortStep.items[i]);
-      hasDecisions = true;
-    }
-  }
-
-  if (hasDecisions) {
-    var decLabels = {
-      keep: {label: 'Keeping consciously', icon: '🤝'},
-      delegate: {label: 'Finding someone else to hold', icon: '💼'},
-      simplify: {label: 'Reducing how much space it takes', icon: '✂️'},
-      release: {label: 'Letting go', icon: '🍃'}
-    };
-    var order = ['release','delegate','simplify','keep'];
-    for (var d = 0; d < order.length; d++) {
-      var dk = order[d];
-      if (decisions[dk].length > 0) {
-        html += '<div class="closing-section">'
-          + '<div class="closing-section-label">' + decLabels[dk].icon + ' ' + decLabels[dk].label + '</div>'
-          + '<div class="closing-items">';
-        for (var j = 0; j < decisions[dk].length; j++) {
-          html += '<div class="closing-item">'
-            + '<div class="closing-item-icon">' + decLabels[dk].icon + '</div>'
-            + '<div class="closing-item-body"><div class="closing-item-txt">' + decisions[dk][j] + '</div></div>'
-            + '</div>';
-        }
-        html += '</div></div>';
-      }
-    }
-  }
-
-  var lighterVal = responses[lighterStep.key + '-lighter'] || responses[lighterStep.key] || '';
-  var reflectionVal = responses[lighterStep.key + '-reflection'] || '';
-  if (lighterVal || reflectionVal) {
-    html += '<div class="closing-reflection">'
-      + '<div class="closing-reflection-label">You said:</div>'
-      + (lighterVal ? '<div class="closing-reflection-txt">' + lighterVal + '</div>' : '')
-      + (reflectionVal ? '<div class="closing-reflection-txt" style="margin-top:12px;">' + reflectionVal + '</div>' : '')
-      + '</div>';
-  }
-
-  document.getElementById('closing-body').innerHTML = html;
-  updateGauge();
-}
-
-function updateGauge() {
-  var count = 0;
-  for (var k in responses) {
-    if (responses[k] && responses[k] !== false) count++;
-  }
-  var pct = Math.min(100, Math.round(count / 14 * 100));
-  document.getElementById('gauge-fill').style.width = pct + '%';
-}
-
-function showScreen(id) {
-  var ss = document.querySelectorAll('.screen');
-  for (var i = 0; i < ss.length; i++) ss[i].classList.remove('active');
+function show(id){
+  var ss=document.querySelectorAll('.screen');
+  for(var i=0;i<ss.length;i++)ss[i].classList.remove('active');
   document.getElementById(id).classList.add('active');
-  window.scrollTo(0, 0);
+  window.scrollTo(0,0);
 }
 
-function goWelcome() {
-  chosen = null; steps = []; stepIndex = 0;
-  buildWelcome();
-  showScreen('s-welcome');
+function getRecommendedDomain(){
+  var p=new URLSearchParams(window.location.search);
+  var dom=p.get('domain');
+  if(dom&&DOMAINS[dom])return dom;
+  var pat=p.get('pattern');
+  if(!pat){try{pat=localStorage.getItem('velani_audit_pattern')||'';}catch(e){}}
+  var dom2;try{dom2=localStorage.getItem('velani_audit_domain')||'';}catch(e){}
+  if(dom2&&DOMAINS[dom2])return dom2;
+  var map={'success-without-self':'inner','endless-pour':'liveliness','running-on-empty':'liveliness','quiet-disappearance':'inner','holding-it-together':'connection','carrying-well':'inner'};
+  if(pat&&map[pat])return map[pat];
+  return null;
 }
 
-function saveState() {
-  try { localStorage.setItem(STORE_KEY, JSON.stringify(responses)); } catch(e) {}
+function goWelcome(){show('sc-welcome');}
+
+function chooseDomain(key){
+  currentDomain=DOMAINS[key];currentStep=0;
+  var d=currentDomain;
+  document.getElementById('di-emoji').textContent=d.emoji;
+  document.getElementById('di-num').textContent=d.num;
+  document.getElementById('di-name').textContent=d.name;
+  var body='';d.intro.forEach(function(p){body+='<p>'+p+'</p>';});
+  document.getElementById('di-body').innerHTML=body;
+  show('sc-dintro');
 }
 
-function loadState() {
-  try {
-    var saved = localStorage.getItem(STORE_KEY);
-    if (saved) responses = JSON.parse(saved) || {};
-  } catch(e) {}
+function startSteps(){currentStep=0;renderStep();show('sc-step');}
+
+function prevStep(){
+  if(currentStep>0){currentStep--;renderStep();}
+  else{show('sc-dintro');}
+}
+
+function skipStep(){advanceStep();}
+function nextStep(){advanceStep();}
+
+function advanceStep(){
+  if(!currentDomain)return;
+  var steps=currentDomain.steps;
+  if(currentStep<steps.length-1){
+    currentStep++;renderStep();
+  }else{
+    buildClosing();show('sc-closing');
+  }
+  gaugeVal=Math.min(100,Math.round((currentStep+1)/steps.length*100));
+  updateGauge();saveState();
+}
+
+function renderStep(){
+  if(!currentDomain)return;
+  var steps=currentDomain.steps;
+  var s=steps[currentStep];
+  var total=steps.length;
+  var wrap=document.getElementById('step-wrap');
+  var html='<div class="step-num">Step '+(currentStep+1)+' of '+total+'</div>';
+  html+='<div class="step-title">'+s.title+'</div>';
+
+  if(s.type==='sort'){
+    html+='<div class="step-body"><p>'+s.body+'</p></div>';
+    html+='<div class="sort-list">';
+    for(var i=0;i<s.items.length;i++){
+      var rkey=currentDomain.key+'_sort_'+currentStep+'_'+i;
+      var ck=responses[rkey]?' checked':'';
+      html+='<div class="sort-item'+ck+'" onclick="toggleSort('+i+')" role="checkbox" aria-checked="'+(responses[rkey]?'true':'false')+'" tabindex="0">'
+        +'<div class="sort-check"></div>'
+        +'<div class="sort-label">'+s.items[i]+'</div>'
+        +'</div>';
+    }
+    html+='</div>';
+  }else if(s.type==='reflect'){
+    html+='<div class="step-body">'+s.body+'</div>';
+    var rkey=currentDomain.key+'_reflect_'+currentStep;
+    var saved=responses[rkey]||'';
+    html+='<div class="reflect-box"><div class="reflect-q">'+s.q+'</div>'
+      +'<textarea class="reflect-area" id="reflect-ta" placeholder="Write as little or as much as feels right..." onblur="saveReflect()" oninput="saveReflect()">'+saved+'</textarea></div>';
+  }else if(s.type==='wisdom'){
+    html+='<div class="step-body">'+s.body+'</div>';
+    html+='<div class="wisdom-box"><div class="wb-label">A truth worth sitting with</div><div class="wb-text">'+s.wisdom+'</div></div>';
+  }else if(s.type==='release'){
+    html+='<div class="step-body">'+s.body+'</div>';
+    for(var di=0;di<s.decisions.length;di++){
+      var dec=s.decisions[di];
+      var chosen=responses[dec.id]||null;
+      html+='<div class="dec-group"><div class="dec-q">'+dec.q+'</div><div class="dec-opts">';
+      for(var oi=0;oi<dec.opts.length;oi++){
+        var o=dec.opts[oi];
+        var isCh=(chosen===o);
+        html+='<button class="dec-btn'+(isCh?' chosen':'')+'" data-id="'+dec.id+'" data-val="'+o.replace(/"/g,'&quot;')+'" onclick="setDecision(this)">'+o+'</button>';
+      }
+      html+='</div></div>';
+    }
+  }else if(s.type==='close'){
+    html+='<div class="step-body">'+s.body+'</div>';
+  }
+
+  wrap.innerHTML=html;
+  var bk=document.getElementById('step-back');
+  if(bk)bk.textContent=(currentStep===0?'← Domain':'← Back');
+  var nx=document.getElementById('step-next');
+  if(nx)nx.textContent=(currentStep===steps.length-1?'Finish →':'Continue →');
+}
+
+function toggleSort(i){
+  if(!currentDomain)return;
+  var rkey=currentDomain.key+'_sort_'+currentStep+'_'+i;
+  responses[rkey]=!responses[rkey];
+  var items=document.querySelectorAll('.sort-item');
+  if(items[i]){
+    items[i].classList.toggle('checked',!!responses[rkey]);
+    items[i].setAttribute('aria-checked',responses[rkey]?'true':'false');
+  }
+  saveState();
+}
+
+function saveReflect(){
+  if(!currentDomain)return;
+  var ta=document.getElementById('reflect-ta');
+  if(!ta)return;
+  var rkey=currentDomain.key+'_reflect_'+currentStep;
+  responses[rkey]=ta.value;
+  saveState();
+}
+
+function setDecision(btn){
+  var id=btn.getAttribute('data-id');
+  var val=btn.getAttribute('data-val');
+  responses[id]=val;
+  var grp=document.querySelectorAll('[data-id="'+id+'"]');
+  for(var i=0;i<grp.length;i++)grp[i].classList.remove('chosen');
+  btn.classList.add('chosen');
+  saveState();
+}
+
+function buildClosing(){
+  if(!currentDomain)return;
+  var steps=currentDomain.steps;
+  var list=document.getElementById('cs-list');
+  var html='';
+  steps.forEach(function(s,idx){
+    if(s.type==='reflect'){
+      var rkey=currentDomain.key+'_reflect_'+idx;
+      var v=responses[rkey];
+      if(v&&v.trim()){
+        html+='<div class="cs-item"><div class="cs-step">'+s.title+'</div><div class="cs-dec">'+v.replace(/</g,'&lt;')+'</div></div>';
+      }
+    }else if(s.type==='release'){
+      s.decisions.forEach(function(d){
+        var v=responses[d.id];
+        if(v){html+='<div class="cs-item"><div class="cs-step">'+d.q.replace(':','')+'</div><div class="cs-dec">'+v+'</div></div>';}
+      });
+    }
+  });
+  if(!html)html='<div class="cs-item"><div class="cs-dec" style="color:var(--ink3);font-style:italic;">Your reflections will appear here as you work through the steps.</div></div>';
+  list.innerHTML=html;
+  gaugeVal=100;updateGauge();saveState();
 }
 
 // Init
-loadState();
-buildWelcome();
-updateGauge();
+loadState();updateGauge();
+
+(function(){
+  var rec=getRecommendedDomain();
+  var pick=document.getElementById('domain-pick');
+  var order=['connection','material','liveliness','inner'];
+  order.forEach(function(k){
+    var d=DOMAINS[k];
+    var isRec=(k===rec);
+    var card=document.createElement('button');
+    card.className='dp-card'+(isRec?' rec':'');
+    card.setAttribute('type','button');
+    card.innerHTML='<span class="dp-emoji">'+d.emoji+'</span>'
+      +'<div class="dp-name">'+d.name+'</div>'
+      +'<div class="dp-desc">'+d.desc+'</div>'
+      +(isRec?'<span class="dp-rec-tag">★ Your heaviest — start here</span>':'');
+    card.onclick=function(){chooseDomain(k);};
+    pick.appendChild(card);
+  });
+})();
 </script>
 </body>
 </html>
