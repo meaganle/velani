@@ -1,4 +1,4 @@
----
+﻿---
 title: "What matters today?"
 description: "The one question that cuts through the noise."
 date: "2026-06-02"
@@ -14,11 +14,11 @@ And when everything feels important, something strange happens. You freeze. Or s
 
 This is one of the heaviest parts of carrying too much.
 
-Not just the weight itself — but the constant decision about where to put it.
+Not just the weight itself, but the constant decision about where to put it.
 
 That's why Velani starts with one simple question: *What matters today?*
 
-Not: what should I finish? Not: how do I catch up on everything? Just: what actually matters — to me, today?
+Not: what should I finish? Not: how do I catch up on everything? Just: what actually matters, to me, today?
 
 The answer is almost always smaller than we think.
 
@@ -26,7 +26,7 @@ One conversation. One email. One hard thing we've been avoiding. One moment of r
 
 The goal isn't to ignore everything else. It's to stop carrying everything equally. Because when everything is urgent, nothing feels meaningful.
 
-And often, one clear thing moved forward — really moved, with full attention — creates more relief than ten things half-done.
+And often, one clear thing moved forward, really moved, with full attention, creates more relief than ten things half-done.
 
 ---
 

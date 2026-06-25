@@ -1,8 +1,8 @@
----
+﻿---
 title: "One clear move at a time"
-description: "On what a meaningful day actually requires — and why it's less than you think."
+description: "On what a meaningful day actually requires, and why it's less than you think."
 date: "2026-05-25"
-preview: "Most days don't feel meaningful at the end. Not because nothing happened. But because nothing moved — at least not the things that were supposed to be for you."
+preview: "Most days don't feel meaningful at the end. Not because nothing happened. But because nothing moved, at least not the things that were supposed to be for you."
 readTime: "4 min read"
 featured: false
 ---
@@ -25,7 +25,7 @@ And then one evening, after a particularly full day, I sat down and felt nothing
 
 I'd done a lot. None of it had been mine.
 
-What I slowly understood is that meaningful days aren't built from doing more. They're built from one clear thing — chosen deliberately, for yourself — and actually done.
+What I slowly understood is that meaningful days aren't built from doing more. They're built from one clear thing, chosen deliberately, for yourself, and actually done.
 
 Not five priorities. Not a themed week. Not a system so complicated it becomes its own job.
 
@@ -35,11 +35,11 @@ The thing you've been putting off because everyone else's needs kept coming firs
 
 One of these, moved forward, changes the feeling of the entire day.
 
-And the feeling of the day — repeated — changes the feeling of a life.
+And the feeling of the day, repeated, changes the feeling of a life.
 
 That's what Velani is built around. Not productivity. Not optimization. Just a daily reminder to ask:
 
-*What's one clear move today — for me?*
+*What's one clear move today, for me?*
 
 And then a quiet place to notice, at the end of it, that it moved.
 

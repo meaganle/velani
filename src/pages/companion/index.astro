@@ -66,9 +66,9 @@ button.dp-card:active{transform:scale(.98);}
 @media(hover:hover){button.dp-card:hover{border-color:var(--ink2);box-shadow:0 4px 18px rgba(26,29,46,.08);}}
 button.dp-card.rec{border-color:var(--terra);background:rgba(196,120,90,.04);}
 .dp-emoji{font-size:1.5rem;line-height:1;display:block;margin-bottom:10px;}
-.dp-sub{display:block;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:3px;}
-.dp-name{display:block;font-size:1rem;font-weight:700;color:var(--ink);letter-spacing:-.01em;margin-bottom:4px;}
-.dp-desc{display:block;font-size:.78rem;color:var(--ink3);line-height:1.4;}
+.dp-sub{display:block;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;}
+.dp-name{display:block;font-size:1.05rem;font-weight:700;color:var(--ink);letter-spacing:-.01em;margin-bottom:7px;}
+.dp-desc{display:block;font-size:.82rem;color:var(--ink3);line-height:1.5;}
 .dp-rec-tag{display:block;font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--terra);margin-top:8px;}
 
 /* DOMAIN INTRO */
@@ -92,7 +92,7 @@ button.di-start:active{transform:scale(.99);}
 .step-wrap{padding:24px 24px 110px;max-width:620px;margin:0 auto;width:100%;}
 
 /* Step header — combined "Domain · N of N" */
-.step-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:14px;border-bottom:1px solid var(--mist);}
+.step-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:14px;border-bottom:1px solid var(--mist);gap:16px;}
 .step-domain-tag{font-size:.72rem;font-weight:700;color:var(--dc);letter-spacing:.03em;transition:color .4s;}
 .step-counter{font-size:.7rem;color:var(--ink3);font-weight:500;}
 
@@ -126,15 +126,15 @@ button.sn-next:active{transform:scale(.99);}
 /* SEE (reflect) */
 .reflect-prompt{font-size:1rem;font-weight:600;color:var(--ink);line-height:1.6;margin-bottom:14px;}
 textarea.reflect-area{
-  width:100%;min-height:220px;padding:20px;
+  width:100%;min-height:260px;padding:22px;
   border:2px solid var(--mist-d);border-radius:13px;
-  font-family:'DM Sans',sans-serif;font-size:1rem;color:var(--ink);
+  font-family:'DM Sans',sans-serif;font-size:1.05rem;color:var(--ink);
   background:var(--warm);resize:vertical;outline:none;
-  transition:border-color .2s;line-height:1.75;
+  transition:border-color .2s;line-height:1.8;
   -webkit-appearance:none;
 }
 textarea.reflect-area:focus{border-color:var(--dc);}
-textarea.reflect-area::placeholder{color:var(--ink3);font-size:.92rem;}
+textarea.reflect-area::placeholder{color:var(--ink3);font-size:.95rem;line-height:1.6;}
 
 /* SORT (tick) — strong visual state */
 .sort-list{display:flex;flex-direction:column;gap:9px;margin-top:4px;}
@@ -184,10 +184,10 @@ button.sort-item.checked .s-text{color:var(--ink);font-weight:600;}
 .kdsl-label{font-size:.95rem;color:var(--ink2);line-height:1.5;margin-bottom:12px;}
 .kdsl-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
 button.kdsl-btn{
-  padding:12px 4px;border:2px solid var(--mist-d);border-radius:22px;
+  padding:14px 8px;border:2px solid var(--mist-d);border-radius:22px;
   background:var(--warm);color:var(--ink3);
-  font-size:.8rem;font-family:'DM Sans',sans-serif;font-weight:500;
-  cursor:pointer;transition:all .18s;min-height:48px;text-align:center;
+  font-size:.84rem;font-family:'DM Sans',sans-serif;font-weight:500;
+  cursor:pointer;transition:all .18s;min-height:52px;text-align:center;
   -webkit-tap-highlight-color:transparent;line-height:1.2;
 }
 button.kdsl-btn:active{transform:scale(.97);}
@@ -256,6 +256,14 @@ button.clo-audit{background:none;border:1.5px solid var(--mist-d);color:var(--in
   .wc-in,.clo-in{padding:0;}
   .step-wrap{padding:32px 32px 110px;}
 }
+@media(max-width:480px){
+  .step-wrap{padding:20px 16px 110px;}
+  textarea.reflect-area{min-height:200px;padding:16px;font-size:1rem;}
+  .kdsl-row{grid-template-columns:repeat(2,1fr);gap:10px;}
+  button.kdsl-btn{padding:16px 10px;font-size:.86rem;min-height:56px;}
+  button.sort-item{padding:18px 16px;min-height:64px;}
+  .s-text{font-size:1rem;}
+}
 </style>
 </head>
 <body>
@@ -321,12 +329,13 @@ button.clo-audit{background:none;border:1.5px solid var(--mist-d);color:var(--in
     <p class="clo-sub">A record of this session. The weight you named, and the strength you're building in its place.</p>
     <div class="clo-list" id="clo-list"></div>
     <div class="clo-email-wrap">
-      <div class="clo-email-h">Send this to yourself</div>
-      <p class="clo-email-sub">Enter your email and we'll send you a copy to revisit whenever you need it.</p>
+      <div class="clo-email-h">Save your session</div>
+      <p class="clo-email-sub">Enter your email to receive a copy of your choices, plus your personalized next steps.</p>
       <div class="clo-email-row">
         <input type="email" class="clo-email-input" id="clo-email" placeholder="your@email.com" autocomplete="email">
         <button class="clo-email-btn" onclick="emailSession()">Send to me</button>
       </div>
+      <button style="margin-top:10px;background:none;border:1.5px solid var(--mist-d);color:var(--ink2);padding:11px 18px;border-radius:11px;font-size:.84rem;font-family:'DM Sans',sans-serif;cursor:pointer;width:100%;-webkit-tap-highlight-color:transparent;" onclick="copySession()">Copy my session to clipboard</button>
       <p class="clo-email-ok" id="clo-email-ok">Saved. A copy is on its way to your inbox.</p>
     </div>
     <div class="clo-actions">
@@ -541,10 +550,10 @@ function renderStep(){
   var steps=currentDomain.steps,s=steps[currentStep],total=steps.length;
   var wrap=document.getElementById('step-wrap');
 
-  /* Header: "Inner  ·  1 of 5" */
+  /* Header: "Inner  ·  Step 1 of 5" */
   var html='<div class="step-header">'
     +'<span class="step-domain-tag">'+currentDomain.name+'</span>'
-    +'<span class="step-counter">'+(currentStep+1)+' of '+total+'</span>'
+    +'<span class="step-counter">Step '+(currentStep+1)+' of '+total+'</span>'
     +'</div>';
 
   /* Section label — Lora italic (CSS handles styling) */
@@ -572,6 +581,9 @@ function renderStep(){
         +'</button>';
     }
     html+='</div>';
+    var initChecked=0;for(var ci=0;ci<s.items.length;ci++){if(responses[currentDomain.key+'_sort_'+ci])initChecked++;}
+    html+='<div style="font-size:.82rem;color:var(--ink3);margin-top:12px;font-style:italic;" id="sort-count">'+(initChecked>0?initChecked+' selected':'')+'</div>';
+    html+='<div style="font-size:.84rem;color:var(--ink3);margin-top:18px;padding:16px 18px;background:var(--dc-l);border-radius:12px;line-height:1.7;">Notice what you selected. The next step explores something important: <strong style="color:var(--ink);">the order of care</strong>, and why your best energy often goes to the wrong places first.</div>';
 
   }else if(s.type==='wisdom'){
     /* No duplicate tag inside — label + title above already identify the step */
@@ -647,6 +659,9 @@ function toggleSort(i){
   responses[rk]=responses[rk]?false:true;
   var items=document.querySelectorAll('.sort-item');
   if(items[i])items[i].classList.toggle('checked',responses[rk]===true);
+  var checked=document.querySelectorAll('.sort-item.checked').length;
+  var counter=document.getElementById('sort-count');
+  if(counter)counter.textContent=checked>0?checked+' selected':'';
   saveState();
 }
 
@@ -742,8 +757,43 @@ function emailSession(){
   });
 }
 
+function copySession(){
+  var items=document.querySelectorAll('.clo-item');
+  var text='My Velani Companion Session\n\n';
+  for(var i=0;i<items.length;i++){
+    var tag=items[i].querySelector('.clo-item-tag');
+    var val=items[i].querySelector('.clo-item-text');
+    if(tag&&val)text+=tag.textContent+': '+val.innerText+'\n\n';
+  }
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(function(){alert('Copied to clipboard.');}).catch(function(){alert('Please copy manually.');});
+  }else{alert('Clipboard not available in this browser.');}
+}
+
 /* Init */
 loadState();updateGauge();
+
+(function(){
+  try{
+    var raw=localStorage.getItem(STORE_KEY);
+    if(raw){
+      var d=JSON.parse(raw);
+      if(d.responses&&Object.keys(d.responses).length>0&&d.savedAt){
+        if(Date.now()-d.savedAt<7*24*60*60*1000){
+          var bar=document.createElement('div');
+          bar.style.cssText='background:var(--dc-l);border:1px solid var(--dc-m);border-radius:12px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;';
+          bar.innerHTML='<span style="font-size:.88rem;color:var(--ink2);">You have a saved session.</span>'
+            +'<div style="display:flex;gap:8px;">'
+            +'<button style="background:var(--ink);color:#fff;border:none;padding:10px 18px;border-radius:10px;font-size:.84rem;font-weight:600;cursor:pointer;font-family:\'DM Sans\',sans-serif;" onclick="this.parentElement.parentElement.remove()">Continue</button>'
+            +'<button style="background:none;border:1.5px solid var(--mist-d);color:var(--ink3);padding:10px 14px;border-radius:10px;font-size:.84rem;cursor:pointer;font-family:\'DM Sans\',sans-serif;" onclick="localStorage.removeItem(\''+STORE_KEY+'\');responses={};this.parentElement.parentElement.remove();">Start fresh</button>'
+            +'</div>';
+          var wc=document.querySelector('.wc-in');
+          if(wc)wc.insertBefore(bar,wc.firstChild);
+        }
+      }
+    }
+  }catch(e){}
+})();
 
 (function(){
   var rec=getRecommendedDomain();
@@ -760,7 +810,7 @@ loadState();updateGauge();
       +'<span class="dp-sub">'+d.num+'</span>'
       +'<span class="dp-name">'+d.desc+'</span>'
       +'<span class="dp-desc">'+d.subdesc+'</span>'
-      +(isRec?'<span class="dp-rec-tag">&#9733; Your heaviest &mdash; start here</span>':'');
+      +(isRec?'<span class="dp-rec-tag">&#9733; Your heaviest. Start here</span>':'');
     card.onclick=function(){chooseDomain(k);};
     pick.appendChild(card);
   });

@@ -1,4 +1,4 @@
----
+﻿---
 title: "When life feels heavy"
 description: "You don't need a system right now. You need permission first."
 date: "2026-05-15"
@@ -26,7 +26,7 @@ Maybe life quietly changed and you haven't had a moment to adjust.
 
 Maybe you've been running on empty for so long that empty started to feel normal.
 
-Not every heavy season needs fixing. Some simply need gentler expectations — from yourself, and from the people around you.
+Not every heavy season needs fixing. Some simply need gentler expectations, from yourself, and from the people around you.
 
 Smaller goals. More rest. Less pressure.
 
@@ -36,7 +36,7 @@ Choose one small move and let that be enough.
 
 Because you do not need to carry everything perfectly. You are allowed to move slowly. You are allowed to need more than you're currently getting.
 
-And slowly — with a little more gentleness — still counts.
+And slowly, with a little more gentleness, still counts.
 
 ---
 

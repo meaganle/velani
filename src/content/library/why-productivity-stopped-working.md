@@ -1,4 +1,4 @@
----
+﻿---
 title: "Why productivity stopped working"
 description: "It was never about the system. It was about the weight."
 date: "2026-05-20"
@@ -16,7 +16,7 @@ Until eventually, the same feeling returned.
 
 Overwhelmed. Behind. Quietly tired in a way that sleep didn't fix.
 
-What I slowly realized — and what I don't think anyone talks about honestly — is this:
+What I slowly realized, and what I don't think anyone talks about honestly, is this:
 
 Most productivity systems were not built for the lives women are actually living.
 
@@ -28,7 +28,7 @@ They were not built for tired humans.
 
 They were not built for seasons where energy changes, where grief shows up, where the body needs rest that the calendar doesn't allow for.
 
-So when the system stops working — when the productivity app sits unopened, when the morning routine collapses, when the planner stays blank — the instinct is to blame yourself.
+So when the system stops working, when the productivity app sits unopened, when the morning routine collapses, when the planner stays blank, the instinct is to blame yourself.
 
 *I lack discipline. I'm not trying hard enough. I just need to be better.*
 
@@ -38,10 +38,10 @@ What's happening is that you're carrying too much for any system to manage. And 
 
 The answer is carrying less.
 
-One clear thing, chosen deliberately. One move that actually matters. A rhythm that fits real life — not the imaginary life where you have four uninterrupted hours and nobody needs anything.
+One clear thing, chosen deliberately. One move that actually matters. A rhythm that fits real life, not the imaginary life where you have four uninterrupted hours and nobody needs anything.
 
 ---
 
 **If productivity feels broken right now:**
 
-It probably isn't you. Ask yourself: *What am I trying to carry — and is any of it mine to put down?*
+It probably isn't you. Ask yourself: *What am I trying to carry, and is any of it mine to put down?*
