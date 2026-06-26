@@ -118,8 +118,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--ink);lin
 .bars-title{font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin-bottom:16px;}
 .bar-row{margin-bottom:14px;}
 .bar-row:last-child{margin-bottom:0;}
-.bar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
-.bar-name{font-size:.86rem;font-weight:600;color:var(--ink);}
+.bar-top{display:grid;grid-template-columns:1fr auto;align-items:center;margin-bottom:6px;gap:12px;}
+.bar-name{font-size:.86rem;font-weight:600;color:var(--ink);min-width:0;}
 .bar-pct{font-size:.8rem;font-weight:700;color:var(--ink3);}
 .bar-track{height:7px;background:var(--mist);border-radius:7px;overflow:hidden;}
 .bar-fl{height:100%;border-radius:7px;width:0;transition:width 1s cubic-bezier(.22,1,.36,1) .3s;}
@@ -247,8 +247,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--ink);lin
     <div class="l-steps">
       <div class="l-step" id="ls1"><div class="l-dot"></div>Home &amp; Family</div>
       <div class="l-step" id="ls2"><div class="l-dot"></div>Work &amp; Career</div>
-      <div class="l-step" id="ls3"><div class="l-dot"></div>Energy &amp; Body</div>
-      <div class="l-step" id="ls4"><div class="l-dot"></div>Identity &amp; Joy</div>
+      <div class="l-step" id="ls3"><div class="l-dot"></div>Health &amp; Energy</div>
+      <div class="l-step" id="ls4"><div class="l-dot"></div>Identity &amp; Self</div>
       <div class="l-step" id="ls5"><div class="l-dot"></div>Finding your pattern</div>
     </div>
   </div>
@@ -314,10 +314,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--ink);lin
         <div class="offer-h" id="offer-h">Turn your result into <em>real change.</em></div>
         <div class="offer-body" id="offer-body">A guided experience built around your result, starting exactly where your load is heaviest. Not another thing to manage. A quiet, beautiful space to decide what you're finally allowed to put down, and what you'll grow toward instead.</div>
         <ul class="offer-list">
-          <li>Personalised to your heaviest domain</li>
-          <li>Uncover what drains you, and reclaim what makes you strong</li>
-          <li>Yours forever, to return to each season of life</li>
-          <li>A printable workbook + guided online version</li>
+          <li>Built around your result: starts where your load is heaviest</li>
+          <li>Five steps: see it, sort it, release it, reclaim it, move forward</li>
+          <li>Discover the Order of Care, the one idea that changes everything</li>
+          <li>Return each season as your capacity grows</li>
+          <li>PDF workbook + interactive web version included</li>
         </ul>
         <div class="offer-price-row">
           <div class="offer-price">$39</div>
@@ -357,21 +358,21 @@ var Qs=[
   {tag:'Work &amp; Career',cls:'work',velani:'material',
    q:'How many unfinished work loops are you carrying right now: decisions, conversations, tasks left open?',
    opts:['A few. Nothing that keeps me up','A moderate amount. I know what they are','A lot. More than I can clearly name','So many I’ve stopped counting']},
-  {tag:'Energy &amp; Body',cls:'self-e',velani:'liveliness',
-   q:'How would you describe your physical and emotional energy most days?',
-   opts:['Generally good. I feel like myself','Variable. Some good days, some empty ones','Often low. I’m running on less than I need','Persistently depleted. I forget what full feels like']},
-  {tag:'Energy &amp; Body',cls:'self-e',velani:'liveliness',
-   q:'How well are you protecting the basics that restore you: sleep, movement, real rest?',
-   opts:['Well. These are non-negotiables I protect','Okay. I get most of them most of the time','Poorly. They’re the first thing I cut','Not at all. I’ve been running on empty a long time']},
-  {tag:'Identity &amp; Joy',cls:'self-i',velani:'inner',
-   q:'When did you last do something entirely for you, not productive, just yours?',
-   opts:['Recently. I make time for this','A few weeks ago. Not as often as I’d like','A while ago. I can’t quite remember','I honestly can’t remember. it’s rare now']},
-  {tag:'Identity &amp; Joy',cls:'self-i',velani:'inner',
-   q:'How connected do you feel to the version of yourself from before all the responsibility?',
-   opts:['Connected. She’s still here','Somewhat. I catch glimpses of her','Barely. She’s in there but quiet','Disconnected. I’m not sure I know her anymore']},
-  {tag:'Identity &amp; Joy',cls:'self-i',velani:'inner',
-   q:'Beauty, curiosity, creativity, the things that feel alive rather than useful. How present are they?',
-   opts:['Present and protected. Part of how I live','Occasional. In small moments','Rare. Luxuries I’ll get back to someday','Almost absent. Life is mostly maintenance']}
+  {tag:’Health &amp; Energy’,cls:’self-e’,velani:’liveliness’,
+   q:’How would you describe your physical and emotional energy most days?’,
+   opts:[‘Generally good. I feel like myself’,’Variable. Some good days, some empty ones’,’Often low. I’m running on less than I need’,’Persistently depleted. I forget what full feels like’]},
+  {tag:’Health &amp; Energy’,cls:’self-e’,velani:’liveliness’,
+   q:’How well are you protecting the basics that restore you: sleep, movement, real rest?’,
+   opts:[‘Well. These are non-negotiables I protect’,’Okay. I get most of them most of the time’,’Poorly. They’re the first thing I cut’,’Not at all. I’ve been running on empty a long time’]},
+  {tag:’Identity &amp; Self’,cls:’self-i’,velani:’inner’,
+   q:’When did you last do something entirely for you, not productive, just yours?’,
+   opts:[‘Recently. I make time for this’,’A few weeks ago. Not as often as I’d like’,’A while ago. I can’t quite remember’,’I honestly can’t remember. it’s rare now’]},
+  {tag:’Identity &amp; Self’,cls:’self-i’,velani:’inner’,
+   q:’How connected do you feel to the version of yourself from before all the responsibility?’,
+   opts:[‘Connected. She’s still here’,’Somewhat. I catch glimpses of her’,’Barely. She’s in there but quiet’,’Disconnected. I’m not sure I know her anymore’]},
+  {tag:’Identity &amp; Self’,cls:’self-i’,velani:’inner’,
+   q:’Beauty, curiosity, creativity, the things that feel alive rather than useful. How present are they?’,
+   opts:[‘Present and protected. Part of how I live’,’Occasional. In small moments’,’Rare. Luxuries I’ll get back to someday’,’Almost absent. Life is mostly maintenance’]}
 ];
 
 var cur=0,ans=new Array(Qs.length).fill(null),lastResult=null;
@@ -429,10 +430,10 @@ function loading(){
 
 function buildResults(){
   var vm={
-    connection:{label:'Connection',score:0,max:0},
-    material:{label:'Work & Material',score:0,max:0},
-    liveliness:{label:'Energy & Body',score:0,max:0},
-    inner:{label:'Identity & Inner',score:0,max:0}
+    connection:{label:'Home & Family',score:0,max:0},
+    material:{label:'Work & Career',score:0,max:0},
+    liveliness:{label:'Health & Energy',score:0,max:0},
+    inner:{label:'Identity & Self',score:0,max:0}
   };
   for(var i=0;i<Qs.length;i++){
     var s=ans[i]==null?0:ans[i];
@@ -525,8 +526,10 @@ function saveResult(){
   e.style.borderColor='';
   var tags=['audit-complete'];
   if(lastResult&&lastResult.pattern)tags.push('pattern-'+lastResult.pattern);
-  fetch('https://velani-subscribe.velani-app.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e.value,tags:tags})}).catch(function(){});
-  document.getElementById('save-card').innerHTML='<div class="save-icon">✓</div><div class="save-h">Saved. Check your inbox.</div><div class="save-sub">Your Capacity Score and Velani Lite are on their way. Your first Velani Letter arrives Sunday.</div>';
+  var fields={};
+  if(lastResult){fields.capacity_score=lastResult.cap;fields.pattern_name=lastResult.name;}
+  fetch('https://velani-subscribe.velani-app.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:e.value,tags:tags,fields:fields})}).catch(function(){});
+  document.getElementById('save-card').innerHTML='<div class="save-icon">✓</div><div class="save-h">Saved. Check your inbox.</div><div class="save-sub">Your Capacity Score and personalized results are on their way, along with Velani Lite.</div>';
 }
 
 function trackCompanion(){

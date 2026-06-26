@@ -591,6 +591,24 @@ function renderStep(){
     html+='<div class="wisdom-block">'
       +'<div class="wis-text">'+s.wisdom+'</div>'
       +'<p class="wisdom-continue">Use the Continue button below when you\'re ready.</p>'
+      +'</div>'
+      +'<div style="margin-top:24px;background:var(--warm);border:1px solid var(--mist);border-radius:14px;padding:22px;">'
+        +'<div style="font-size:.88rem;font-weight:600;color:var(--ink);margin-bottom:14px;">Right now, who gets your best energy?</div>'
+        +'<div style="display:flex;flex-direction:column;gap:8px;">'
+          +'<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--cream);border-radius:10px;">'
+            +'<span style="font-size:.9rem;color:var(--ink2);">Acquaintances &amp; obligations</span>'
+            +'<span style="font-size:.82rem;font-weight:600;color:var(--terra);">Your best?</span>'
+          +'</div>'
+          +'<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--cream);border-radius:10px;">'
+            +'<span style="font-size:.9rem;color:var(--ink2);">People you love</span>'
+            +'<span style="font-size:.82rem;font-weight:600;color:var(--ink3);">The middle?</span>'
+          +'</div>'
+          +'<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--cream);border-radius:10px;">'
+            +'<span style="font-size:.9rem;color:var(--ink2);">You</span>'
+            +'<span style="font-size:.82rem;font-weight:600;color:var(--ink3);">The leftovers?</span>'
+          +'</div>'
+        +'</div>'
+        +'<div style="font-size:.84rem;color:var(--sage);font-style:italic;margin-top:14px;font-family:\'Lora\',serif;">What if you reversed the order?</div>'
       +'</div>';
 
   }else if(s.type==='release'){
@@ -725,6 +743,14 @@ function buildClosing(){
     html='<div class="clo-item"><div class="clo-item-text" style="color:var(--ink3);font-style:italic;">Your choices and reflections will appear here as you complete each step.</div></div>';
   }
   list.innerHTML=html;
+
+  /* Mark this domain complete in localStorage */
+  try{
+    var compKey='velani_companion_done';
+    var done=JSON.parse(localStorage.getItem(compKey)||'{}');
+    done[d.key]={line:d.steps[4].line||'',completedAt:Date.now()};
+    localStorage.setItem(compKey,JSON.stringify(done));
+  }catch(e){}
 }
 
 function emailSession(){
@@ -799,18 +825,23 @@ loadState();updateGauge();
   var rec=getRecommendedDomain();
   var pick=document.getElementById('domain-pick');
   var order=['inner','connection','material','liveliness'];
+  var done={};
+  try{done=JSON.parse(localStorage.getItem('velani_companion_done')||'{}');}catch(e){}
   order.forEach(function(k){
     var d=DOMAINS[k];
     var isRec=(k===rec);
+    var isDone=!!done[k];
     var card=document.createElement('button');
     card.type='button';
-    card.className='dp-card'+(isRec?' rec':'');
+    card.className='dp-card'+(isRec&&!isDone?' rec':'');
+    if(isDone){card.style.cssText='opacity:.75;border-color:var(--sage);background:rgba(91,140,122,.06);';}
     card.innerHTML=
       '<span class="dp-emoji">'+d.emoji+'</span>'
       +'<span class="dp-sub">'+d.num+'</span>'
       +'<span class="dp-name">'+d.desc+'</span>'
       +'<span class="dp-desc">'+d.subdesc+'</span>'
-      +(isRec?'<span class="dp-rec-tag">&#9733; Your heaviest. Start here</span>':'');
+      +(isDone?'<span class="dp-rec-tag" style="color:var(--sage);">&#10003; Completed. Return anytime</span>'
+        :isRec?'<span class="dp-rec-tag">&#9733; Your heaviest. Start here</span>':'');
     card.onclick=function(){chooseDomain(k);};
     pick.appendChild(card);
   });
