@@ -8,6 +8,7 @@
 # Local environment files
 .env
 .env.*
+worker/.dev.vars
 
 # Logs
 npm-debug.log*
