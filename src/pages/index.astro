@@ -1,5 +1,17 @@
 ---
 import Base from '../layouts/Base.astro';
+
+const allLetters = await Astro.glob('../content/letters/*.md');
+const latestLetter = allLetters
+  .filter(l => !l.frontmatter.draft)
+  .sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date))
+  [0];
+
+const allReads = await Astro.glob('../content/library/*.md');
+const popularReads = allReads
+  .filter(r => !r.frontmatter.draft)
+  .sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date))
+  .slice(0, 3);
 ---
 <Base
   title="Make Room for Yourself Again"
@@ -227,6 +239,58 @@ import Base from '../layouts/Base.astro';
     max-width: 460px; margin-left: auto; margin-right: auto;
   }
 
+  /* ── From Velani ── */
+  .from-velani {
+    padding: 4rem 3rem;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative; z-index: 1;
+  }
+  .from-inner {
+    max-width: 860px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+  .from-col-label {
+    font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink3); font-weight: 600; margin-bottom: 1.1rem;
+  }
+  .from-letter-title {
+    font-family: var(--display);
+    font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+    font-weight: 300; line-height: 1.25;
+    color: var(--ink); margin-bottom: .9rem;
+    letter-spacing: -.012em;
+  }
+  .from-letter-link {
+    font-size: .8rem; color: var(--sage);
+    font-family: var(--display); font-style: italic;
+    text-decoration: none; transition: opacity .15s;
+  }
+  .from-letter-link:hover { opacity: .7; }
+  .from-reads-list { display: flex; flex-direction: column; margin-bottom: 1rem; }
+  .from-read-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: .6rem 0; border-bottom: 1px solid var(--border);
+    text-decoration: none; color: var(--ink2);
+    font-size: .88rem; font-family: var(--display);
+    line-height: 1.4; transition: color .15s;
+  }
+  .from-read-item:first-child { border-top: 1px solid var(--border); }
+  .from-read-item:hover { color: var(--ink); }
+  .from-read-arrow { font-size: .7rem; color: var(--border2); flex-shrink: 0; transition: color .15s; }
+  .from-read-item:hover .from-read-arrow { color: var(--sage); }
+  .from-more {
+    font-size: .8rem; color: var(--sage); text-decoration: none;
+    font-family: var(--display); font-style: italic; transition: opacity .15s;
+  }
+  .from-more:hover { opacity: .7; }
+
+  @media (max-width: 760px) {
+    .from-velani { padding: 3rem 1.5rem; }
+    .from-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+
   /* ── Section 5 signup ── */
   .s5-inner { max-width: 500px; margin: 0 auto; }
   .s5-eyebrow {
@@ -437,6 +501,38 @@ import Base from '../layouts/Base.astro';
       <a class="btn-dark" href="/start" style="background:var(--bg);color:var(--ink);margin:0 auto;display:inline-flex;">
         Start here
       </a>
+    </div>
+  </section>
+
+  <!-- ── FROM VELANI ── -->
+  <section class="from-velani">
+    <div class="from-inner">
+
+      <div class="from-col">
+        <div class="from-col-label">The latest letter</div>
+        {latestLetter && (
+          <>
+            <div class="from-letter-title">{latestLetter.frontmatter.title}</div>
+            <a class="from-letter-link" href={`/letters/${latestLetter.file.split('/').pop().replace('.md','')}`}>
+              Read letter →
+            </a>
+          </>
+        )}
+      </div>
+
+      <div class="from-col">
+        <div class="from-col-label">From the library</div>
+        <div class="from-reads-list">
+          {popularReads.map(r => (
+            <a class="from-read-item" href={`/library/${r.file.split('/').pop().replace('.md','')}`}>
+              <span>{r.frontmatter.title}</span>
+              <span class="from-read-arrow">→</span>
+            </a>
+          ))}
+        </div>
+        <a class="from-more" href="/library">Browse the library →</a>
+      </div>
+
     </div>
   </section>
 

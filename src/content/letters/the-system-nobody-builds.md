@@ -4,7 +4,6 @@ description: "On why the most important structure in your life goes undesigned."
 date: "2026-06-08"
 preview: "Most of us spend years building careers, families, and homes. Very few of us ever stop to build the structure underneath our daily lives, the quiet thing that shapes how everything feels."
 readTime: "4 min read"
-featured: true
 ---
 
 For years, I thought I needed better discipline.

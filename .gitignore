@@ -14,7 +14,7 @@ worker/.dev.vars
 .wrangler/
 
 /.claude/
-
+/instructions/
 # Logs
 npm-debug.log*
 yarn-debug.log*

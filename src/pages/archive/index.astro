@@ -1,0 +1,153 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const allLetters = await Astro.glob('../../content/letters/*.md');
+const allReads   = await Astro.glob('../../content/library/*.md');
+
+const letters = allLetters
+  .filter(l => !l.frontmatter.draft)
+  .map(l => ({
+    title:    l.frontmatter.title,
+    description: l.frontmatter.description || l.frontmatter.preview || '',
+    date:     l.frontmatter.date,
+    readTime: l.frontmatter.readTime || '3 min read',
+    type:     'Letter',
+    href:     `/letters/${l.file.split('/').pop().replace('.md', '')}`,
+  }));
+
+const reads = allReads
+  .filter(r => !r.frontmatter.draft)
+  .map(r => ({
+    title:    r.frontmatter.title,
+    description: r.frontmatter.description || '',
+    date:     r.frontmatter.date,
+    readTime: r.frontmatter.readTime || '3 min read',
+    type:     'Read',
+    href:     `/library/${r.file.split('/').pop().replace('.md', '')}`,
+  }));
+
+const all = [...letters, ...reads].sort((a, b) => new Date(b.date) - new Date(a.date));
+---
+<Base
+  title="Archive"
+  description="Every letter and library read from Velani, in one place."
+  currentPath="/archive"
+>
+<style>
+  main { flex: 1; }
+
+  .arc-controls {
+    display: flex; align-items: center; gap: .5rem;
+    margin-bottom: 2rem; flex-wrap: wrap;
+  }
+  .arc-pill {
+    font-size: .68rem; color: var(--ink3);
+    background: var(--surface); border: 1.5px solid var(--border2);
+    border-radius: 100px; padding: .3rem .9rem;
+    cursor: pointer; transition: all .15s; white-space: nowrap;
+    font-family: var(--body); letter-spacing: .02em;
+  }
+  .arc-pill:hover { border-color: var(--sage); color: var(--ink); }
+  .arc-pill.active { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+
+  .arc-list { display: flex; flex-direction: column; gap: .45rem; max-width: 760px; }
+
+  .arc-row {
+    display: flex; align-items: baseline;
+    justify-content: space-between; gap: 1.5rem;
+    padding: 1rem 1.3rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; text-decoration: none;
+    transition: box-shadow .15s, transform .12s, border-color .15s;
+  }
+  .arc-row:hover {
+    box-shadow: 0 2px 20px rgba(26,29,46,.06);
+    transform: translateY(-1px); border-color: var(--border2);
+  }
+  .arc-body { flex: 1; min-width: 0; }
+  .arc-title {
+    font-family: var(--display); font-size: .92rem;
+    font-weight: 400; color: var(--ink);
+    line-height: 1.3; margin-bottom: .2rem;
+  }
+  .arc-desc { font-size: .77rem; color: var(--ink3); line-height: 1.55; }
+  .arc-right { display: flex; align-items: center; gap: .6rem; flex-shrink: 0; }
+  .arc-type {
+    font-size: .58rem; letter-spacing: .1em; text-transform: uppercase;
+    font-weight: 600; padding: .18rem .5rem; border-radius: 100px;
+  }
+  .arc-type.Letter { color: var(--terra); background: rgba(184,106,67,.08); }
+  .arc-type.Read   { color: var(--sage);  background: var(--sage-gl); }
+  .arc-date {
+    font-size: .68rem; color: var(--ink3);
+    font-family: var(--display); font-style: italic; white-space: nowrap;
+  }
+  .arc-time { font-size: .65rem; color: var(--ink3); white-space: nowrap; }
+
+  .empty { font-family: var(--display); font-size: .9rem; font-style: italic; color: var(--ink3); padding: 2rem 0; }
+
+  @media (max-width: 700px) {
+    .arc-row { flex-wrap: wrap; gap: .5rem; }
+    .arc-right { width: 100%; justify-content: flex-start; }
+  }
+</style>
+
+<main>
+<div class="page-wrap">
+
+  <div class="page-hero">
+    <div class="eyebrow">Archive</div>
+    <h1 class="page-title">Every letter<br>and <em>library read.</em></h1>
+    <p class="page-subtitle">All Velani content in one place, newest first.</p>
+  </div>
+
+  <div class="arc-controls">
+    <button class="arc-pill active" data-filter="all">All ({all.length})</button>
+    <button class="arc-pill" data-filter="Letter">Letters ({letters.length})</button>
+    <button class="arc-pill" data-filter="Read">Library ({reads.length})</button>
+  </div>
+
+  <div class="arc-list" id="arc-list">
+    {all.map(item => (
+      <a
+        class="arc-row"
+        href={item.href}
+        data-type={item.type}
+      >
+        <div class="arc-body">
+          <div class="arc-title">{item.title}</div>
+          {item.description && <div class="arc-desc">{item.description}</div>}
+        </div>
+        <div class="arc-right">
+          <span class={`arc-type ${item.type}`}>{item.type}</span>
+          <span class="arc-date">
+            {new Date(item.date + 'T12:00:00').toLocaleDateString('en-CA', { year: 'numeric', month: 'short', day: 'numeric' })}
+          </span>
+          <span class="arc-time">{item.readTime}</span>
+        </div>
+      </a>
+    ))}
+  </div>
+
+  {all.length === 0 && <p class="empty">Nothing published yet.</p>}
+
+</div>
+</main>
+
+<script>
+  const pills = document.querySelectorAll('.arc-pill');
+  const rows  = document.querySelectorAll('.arc-row');
+
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      pills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const f = pill.dataset.filter;
+      rows.forEach(row => {
+        row.style.display = (f === 'all' || row.dataset.type === f) ? '' : 'none';
+      });
+    });
+  });
+</script>
+
+</Base>

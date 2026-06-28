@@ -2,7 +2,7 @@
 title: "When life feels heavy"
 description: "You don't need a system right now. You need permission first."
 date: "2026-05-15"
-category: "calmer-days"
+category: "why-it-feels-heavy"
 readTime: "3 min"
 ---
 

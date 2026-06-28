@@ -2,7 +2,7 @@
 title: "Why you're exhausted before noon"
 description: "It's not laziness. It's the invisible decisions nobody counts."
 date: "2026-05-10"
-category: "carrying-less"
+category: "why-it-feels-heavy"
 readTime: "4 min"
 ---
 

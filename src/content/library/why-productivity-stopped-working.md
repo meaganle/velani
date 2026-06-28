@@ -2,7 +2,7 @@
 title: "Why productivity stopped working"
 description: "It was never about the system. It was about the weight."
 date: "2026-05-20"
-category: "carrying-less"
+category: "why-it-feels-heavy"
 readTime: "4 min"
 ---
 
