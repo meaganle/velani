@@ -2,7 +2,8 @@
 const {
   title = 'Velani',
   description = 'A daily clarity layer. One clear move at a time.',
-  currentPath = ''
+  currentPath = '',
+  ogImage = 'https://velani.app/og-default.jpg'
 } = Astro.props;
 
 const nav = [
@@ -25,9 +26,18 @@ const nav = [
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="shortcut icon" href="/favicon.ico">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
 <meta property="og:title" content={`${title} | Velani`}>
 <meta property="og:description" content={description}>
 <meta property="og:url" content={`https://velani.app${currentPath}`}>
+<meta property="og:image" content={ogImage}>
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Velani">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content={`${title} | Velani`}>
+<meta name="twitter:description" content={description}>
+<meta name="twitter:image" content={ogImage}>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
