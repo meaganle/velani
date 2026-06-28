@@ -10,6 +10,11 @@
 .env.*
 worker/.dev.vars
 
+# Cloudflare Wrangler cache and build artifacts
+.wrangler/
+
+/.claude/
+
 # Logs
 npm-debug.log*
 yarn-debug.log*
