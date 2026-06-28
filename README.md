@@ -66,7 +66,7 @@ Same as above but in `src/content/library/`. Add a `tag` field for grouping:
 
 ```md
 ---
-title: "Your title"
+title: "Your-title"
 description: "One sentence"
 date: "2026-06-01"
 tag: "Framework"

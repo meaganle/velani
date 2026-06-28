@@ -1,0 +1,6 @@
+name = "velani-subscribe"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+KIT_FORM_ID = "9244672"

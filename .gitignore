@@ -8,6 +8,12 @@
 # Local environment files
 .env
 .env.*
+worker/.dev.vars
+
+# Cloudflare Wrangler cache and build artifacts
+.wrangler/
+
+/.claude/
 
 # Logs
 npm-debug.log*
