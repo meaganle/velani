@@ -110,14 +110,20 @@ const phArchive = [
     line-height: 1.75; margin-bottom: 1.4rem;
   }
 
+  /* Signup card form — stacked layout so email isn't squeezed */
+  .signup-card .inline-form { flex-direction: column; gap: .5rem; }
+  .signup-card .inline-btn {
+    width: 100%; padding: .85rem;
+    text-align: center; display: block;
+  }
+
   /* Trust badges */
   .signup-trust {
-    display: flex; flex-wrap: wrap; gap: .5rem;
+    display: flex; flex-wrap: wrap; align-items: center; gap: .35rem .5rem;
     margin-top: 1rem;
   }
   .trust-badge {
-    font-size: .6rem; letter-spacing: .08em;
-    text-transform: uppercase; color: var(--ink3);
+    font-size: .72rem; color: var(--ink3);
     display: flex; align-items: center; gap: .35rem;
   }
   .trust-badge::before {
@@ -230,9 +236,12 @@ const phArchive = [
 
       <div>
         <p class="hero-eyebrow">The Velani Letter</p>
-        <h1 class="hero-title">A Sunday letter<br>for <em>women carrying too much.</em></h1>
+        <h1 class="hero-title">A thoughtful Sunday letter<br>for women who want to <em>carry less.</em></h1>
         <p class="hero-desc">
-          Not a newsletter about productivity. A quiet weekly letter about making room for yourself again — in your days, your mind, and your life.
+          Some weeks you'll find a story.<br>
+          Some weeks, an idea.<br>
+          Some weeks, simply a reminder that you don't have to carry everything alone.<br>
+          That's enough.
         </p>
 
         <div class="find-block">
@@ -248,14 +257,14 @@ const phArchive = [
 
       <div class="signup-card">
         <div class="signup-eyebrow">Receive the letter</div>
-        <h2 class="signup-hed">A quieter <em>Sunday.</em></h2>
+        <h2 class="signup-hed">Arrive every <em>Sunday.</em></h2>
         <p class="signup-desc">
-          Warm, practical letters arriving every Sunday morning. Written for women who want to feel more like themselves again.
+          Receive every Sunday. A thoughtful letter for making room for yourself again.
         </p>
         <div id="letters-form">
           <div class="inline-form">
             <input type="email" id="let-email" class="inline-email" placeholder="your@email.com" autocomplete="email">
-            <button class="inline-btn" onclick="window.lettersSignup()">Join</button>
+            <button class="inline-btn" onclick="window.lettersSignup()">I'd love to receive it</button>
           </div>
           <p class="inline-consent">
             By joining, you agree to receive occasional Velani emails.
@@ -278,7 +287,7 @@ const phArchive = [
   <div class="archive-section">
     <div class="archive-inner">
 
-      <div class="section-label">Start here</div>
+      <div class="section-label">This week</div>
       <div class="featured-list">
         {featured.length > 0
           ? featured.map(l => (
@@ -303,8 +312,7 @@ const phArchive = [
       {(archive.length > 0 || phArchive.length > 0) && (
         <div>
           <div class="v-divider"></div>
-          <div class="section-label">Archive</div>
-          <p class="archive-intro">Read before subscribing.</p>
+          <div class="section-label">Earlier letters</div>
           <div class="archive-list">
             {archive.length > 0
               ? archive.map(l => (
@@ -314,7 +322,7 @@ const phArchive = [
                       {l.frontmatter.preview && <div class="arc-preview">{l.frontmatter.preview}</div>}
                     </div>
                     <div class="arc-right">
-                      <div class="arc-date">{new Date(l.frontmatter.date).toLocaleDateString('en-CA', { year:'numeric', month:'short', day:'numeric' })}</div>
+                      <div class="arc-date">{new Date(l.frontmatter.date + 'T12:00:00').toLocaleDateString('en-CA', { year:'numeric', month:'short', day:'numeric' })}</div>
                       <div class="arc-time">{l.frontmatter.readTime || '3 min'}</div>
                     </div>
                   </a>

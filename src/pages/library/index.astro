@@ -6,19 +6,22 @@ const sorted = allReads
   .filter(r => !r.frontmatter.draft)
   .sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date));
 
+const allLetters = await Astro.glob('../../content/letters/*.md');
+const letters = allLetters
+  .filter(l => !l.frontmatter.draft)
+  .sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date));
+
 function live(slug) {
   return sorted.filter(r => r.frontmatter.category === slug);
 }
 
 const categories = [
-  { slug: 'start-here',    label: 'Start Here',      featured: true,  desc: 'New? Begin here.' },
-  { slug: 'calmer-days',   label: 'Calmer Days',      featured: true,  desc: 'When life feels heavy.' },
-  { slug: 'carrying-less', label: 'Carrying Less',    featured: false, desc: 'The invisible load.' },
-  { slug: 'rhythm',        label: 'Gentle Rhythms',   featured: false, desc: 'Morning, evening, weekly.' },
-  { slug: 'quiet-wins',    label: 'Quiet Wins',       featured: false, desc: 'Small progress matters.' },
-  { slug: 'making-room',   label: 'Making Room',      featured: false, desc: 'Space for yourself.' },
-  { slug: 'wisdom-cards',  label: 'One Idea',         featured: false, desc: 'Short and memorable.' },
-  { slug: 'velani-letter', label: 'From the Letter',  featured: false, desc: 'Longer reads.' },
+  { slug: 'start-here',         label: 'Start Here',             featured: true,  desc: 'Begin here.' },
+  { slug: 'why-it-feels-heavy', label: 'Why It Feels Heavy',     featured: true,  desc: 'Recognition.' },
+  { slug: 'make-room',          label: 'Make Room For Yourself', featured: false, desc: 'The emotional payoff.' },
+  { slug: 'gentle-rhythms',     label: 'Gentle Rhythms',         featured: false, desc: 'Practical routines.' },
+  { slug: 'quiet-wins',         label: 'Quiet Wins',             featured: false, desc: 'Reflection.' },
+  { slug: 'from-the-letter',    label: 'From the Letter',        featured: false, desc: 'Sunday letter archive.' },
 ];
 
 const placeholders = {
@@ -26,39 +29,26 @@ const placeholders = {
     { title: 'What matters today?',           desc: 'The one question that cuts through everything else.',        time: '2 min' },
     { title: 'One meaningful move',           desc: 'Why one clear thing beats a full list every time.',         time: '3 min' },
     { title: 'Weekly reset',                  desc: 'A slow Sunday ritual that actually works.',                  time: '5 min' },
-    { title: 'The invisible load',            desc: 'What\'s making you tired — it\'s not on your list.',        time: '4 min' },
+    { title: 'The invisible load',            desc: "What's making you tired — it's not on your list.",          time: '4 min' },
   ],
-  'calmer-days': [
-    { title: 'When life feels heavy',         desc: 'You don\'t need a system right now. You need this first.',  time: '3 min' },
-    { title: 'Make tomorrow easier',          desc: 'Small things tonight that change how the morning feels.',   time: '2 min' },
-    { title: 'What would 10% lighter feel like?', desc: 'A gentler question for hard days.',                    time: '2 min' },
+  'why-it-feels-heavy': [
+    { title: "Why you're exhausted before noon", desc: "It's not laziness. It's the invisible decisions.",       time: '4 min' },
+    { title: 'When life feels heavy',           desc: "You don't need a system right now. You need this first.", time: '3 min' },
+    { title: 'Why productivity stopped working', desc: 'It was never about the system. It was about the weight.', time: '4 min' },
   ],
-  'carrying-less': [
-    { title: 'Why you\'re exhausted before noon', desc: 'It\'s not laziness. It\'s the invisible decisions.',   time: '4 min' },
-    { title: 'The mental load nobody talks about', desc: 'Naming the weight is the first step to setting it down.', time: '4 min' },
-    { title: 'Simplifying what you carry',    desc: 'Not everything deserves equal space in your mind.',         time: '3 min' },
+  'make-room': [
+    { title: 'When did you stop being on your own list?', desc: 'A gentle question worth sitting with.',         time: '3 min' },
+    { title: 'Rest is not a reward',            desc: 'On giving yourself permission before you\'ve earned it.', time: '3 min' },
+    { title: 'The woman you haven\'t had time to be', desc: 'Making room before making progress.',              time: '4 min' },
   ],
-  'rhythm': [
-    { title: 'A morning that actually works', desc: 'Not a 5am routine. A gentle rhythm that fits real life.',   time: '4 min' },
-    { title: 'The evening reset',             desc: 'How to close the day without carrying it into tomorrow.',   time: '3 min' },
-    { title: 'Sustainable over optimal',      desc: 'Consistency built gently lasts longer than systems built fast.', time: '3 min' },
+  'gentle-rhythms': [
+    { title: 'A morning that actually works',   desc: 'Not a 5am routine. A gentle rhythm that fits real life.', time: '4 min' },
+    { title: 'The evening reset',               desc: 'How to close the day without carrying it into tomorrow.', time: '3 min' },
+    { title: 'Sustainable over optimal',        desc: 'Consistency built gently lasts longer than systems built fast.', time: '3 min' },
   ],
   'quiet-wins': [
-    { title: 'The things nobody clapped for', desc: 'A space to notice what you did well this week.',            time: '2 min' },
-    { title: 'Small progress counts',         desc: 'Why the quiet moves matter more than you\'re giving them credit for.', time: '3 min' },
-  ],
-  'making-room': [
-    { title: 'When did you stop being on your own list?', desc: 'A gentle question worth sitting with.',         time: '3 min' },
-    { title: 'Rest is not a reward',          desc: 'On giving yourself permission before you\'ve earned it.',   time: '3 min' },
-    { title: 'Possibility and the daily reset', desc: 'How small space creates unexpected room.',                time: '4 min' },
-  ],
-  'wisdom-cards': [
-    { title: 'On doing less, better',         desc: 'Greg McKeown on essentialism.',                             time: '2 min' },
-    { title: 'On building identity slowly',   desc: 'James Clear on why small habits compound quietly.',         time: '2 min' },
-  ],
-  'velani-letter': [
-    { title: 'The system nobody builds',      desc: 'On why the most important architecture in your life goes undesigned.', time: '4 min' },
-    { title: 'One clear move at a time',      desc: 'A different philosophy on what a good day actually requires.', time: '3 min' },
+    { title: 'The things nobody clapped for',  desc: 'A space to notice what you did well this week.',           time: '2 min' },
+    { title: 'Small progress counts',          desc: "Why the quiet moves matter more than you're giving them credit for.", time: '3 min' },
   ],
 };
 ---
@@ -197,6 +187,12 @@ const placeholders = {
     line-height: 1.3; margin-bottom: .2rem;
   }
   .read-desc { font-size: .77rem; color: var(--ink3); line-height: 1.55; }
+  .read-meta { display: flex; align-items: center; gap: .5rem; flex-shrink: 0; }
+  .read-type {
+    font-size: .58rem; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--terra); font-weight: 600;
+    background: rgba(184,106,67,.08); padding: .18rem .5rem; border-radius: 100px;
+  }
   .read-time {
     font-size: .68rem; color: var(--ink3);
     font-family: var(--display); font-style: italic;
@@ -262,7 +258,7 @@ const placeholders = {
     <div class="cat-pills" id="cat-pills-desktop">
       <button class="cat-pill active" data-cat="all">All</button>
       {categories.map(cat => {
-        const has = live(cat.slug).length > 0;
+        const has = cat.slug === 'from-the-letter' ? letters.length > 0 : live(cat.slug).length > 0;
         return (
           <button class={`cat-pill${!has ? ' coming' : ''}`} data-cat={cat.slug}>
             {cat.featured && <span class="pill-featured"></span>}
@@ -279,7 +275,7 @@ const placeholders = {
       <div class="cat-mobile-pills">
         <button class="cat-pill active" data-cat="all">All</button>
         {categories.map(cat => {
-          const has = live(cat.slug).length > 0;
+          const has = cat.slug === 'from-the-letter' ? letters.length > 0 : live(cat.slug).length > 0;
           return (
             <button class={`cat-pill${!has ? ' coming' : ''}`} data-cat={cat.slug}>
               {cat.featured && <span class="pill-featured"></span>}
@@ -300,7 +296,8 @@ const placeholders = {
   <div class="lib-content">
     <div class="lib-inner">
       {categories.map(cat => {
-        const liveItems = live(cat.slug);
+        const isLetterSection = cat.slug === 'from-the-letter';
+        const liveItems = isLetterSection ? letters : live(cat.slug);
         const phItems   = placeholders[cat.slug] || [];
         const items     = liveItems.length > 0 ? liveItems : phItems;
         return (
@@ -319,10 +316,10 @@ const placeholders = {
               {items.map(item => {
                 const isLive = liveItems.length > 0;
                 const title = isLive ? item.frontmatter.title : item.title;
-                const desc  = isLive ? item.frontmatter.description : item.desc;
+                const desc  = isLive ? (item.frontmatter.description || item.frontmatter.preview || '') : item.desc;
                 const time  = isLive ? (item.frontmatter.readTime || '3 min') : item.time;
                 const slug  = isLive ? item.file.split('/').pop().replace('.md', '') : null;
-                const href  = isLive ? `/library/${slug}` : null;
+                const href  = isLive ? (isLetterSection ? `/letters/${slug}` : `/library/${slug}`) : null;
                 const Tag   = isLive ? 'a' : 'div';
                 return (
                   <Tag
@@ -336,7 +333,10 @@ const placeholders = {
                       <div class="read-title">{title}</div>
                       {desc && <div class="read-desc">{desc}</div>}
                     </div>
-                    <div class="read-time">{time}</div>
+                    <div class="read-meta">
+                      {isLetterSection && isLive && <span class="read-type">Letter</span>}
+                      <span class="read-time">{time}</span>
+                    </div>
                   </Tag>
                 );
               })}
@@ -350,7 +350,7 @@ const placeholders = {
         <div class="lib-nudge-left">
           <div class="lib-nudge-eyebrow">The Velani Letter</div>
           <div class="lib-nudge-title">A quieter <em>inbox.</em></div>
-          <p>Weekly letters for women who want to carry less and feel more like themselves. Every Sunday, free.</p>
+          <p>Weekly letters for women who want to carry less. Every Sunday, free.</p>
         </div>
         <div class="lib-nudge-form" id="nudge-form">
           <div class="inline-form">

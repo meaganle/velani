@@ -261,9 +261,9 @@ function buildEmail4() {
     <p>It's been almost two weeks since the Companion became yours, and I've been wondering how it's landing for you.</p>
     <p>Not in a "did you finish it" way — there's nothing to finish. More in a real way. I built Velani because I needed it myself, and the thing I care about most isn't whether you completed a workbook. It's whether you feel even slightly more like yourself than you did two weeks ago.</p>
     <p>So I'd love to hear from you. Just hit reply and tell me one of these — whichever is true:</p>
-    <p style="margin:4px 0 4px 16px;">— One thing you decided to put down.</p>
-    <p style="margin:4px 0 4px 16px;">— One thing you're making room for.</p>
-    <p style="margin:4px 0 4px 16px;">— Or just: where you are right now, honestly.</p>
+    <p style="margin:4px 0 4px 16px;">- One thing you decided to put down.</p>
+    <p style="margin:4px 0 4px 16px;">- One thing you're making room for.</p>
+    <p style="margin:4px 0 4px 16px;">- Or just: where you are right now, honestly.</p>
     <p>I read every reply myself. Not a team, not an auto-responder — me. And I write back.</p>
     <p>That's the part of Velani I care about most: that you're not doing this alone, and that someone sees the effort it takes to finally make a little room for yourself.</p>
     <p>Whatever you've done with it — even if you've only thought about it — you've already started something most people never do. You turned toward yourself. That matters more than you know.</p>
